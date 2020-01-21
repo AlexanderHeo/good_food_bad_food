@@ -12,8 +12,8 @@ function getFDAData(event) {
 
       const FDAWarning = response.meta.disclaimer;
       console.log('WARNING: ', FDAWarning);
-      const FDADateIssued = response.results[0].report_date
-      console.log("Date issued: ", FDADateIssued)
+      const FDADateIssued = response.results[0].report_date;
+      console.log('Date issued: ', FDADateIssued);
       const FDACity = response.results[0].city;
       console.log('City: ', FDACity);
       const FDAReason = response.results[0].reason_for_recall;
