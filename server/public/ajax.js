@@ -1,31 +1,33 @@
-$("#FDASubmit").on("submit", getFDAData)
+$('#FDASubmit').on('submit', getFDAData);
 
-function getFDAData(event){
+function getFDAData(event) {
   event.preventDefault();
-  let cityText = $(".cityText").val()
+  const cityText = $('.cityText').val();
   $.ajax({
-    dataType: "json",
+    dataType: 'json',
     url: `https://api.fda.gov/food/enforcement.json?search=city:"${cityText}"`,
-    method: "GET",
+    method: 'GET',
     success: function (response) {
-      console.log("FULL RESPONSE: ", response);
+      console.log('FULL RESPONSE: ', response);
 
-      let FDAWarning = response.meta.disclaimer;
-      console.log("WARNING: ", FDAWarning)
-      let FDACity = response.results[0].city;
-      console.log("City: ", FDACity);
-      let FDAReason = response.results[0].reason_for_recall;
-      console.log("Reason: ", FDAReason);
-      let FDADescription = response.results[0].product_description;
-      console.log("Product: ", FDADescription);
-      let FDAQuantity = response.results[0].product_quantity;
-      console.log("Quantity: ", FDAQuantity);
-      let FDADistribution = response.results[0].distribution_pattern;
+      const FDAWarning = response.meta.disclaimer;
+      console.log('WARNING: ', FDAWarning);
+      const FDADateIssued = response.results[0].report_date
+      console.log("Date issued: ", FDADateIssued)
+      const FDACity = response.results[0].city;
+      console.log('City: ', FDACity);
+      const FDAReason = response.results[0].reason_for_recall;
+      console.log('Reason: ', FDAReason);
+      const FDADescription = response.results[0].product_description;
+      console.log('Product: ', FDADescription);
+      const FDAQuantity = response.results[0].product_quantity;
+      console.log('Quantity: ', FDAQuantity);
+      const FDADistribution = response.results[0].distribution_pattern;
       console.log(FDADistribution);
     },
-    error: function(response){
-      console.log("error: ", response)
+    error: function (response) {
+      console.log('error: ', response);
     }
-  })
+  });
 
 }
