@@ -21,6 +21,7 @@ ALTER TABLE ONLY public."userIngredients" DROP CONSTRAINT "userIngredients_ingre
 ALTER TABLE ONLY public.meals DROP CONSTRAINT "meals_userId_fkey";
 ALTER TABLE ONLY public."mealReports" DROP CONSTRAINT "mealReports_mealId_fkey";
 ALTER TABLE ONLY public."mealIngredients" DROP CONSTRAINT "mealIngredients_mealId_fkey";
+ALTER TABLE ONLY public."mealIngredients" DROP CONSTRAINT fk;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_username_key;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
 ALTER TABLE ONLY public.meals DROP CONSTRAINT meals_pkey;
@@ -94,7 +95,8 @@ CREATE TABLE public."mealIngredients" (
 
 CREATE TABLE public."mealReports" (
     "mealId" integer NOT NULL,
-    report integer NOT NULL
+    report integer NOT NULL,
+    image text
 );
 
 
@@ -192,6 +194,9 @@ ALTER TABLE ONLY public.users ALTER COLUMN "userId" SET DEFAULT nextval('public.
 --
 
 COPY public.ingredients (name) FROM stdin;
+bacon
+tomato
+lettuce
 \.
 
 
@@ -200,6 +205,9 @@ COPY public.ingredients (name) FROM stdin;
 --
 
 COPY public."mealIngredients" ("mealId", "ingredientName") FROM stdin;
+1	bacon
+1	tomato
+1	lettuce
 \.
 
 
@@ -207,7 +215,8 @@ COPY public."mealIngredients" ("mealId", "ingredientName") FROM stdin;
 -- Data for Name: mealReports; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."mealReports" ("mealId", report) FROM stdin;
+COPY public."mealReports" ("mealId", report, image) FROM stdin;
+1	1	/images/badFace.jpg
 \.
 
 
@@ -216,6 +225,7 @@ COPY public."mealReports" ("mealId", report) FROM stdin;
 --
 
 COPY public.meals ("mealId", name, "eatenAt", "userId") FROM stdin;
+1	BLT	2020-01-22 18:54:40.912531+00	1
 \.
 
 
@@ -232,6 +242,7 @@ COPY public."userIngredients" ("userId", ingredient, unfavorable) FROM stdin;
 --
 
 COPY public.users ("userId", username, password, location) FROM stdin;
+1	Evan	learningfuze	Irvine
 \.
 
 
@@ -239,14 +250,14 @@ COPY public.users ("userId", username, password, location) FROM stdin;
 -- Name: meals_mealId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."meals_mealId_seq"', 1, false);
+SELECT pg_catalog.setval('public."meals_mealId_seq"', 1, true);
 
 
 --
 -- Name: users_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."users_userId_seq"', 1, false);
+SELECT pg_catalog.setval('public."users_userId_seq"', 1, true);
 
 
 --
@@ -279,6 +290,14 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- Name: mealIngredients fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."mealIngredients"
+    ADD CONSTRAINT fk FOREIGN KEY ("ingredientName") REFERENCES public.ingredients(name);
 
 
 --
