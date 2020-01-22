@@ -8,6 +8,8 @@ const sessionMiddleware = require('./session-middleware');
 
 const app = express();
 
+const pg = require('pg');
+
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
@@ -18,6 +20,14 @@ app.get('/api/health-check', (req, res, next) => {
     .then(result => res.json(result.rows[0]))
     .catch(err => next(err));
 });
+
+//GET FOOD ENTERED ALREADY
+  app.get('/ratefood', (req, res, next) => {
+    const SQL = `
+    select *
+    from "mealReports"
+    `
+  }
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
