@@ -14,7 +14,7 @@ app.use(sessionMiddleware);
 app.use(express.json());
 
 app.post('/api/enter', (req, res, next) => {
-  const userId = '1';
+  const userId = req.session.userId;
   const { meal } = req.body;
 
   if (!userId) {
