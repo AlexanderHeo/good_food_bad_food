@@ -13,11 +13,41 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
+app.post('/api/enter', (req, res, next) => {
+  const userId = req.session.userId;
+  const { meal } = req.body;
+
+  if (!userId) {
+    next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
+    return;
+  } else if (!meal) {
+    next(new ClientError('Please enter a meal.', 400));
+    return;
+  }
+
+  const sql = `
+    insert into "meals" ("name", "userId")
+    values ($1, $2)
+    returning *;
+  `;
+  const params = ([meal, userId]);
+
+  db.query(sql, params)
+    .then(result => {
+      res.status(201).json(result.rows[0]);
+    })
+    .catch(error => {
+      next(error);
+    });
+
+});
+
 app.get('/api/health-check', (req, res, next) => {
   db.query('select \'successfully connected\' as "message"')
     .then(result => res.json(result.rows[0]))
     .catch(err => next(err));
 });
+
 
 // FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
@@ -50,6 +80,30 @@ app.post('/api/ratefood', (req, res, next) => {
       res.json(report);
       return report;
     });
+
+app.get('/api/list', (req, res, next) => {
+  let { userId } = req.session;
+
+  // for testing default userId to 1;
+  if (!userId) {
+    userId = 1;
+  }
+
+  const condition = new RegExp('^\\d+$');
+  if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404));
+  const sql = `
+  select "m"."name",
+  to_char("m"."eatenAt", 'day') "eatenAt",
+  "r"."report",
+  "r"."image"
+  from "meals" as "m"
+  join "mealReports" as "r" using ("mealId")
+  where "m"."userId" = $1;
+  `;
+  const params = [1];
+  db.query(sql, params)
+    .then(result => res.json(result.rows[0]))
+    .catch(err => next(err));
 });
 
 app.use('/api', (req, res, next) => {
