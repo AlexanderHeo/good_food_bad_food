@@ -1,25 +1,33 @@
 import React from 'react';
+// import ChooseMeal from './choose-meal'
+import RateMeal from './rate-meal'
+import ChooseMeal from './choose-meal';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: null,
-      isLoading: true
+      rateFood: false,
     };
   }
 
-  componentDidMount() {
-    fetch('/api/health-check')
-      .then(res => res.json())
-      .then(data => this.setState({ message: data.message || data.error }))
-      .catch(err => this.setState({ message: err.message }))
-      .finally(() => this.setState({ isLoading: false }));
-  }
+  // componentDidMount() {
+  //   fetch('/api/health-check')
+  //     .then(res => res.json())
+  //     .then(data => this.setState({ message: data.message || data.error }))
+  //     .catch(err => this.setState({ message: err.message }))
+  //     .finally(() => this.setState({ isLoading: false }));
+  // }
 
   render() {
-    return this.state.isLoading
-      ? <h1>Testing connections...</h1>
-      : <h1>{this.state.message}</h1>;
+    if (this.state.rateFood === false){
+      return (
+        <ChooseMeal />
+      )
+    } else if (this.state.rateFood === true){
+      return (
+        <RateMeal />
+      )
+    }
   }
 }
