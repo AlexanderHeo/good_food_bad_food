@@ -1,0 +1,109 @@
+body {
+  font-family: 'Patua One', cursive
+}
+.container {
+  position: relative;
+  width: 375px;
+  height: 667px;
+
+  background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
+}
+.header {
+  position: absolute;
+  width: 326px;
+  height: 75px;
+  left: 25px;
+  top: 14px;
+
+  border: 2px solid #4A6FF1;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.header span {
+  position: absolute;
+  width: 324px;
+  font-size: 48px;
+  text-align: center;
+
+  color: #4A6FF1;
+}
+.input {
+  position: absolute;
+  width: 327px;
+  height: 70px;
+  left: 26px;
+  top: 116px;
+  font-size: 30px;
+  text-align: center;
+  background: #FFFFFF;
+}
+.addButton {
+  position: absolute;
+  width: 311px;
+  height: 38px;
+  left: 35px;
+  top: 204px;
+
+  background: radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #14CAF2 100%);
+  border-radius: 10px;
+}
+.addButton span {
+  position: relative;
+  left: 132px;
+  top: 4px;
+
+  font-size: 24px;
+  color: #4A6FF1;
+}
+.list {
+  position: absolute;
+  overflow-y: scroll;
+  width: 326px;
+  height: 263px;
+  left: 27px;
+  top: 272px;
+
+  border: 2px solid #4A6FF1;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.doneButton {
+  position: absolute;
+  width: 139px;
+  height: 38px;
+  left: 34px;
+  top: 610px;
+
+  background: radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #14CAF2 100%);
+  border-radius: 10px;
+}
+.doneButton span {
+  position: relative;
+  left: 40px;
+  top: 2px;
+
+  font-size: 24px;
+  line-height: 29px;
+
+  color: #4A6FF1;
+}
+.cancelButton {
+  position: absolute;
+  width: 139px;
+  height: 38px;
+  left: 206px;
+  top: 610px;
+
+  background: radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #14CAF2 100%);
+  border-radius: 10px;
+}
+.cancelButton span {
+  position: relative;
+  left: 35px;
+  top: 2px;
+
+  font-size: 24px;
+  line-height: 29px;
+
+  color: #4A6FF1;
+}
