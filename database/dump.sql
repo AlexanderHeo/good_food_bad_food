@@ -85,8 +85,7 @@ CREATE TABLE public.ingredients (
 
 CREATE TABLE public."mealIngredients" (
     "mealId" integer NOT NULL,
-    "ingredientName" text NOT NULL,
-    "mealName" text NOT NULL
+    "ingredientName" text NOT NULL
 );
 
 
@@ -205,10 +204,10 @@ lettuce
 -- Data for Name: mealIngredients; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."mealIngredients" ("mealId", "ingredientName", "mealName") FROM stdin;
-1	bacon	BLT
-1	tomato	BLT
-1	lettuce	BLT
+COPY public."mealIngredients" ("mealId", "ingredientName") FROM stdin;
+1	bacon
+1	tomato
+1	lettuce
 \.
 
 
