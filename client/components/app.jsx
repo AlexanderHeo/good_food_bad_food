@@ -4,6 +4,7 @@ import {
   Route,
   Link
 } from 'react-router-dom';
+import FDAWarning from './fdawarning'
 
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
@@ -72,6 +73,9 @@ export default function App() {
         <Route path="/openpage">
           <OpenPage />
         </Route>
+        <Route path="/fdawarning">
+          <FDAWarning />
+        </Route>
         <Route path="/enterfood">
           <EnterFood />
         </Route>
@@ -133,7 +137,11 @@ function OpenPage() {
       <h5>Enter Effect</h5>
       <h5>See Good / Bad List</h5>
       <h5>My Next Meal Is...</h5>
-      <h5>FDA Food Recalls</h5>
+      <h5>
+        <li>
+          <Link to="/fdawarning">FDA Food Recalls</Link>
+        </li>
+      </h5>
     </div>
   );
 }
