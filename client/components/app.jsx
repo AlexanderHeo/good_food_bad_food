@@ -4,7 +4,7 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-import FDAWarning from './fdawarning'
+import FDAWarning from './fdawarning';
 
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).

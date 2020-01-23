@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 
 export default class FDAWarning extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       city: ''
-    }
+    };
   }
 
   componentDidMount() {
-    const cityText = "Irvine"
+    const cityText = 'Irvine';
     const FDAWarning = response.meta.disclaimer;
     const FDADateIssued = response.results[0].report_date;
     const FDACity = response.results[0].city;
@@ -22,7 +22,7 @@ export default class FDAWarning extends React.Component {
         return response.json();
       })
       .then(response => {
-        console.log("warning data: ", response)
+        console.log('warning data: ', response);
       })
       .catch(err => {
         console.log('Err: ', err);
@@ -32,8 +32,9 @@ export default class FDAWarning extends React.Component {
   render() {
     return (
       <div>
-        <h1>FDA Warning: {FDAWarning} </h1>
-        <h5>Disclaimer: {FDADateIssued} </h5>
+        <h1>FDA Warning:</h1>
+        <h5>Product Description: {FDADescription}</h5>
+        <h5>Disclaimer: {FDAWarning} </h5>
         <h5>Date issued: {FDADateIssued} </h5>
         <h5>Cities Impacted: {FDACity} </h5>
         <h5>Reason for Recall: {FDAReason}</h5>
@@ -47,6 +48,6 @@ export default class FDAWarning extends React.Component {
       //   </label>
       //   <input type="submit" value="Submit" />
       // </form>
-    )
+    );
   }
 }
