@@ -1,18 +1,18 @@
-import React from 'react'
+import React from 'react';
 
 export default class FDAWarning extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       city: ''
-    }
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount(){
-    const cityText = this.state.city
+  componentDidMount() {
+    const cityText = this.state.city;
     fetch(`https://api.fda.gov/food/enforcement.json?search=city:"${cityText}"`)
       .then(response => {
         response.json();
@@ -22,17 +22,17 @@ export default class FDAWarning extends React.Component {
       });
   }
 
-  handleChange(event){
-    this.setState({city: event.target.value})
-    console.log("city: ", city)
+  handleChange(event) {
+    this.setState({ city: event.target.value });
+    console.log('city: ', city);
   }
 
-  handleSubmit(event){
+  handleSubmit(event) {
     event.preventDefault();
-    this.componentDidMount
+    this.componentDidMount;
   }
 
-  render(){
+  render() {
     return (
       <form onSubmit={ this.handleSubmit }>
         <label>
@@ -41,6 +41,6 @@ export default class FDAWarning extends React.Component {
         </label>
         <input type="submit" value="Submit" />
       </form>
-    )
+    );
   }
 }

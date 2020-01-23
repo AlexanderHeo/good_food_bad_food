@@ -1,5 +1,5 @@
 import React from 'react';
-import FDAWarning from './fdawarning'
+import FDAWarning from './fdawarning';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -23,6 +23,6 @@ export default class App extends React.Component {
       <div>
         <FDAWarning />
       </div>
-    )
+    );
   }
 }
