@@ -48,6 +48,39 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
+
+// FOOD LIST WITH OR WITHOUT RATINGS
+app.get('/api/ratefood', (req, res, next) => {
+  const SQL = `
+      SELECT m."userId", m."name", m."eatenAt", mp."report"
+      FROM "meals" as m
+      JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
+      WHERE m."userId" = 1
+    `;
+  db.query(SQL)
+    .then(result => {
+      const meals = result.rows;
+      res.status(200).json(meals);
+    })
+    .catch(err => next(err));
+});
+
+// SENDING RATING
+app.post('/api/ratefood', (req, res, next) => {
+  const text = `
+      INSERT INTO "mealReports" ("mealId", "report")
+      VALUES ($1, $2)
+      RETURNING *
+    `;
+  const values = [`${req.body.mealId}`, `${req.body.report}`];
+
+  db.query(text, values)
+    .then(result => {
+      const report = result.rows;
+      res.json(report);
+      return report;
+    });
+
 app.get('/api/list', (req, res, next) => {
   let { userId } = req.session;
 
