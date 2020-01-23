@@ -1,7 +1,7 @@
 $('#FDASubmit').on('submit', getFDAData);
 
 function getFDAData(event) {
-  event.preventDefault();
+
   const cityText = $('.cityText').val();
   $.ajax({
     dataType: 'json',
