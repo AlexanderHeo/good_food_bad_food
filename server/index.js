@@ -20,9 +20,9 @@ app.get('/api/health-check', (req, res, next) => {
 });
 
 app.post('/api/enter', (req, res, next) => {
-  const userId = req.session.userId;
+  // const userId = req.session.userId;
+  const userId = 1;
   const { meal } = req.body;
-
   if (!userId) {
     next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
     return;
@@ -30,21 +30,19 @@ app.post('/api/enter', (req, res, next) => {
     next(new ClientError('Please enter a meal.', 400));
     return;
   }
-
   const sql = `
     insert into "meals" ("name", "userId")
     values ($1, $2)
     returning *;
   `;
-  const params = ([meal, userId]);
-
+  const params = [meal, userId];
   db.query(sql, params)
     .then(result => {
       res.status(201).json(result.rows[0]);
     })
-    .catch(error => {
-      next(error);
-    });
+    .catch(error =>
+      next(error)
+    );
 });
 
 // FOOD LIST WITH OR WITHOUT RATINGS
