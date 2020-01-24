@@ -45,16 +45,7 @@ app.post('/api/enter', (req, res, next) => {
     .catch(error => {
       next(error);
     });
-
 });
-
-
-app.get('/api/health-check', (req, res, next) => {
-  db.query('select \'successfully connected\' as "message"')
-    .then(result => res.json(result.rows[0]))
-    .catch(err => next(err));
-});
-
 
 // FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
@@ -87,6 +78,7 @@ app.post('/api/ratefood', (req, res, next) => {
       res.json(report);
       return report;
     });
+});
 
 app.get('/api/list', (req, res, next) => {
   let { userId } = req.session;
@@ -105,7 +97,8 @@ app.get('/api/list', (req, res, next) => {
   "r"."image"
   from "meals" as "m"
   left join "mealReports" as "r" using ("mealId")
-  where "m"."userId" = $1;
+  where "m"."userId" = $1
+  order by "eatenAt" desc;
   `;
   const params = [1];
   db.query(sql, params)
