@@ -1,71 +1,54 @@
 import React from 'react';
 
-class EnterFood extends React.Component {
+class Enter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      enterMeal: null,
-      todaysMeals: null
+      meals: { meal: '' }
     };
-    this.handleEnterMeal = this.handleEnterMeal.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    // this.getTodaysMeals();
-  }
-
-  // addIngredients(success) {
-  //   console.log(success);
-  //   var ingredients = [];
-  // }
-
-  getTodaysMeals() {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
-    today = `${yyyy}-${mm}-${dd}`;
-
-    fetch(`api/todaysMeals/${today}`)
-      .then(response => {
-        return response.json();
-      })
-      .then(jsonData => {
-
-        this.setState({
-          todaysMeals: jsonData
-        });
-      });
-  }
-
-  handleEnterMeal(event) {
+  handleChange(event) {
     this.setState({
-      [event.target.meal]: event.target.value
+      meals: { meal: event.target.value }
     });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.onSubmit(this.state.meals);
   }
 
   render() {
     return (
-      <div className="container">
-        <div className="header">
-          <span>Enter Food</span>
+      <form action=""
+        onSubmit={ this.handleSubmit }
+      >
+
+        <div className="container">
+          <div className="header">
+            <span>Enter Meal</span>
+          </div>
+          <input
+            type="text"
+            className="input"
+            placeholder="Enter Meal"
+            name="enter"
+            value= { this.state.meals.meal }
+            onChange= { this.handleChange }
+          />
+          <button
+            type="submit"
+            className="addButton"
+            value="Add"
+          />
         </div>
-        {/* <div className="input"></div> */}
-        <input
-          type="text"
-          className="input"
-          placeholder="Enter Meal"
-          name="meal"
-          value={ this.state.enterMeal }
-          onChange={ this.handleEnterMeal }
-        />
-        <div className="addButton">
-          <span>Add</span>
-        </div>
-        <div className="list"></div>
-      </div>
+
+      </form>
     );
   }
 }
 
-export default EnterFood;
+export default Enter;
