@@ -1,6 +1,7 @@
 /* eslint no-console */
 import React from 'react';
 // import SingleMeal from './single-meal'
+import DailyList from './daily-list'
 
 export default class RateMeal extends React.Component {
   constructor(props) {
@@ -41,30 +42,13 @@ export default class RateMeal extends React.Component {
     } else {
       if (this.state.rateFood === false) {
         const allMeals = this.state.meals;
-        console.log('meal state in render: ', allMeals);
-        allMeals.map(mealObject => {
-          console.log(mealObject);
-        });
+        console.log(allMeals)
         return (
           <div className={'container'} style={{ width: '375px', height: '667px' }}>
             <div className={'enterEffectDiv'}></div>
             <div className={'bg-primary'}>Choose the food you want to enter effect for:</div>
-            <div className="list-group">
-              <a href="#" className="list-group-item list-group-item-action" onClick={this.handleFoodClick}>Pizza
-                <img src='./images/badFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action" onClick={this.handleFoodClick}>Hot Dog
-                <img src='./images/happyFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action" onClick={this.handleFoodClick}>Hamburger
-                <img src='./images/happyFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action" onClick={this.handleFoodClick}>Salad
-                <img src='./images/neutralFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
-              </a>
-              <a href="#" className="list-group-item list-group-item-action" onClick={this.handleFoodClick}>Hot Wings
-                <img src='./images/neutralFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
-              </a>
+            <div>
+              <DailyList weekday={allMeals} onClick={this.handleFoodClick} />
             </div>
             <button className={'.doneButton'} style={{ float: 'left' }}>
               <span>

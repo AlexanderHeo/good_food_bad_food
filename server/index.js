@@ -13,6 +13,12 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
+app.get('/api/health-check', (req, res, next) => {
+  db.query('select \'successfully connected\' as "message"')
+    .then(result => res.json(result.rows[0]))
+    .catch(err => next(err));
+});
+
 app.post('/api/enter', (req, res, next) => {
   const userId = req.session.userId;
   const { meal } = req.body;
@@ -39,19 +45,12 @@ app.post('/api/enter', (req, res, next) => {
     .catch(error => {
       next(error);
     });
-
-});
-
-app.get('/api/health-check', (req, res, next) => {
-  db.query('select \'successfully connected\' as "message"')
-    .then(result => res.json(result.rows[0]))
-    .catch(err => next(err));
 });
 
 // FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
   const SQL = `
-      SELECT m."userId", m."name", m."eatenAt", mp."report"
+      SELECT m."userId", m."name", m."eatenAt", mp."report", mp."image"
       FROM "meals" as m
       JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
       WHERE m."userId" = 1
@@ -93,16 +92,17 @@ app.get('/api/list', (req, res, next) => {
   if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404));
   const sql = `
   select "m"."name",
-  to_char("m"."eatenAt", 'day') "eatenAt",
+  "m"."eatenAt",
   "r"."report",
   "r"."image"
   from "meals" as "m"
-  join "mealReports" as "r" using ("mealId")
-  where "m"."userId" = $1;
+  left join "mealReports" as "r" using ("mealId")
+  where "m"."userId" = $1
+  order by "eatenAt" desc;
   `;
   const params = [1];
   db.query(sql, params)
-    .then(result => res.json(result.rows[0]))
+    .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
 
