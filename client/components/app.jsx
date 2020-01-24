@@ -1,4 +1,6 @@
 import React from 'react';
+import UserMealStatus from './user-meals-status';
+
 // import SingleMeal from './single-meal'
 import FDAWarning from './fdawarning';
 import RateMeal from './rate-meal';
