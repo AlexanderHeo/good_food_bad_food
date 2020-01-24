@@ -65,7 +65,8 @@ app.get('/api/list', (req, res, next) => {
   "r"."image"
   from "meals" as "m"
   left join "mealReports" as "r" using ("mealId")
-  where "m"."userId" = $1;
+  where "m"."userId" = $1
+  order by "eatenAt" desc;
   `;
   const params = [1];
   db.query(sql, params)
