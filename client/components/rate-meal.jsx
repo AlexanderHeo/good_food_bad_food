@@ -1,4 +1,5 @@
 import React from 'react';
+// import SingleMeal from './single-meal'
 
 export default class RateMeal extends React.Component {
   constructor(props) {
@@ -20,6 +21,10 @@ export default class RateMeal extends React.Component {
   }
 
   componentDidMount() {
+    this.getMeals()
+  }
+
+  getMeals(){
     fetch('/api/ratefood')
       .then(response => {
         return response.json();
@@ -40,9 +45,8 @@ export default class RateMeal extends React.Component {
       if (this.state.rateFood === false) {
         const allMeals = this.state.meals
         console.log("meal state in render: ", allMeals)
-        // console.log("meal object: ", mealObject)
         allMeals.map(mealObject => {
-          console.log(mealObject)
+        console.log(mealObject)
         })
         return (
           <div className={'container'} style={{ width: '375px', height: '667px' }}>

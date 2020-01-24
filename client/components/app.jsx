@@ -1,5 +1,5 @@
 import React from 'react';
-// import ChooseMeal from './choose-meal'
+// import SingleMeal from './single-meal'
 import RateMeal from './rate-meal';
 
 export default class App extends React.Component {
