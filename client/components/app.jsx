@@ -1,6 +1,9 @@
 import React from 'react';
+
 import Enter from './enter.jsx';
 import ListMeals from './listEnterFood.jsx';
+import UserMealStatus from './user-meals-status';
+
 
 class EnterFoodScreen extends React.Component {
   constructor(props) {
