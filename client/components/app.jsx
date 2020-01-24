@@ -1,26 +1,55 @@
 import React from 'react';
+
+import Enter from './enter.jsx';
+import ListMeals from './listEnterFood.jsx';
 import UserMealStatus from './user-meals-status';
 
-export default class App extends React.Component {
+
+class EnterFoodScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      message: null,
-      isLoading: true
-    };
+    this.state = ({
+      todaysMeals: []
+    });
+    this.addMeal = this.addMeal.bind(this);
   }
 
-  componentDidMount() {
-    fetch('/api/health-check')
-      .then(res => res.json())
-      .then(data => this.setState({ message: data.message || data.error }))
-      .catch(err => this.setState({ message: err.message }))
-      .finally(() => this.setState({ isLoading: false }));
+  addMeal(newMeal) {
+    fetch('/api/enter', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newMeal)
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(jsonData => {
+        const todaysMealsCopy = [...this.state.todaysMeals];
+        const addedMeal = todaysMealsCopy.concat(jsonData.name);
+        this.setState({
+          todaysMeals: addedMeal
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   render() {
-    return this.state.isLoading
-      ? <h1>Testing connections...</h1>
-      : <UserMealStatus />;
+    return (
+      <>
+        <Enter
+          onSubmit={ this.addMeal }
+          todaysMeals={ this.state.todaysMeals }
+        />
+        <ListMeals
+          todaysMeals={ this.state.todaysMeals }
+        />
+      </>
+    );
   }
 }
+
+export default EnterFoodScreen;
