@@ -1,7 +1,7 @@
 import React from 'react';
 // import ChooseMeal from './choose-meal'
 import RateMeal from './rate-meal'
-import ChooseMeal from './choose-meal';
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,14 +20,8 @@ export default class App extends React.Component {
   // }
 
   render() {
-    if (this.state.rateFood === false){
-      return (
-        <ChooseMeal />
-      )
-    } else if (this.state.rateFood === true){
-      return (
-        <RateMeal />
-      )
-    }
+    return (
+      <RateMeal />
+    )
   }
 }
