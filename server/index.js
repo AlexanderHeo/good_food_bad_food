@@ -48,7 +48,7 @@ app.post('/api/enter', (req, res, next) => {
 // FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
   const SQL = `
-      SELECT m."userId", m."name", m."eatenAt", mp."report"
+      SELECT m."userId", m."name", m."eatenAt", mp."report", mp."image"
       FROM "meals" as m
       JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
       WHERE m."userId" = 1
@@ -62,7 +62,7 @@ app.get('/api/ratefood', (req, res, next) => {
 });
 
 // SENDING RATING
-app.post('/api/ratefood', (req, res, next) => {
+app.post('/api/ratedfood', (req, res, next) => {
   const text = `
       INSERT INTO "mealReports" ("mealId", "report")
       VALUES ($1, $2)
