@@ -1,13 +1,12 @@
 import React from 'react';
 // import ChooseMeal from './choose-meal'
-import RateMeal from './rate-meal'
-
+import RateMeal from './rate-meal';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rateFood: false,
+      rateFood: false
     };
   }
 
@@ -22,6 +21,6 @@ export default class App extends React.Component {
   render() {
     return (
       <RateMeal />
-    )
+    );
   }
 }
