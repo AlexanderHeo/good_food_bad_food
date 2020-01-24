@@ -19,6 +19,9 @@ class Enter extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.props.onSubmit(this.state.meals);
+    this.setState({
+      meals: { meal: '' }
+    });
   }
 
   render() {
