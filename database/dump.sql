@@ -217,6 +217,8 @@ COPY public."mealIngredients" ("mealId", "ingredientName") FROM stdin;
 
 COPY public."mealReports" ("mealId", report, image) FROM stdin;
 1	1	/images/badFace.jpg
+2	2	/images/neutralFace.jpg
+3	2	/images/neutralFace.jpg
 \.
 
 
@@ -226,6 +228,8 @@ COPY public."mealReports" ("mealId", report, image) FROM stdin;
 
 COPY public.meals ("mealId", name, "eatenAt", "userId") FROM stdin;
 1	BLT	2020-01-22 18:54:40.912531+00	1
+3	Mutton	2020-01-23 18:51:46.844296+00	1
+2	water2.0	2020-01-23 18:31:46.63852+00	1
 \.
 
 
@@ -250,7 +254,7 @@ COPY public.users ("userId", username, password, location) FROM stdin;
 -- Name: meals_mealId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."meals_mealId_seq"', 1, true);
+SELECT pg_catalog.setval('public."meals_mealId_seq"', 3, true);
 
 
 --
