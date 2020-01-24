@@ -1,5 +1,6 @@
 import React from 'react';
 import Enter from './enter.jsx';
+import ListMeals from './listEnterFood.jsx';
 
 class EnterFoodScreen extends React.Component {
   constructor(props) {
@@ -35,10 +36,15 @@ class EnterFoodScreen extends React.Component {
 
   render() {
     return (
-      <Enter
-        onSubmit={ this.addMeal }
-        todaysMeals={ this.state.todaysMeals }
-      />
+      <>
+        <Enter
+          onSubmit={ this.addMeal }
+          todaysMeals={ this.state.todaysMeals }
+        />
+        <ListMeals
+          todaysMeals={ this.state.todaysMeals }
+        />
+      </>
     );
   }
 }
