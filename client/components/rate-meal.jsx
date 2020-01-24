@@ -1,7 +1,7 @@
-/* eslint no-console */
+
 import React from 'react';
 // import SingleMeal from './single-meal'
-import DailyList from './daily-list'
+import DailyList from './daily-list';
 
 export default class RateMeal extends React.Component {
   constructor(props) {
@@ -42,7 +42,6 @@ export default class RateMeal extends React.Component {
     } else {
       if (this.state.rateFood === false) {
         const allMeals = this.state.meals;
-        console.log(allMeals)
         return (
           <div className={'container'} style={{ width: '375px', height: '667px' }}>
             <div className={'enterEffectDiv'}></div>

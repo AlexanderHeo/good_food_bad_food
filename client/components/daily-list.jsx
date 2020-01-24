@@ -1,8 +1,8 @@
 import React from 'react';
 
 const DailyList = props => {
-  if (!props.weekday){
-    return null
+  if (!props.weekday) {
+    return null;
   }
   return (
     <div className="d-flex">
