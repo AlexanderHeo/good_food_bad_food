@@ -1,4 +1,4 @@
-/* eslint no-console*/
+/* eslint no-console */
 import React from 'react';
 // import SingleMeal from './single-meal'
 
@@ -22,10 +22,6 @@ export default class RateMeal extends React.Component {
   }
 
   componentDidMount() {
-    this.getMeals();
-  }
-
-  getMeals() {
     fetch('/api/ratefood')
       .then(response => {
         return response.json();

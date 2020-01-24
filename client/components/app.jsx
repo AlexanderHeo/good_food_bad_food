@@ -1,45 +1,12 @@
 import React from 'react';
-
 // import SingleMeal from './single-meal'
+import FDAWarning from './fdawarning';
 import RateMeal from './rate-meal';
-
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      rateFood: false
-    };
-  }
-
-  // componentDidMount() {
-  //   fetch('/api/health-check')
-  //     .then(res => res.json())
-  //     .then(data => this.setState({ message: data.message || data.error }))
-  //     .catch(err => this.setState({ message: err.message }))
-  //     .finally(() => this.setState({ isLoading: false }));
-  // }
-
-  render() {
-    return (
-      <RateMeal />
-    );
-  }
-  
 import {
   Switch,
   Route,
   Link
 } from 'react-router-dom';
-import FDAWarning from './fdawarning';
-
-// This site has 3 pages, all of which are rendered
-// dynamically in the browser (not server rendered).
-//
-// Although the page does not ever refresh, notice how
-// React Router keeps the URL up to date as you navigate
-// through the site. This preserves the browser history,
-// making sure things like the back button and bookmarks
-// work properly.
 
 export default function App() {
   return (
@@ -82,13 +49,6 @@ export default function App() {
 
       <hr />
 
-      {/*
-        A <Switch> looks through all its children <Route>
-        elements and renders the first one whose path
-        matches the current URL. Use a <Switch> any time
-        you have multiple routes, but you want only one
-        of them to render at a time
-      */}
       <Switch>
         <Route exact path="/">
           <Home />
@@ -106,16 +66,13 @@ export default function App() {
           <EnterFood />
         </Route>
         <Route path="/ratefood">
-          <RateFood />
+          <RateMeal />
         </Route>
         <Route path="/seetoday">
           <SeeToday />
         </Route>
         <Route path="/seeweek">
           <SeeWeek />
-        </Route>
-        <Route path="/seemonth">
-          <SeeMonth />
         </Route>
         <Route path="/goodbadlist">
           <GoodBadList />
@@ -130,9 +87,6 @@ export default function App() {
     </div>
   );
 }
-
-// You can think of these components as "pages"
-// in your app.
 
 function Home() {
   return (
@@ -180,14 +134,6 @@ function EnterFood() {
   );
 }
 
-function RateFood() {
-  return (
-    <div>
-      <h1>Rate Food</h1>
-    </div>
-  );
-}
-
 function SeeToday() {
   return (
     <div>
@@ -205,17 +151,6 @@ function SeeWeek() {
       <h1>Weekly Overview</h1>
       <h5>See Today</h5>
       <h5>See Month</h5>
-      <h5>See Good / Bad List</h5>
-    </div>
-  );
-}
-
-function SeeMonth() {
-  return (
-    <div>
-      <h1>Monthly Overview</h1>
-      <h5>See Day</h5>
-      <h5>See Week</h5>
       <h5>See Good / Bad List</h5>
     </div>
   );

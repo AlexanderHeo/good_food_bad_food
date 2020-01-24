@@ -10,13 +10,6 @@ export default class FDAWarning extends React.Component {
 
   componentDidMount() {
     const cityText = 'Irvine';
-    const FDAWarning = response.meta.disclaimer;
-    const FDADateIssued = response.results[0].report_date;
-    const FDACity = response.results[0].city;
-    const FDAReason = response.results[0].reason_for_recall;
-    const FDADescription = response.results[0].product_description;
-    const FDAQuantity = response.results[0].product_quantity;
-    const FDADistribution = response.results[0].distribution_pattern;
     fetch(`https://api.fda.gov/food/enforcement.json?search=city:"${cityText}"&limit=1`)
       .then(response => {
         return response.json();
