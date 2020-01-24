@@ -13,10 +13,17 @@ app.use(sessionMiddleware);
 
 app.use(express.json());
 
-app.post('/api/enter', (req, res, next) => {
-  const userId = req.session.userId;
-  const { meal } = req.body;
+app.get('/api/health-check', (req, res, next) => {
+  db.query('select \'successfully connected\' as "message"')
+    .then(result => res.json(result.rows[0]))
+    .catch(err => next(err));
+});
 
+// User can enter new meal
+app.post('/api/enter', (req, res, next) => {
+  // const userId = req.session.userId;
+  const userId = 1;
+  const { meal } = req.body;
   if (!userId) {
     next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
     return;
@@ -24,28 +31,20 @@ app.post('/api/enter', (req, res, next) => {
     next(new ClientError('Please enter a meal.', 400));
     return;
   }
-
   const sql = `
     insert into "meals" ("name", "userId")
     values ($1, $2)
     returning *;
   `;
-  const params = ([meal, userId]);
-
+  const params = [meal, userId];
   db.query(sql, params)
     .then(result => {
       res.status(201).json(result.rows[0]);
-    })
-    .catch(error => {
-      next(error);
-    });
-
-});
-
-app.get('/api/health-check', (req, res, next) => {
-  db.query('select \'successfully connected\' as "message"')
-    .then(result => res.json(result.rows[0]))
-    .catch(err => next(err));
+    }
+    )
+    .catch(error =>
+      next(error)
+    );
 });
 
 app.use('/api', (req, res, next) => {
