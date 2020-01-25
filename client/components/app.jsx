@@ -1,4 +1,6 @@
 import React from 'react';
+// import UserMealStatus from './user-meals-status';
+
 import { Link, Route, Switch } from 'react-router-dom';
 // import SingleMeal from './single-meal'
 import EnterFood from './Enter-a-meal';
@@ -100,7 +102,7 @@ function About() {
   return (
     <div>
       <h1>About</h1>
-      <h5>Let&aposs Get Started!</h5>
+      <h5>Lets Get Started!</h5>
     </div>
   );
 }
