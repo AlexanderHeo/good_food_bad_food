@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   BrowserRouter as Router,
   Route
@@ -11,7 +12,6 @@ import List from './user-meals-status';
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {};
   }
 
@@ -28,3 +28,4 @@ class App extends React.Component {
 }
 
 export default App;
+
