@@ -1,14 +1,11 @@
 import React from 'react';
 // import UserMealStatus from './user-meals-status';
 
+import { Link, Route, Switch } from 'react-router-dom';
 // import SingleMeal from './single-meal'
+import EnterFood from './Enter-a-meal';
 import FDAWarning from './fdawarning';
 import RateMeal from './rate-meal';
-import {
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom';
 
 export default function App() {
   return (
@@ -128,13 +125,13 @@ function OpenPage() {
   );
 }
 
-function EnterFood() {
-  return (
-    <div>
-      <h1>Enter Food</h1>
-    </div>
-  );
-}
+// function EnterFood() {
+//   return (
+//     <div>
+//       <h1>Enter Food</h1>
+//     </div>
+//   );
+// }
 
 function SeeToday() {
   return (
