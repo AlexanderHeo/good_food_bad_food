@@ -1,6 +1,5 @@
 
 import React from 'react';
-// import SingleMeal from './single-meal'
 import DailyList from './daily-list';
 
 export default class RateMeal extends React.Component {
@@ -29,7 +28,6 @@ export default class RateMeal extends React.Component {
       })
       .then(data => {
         this.setState({ meals: data });
-        // console.log('meals: ', this.state.meals);
       })
       .catch(err => {
         alert('Error: ', err);

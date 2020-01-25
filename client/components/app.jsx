@@ -125,14 +125,6 @@ function OpenPage() {
   );
 }
 
-// function EnterFood() {
-//   return (
-//     <div>
-//       <h1>Enter Food</h1>
-//     </div>
-//   );
-// }
-
 function SeeToday() {
   return (
     <div>
