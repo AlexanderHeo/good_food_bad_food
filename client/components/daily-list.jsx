@@ -9,7 +9,7 @@ const DailyList = props => {
       {
         props.weekday.map(element =>
           <p className="h3" key={element.eatenAt}
-            onClick={props.onClick ? props.onClick : ''}> {element.name}
+            onClick={props.onClick ? props.onClick : null}> {element.name}
             <img src={element.image} alt={element.image} />
           </p>)
       }
