@@ -1,0 +1,40 @@
+/* .doneButton {
+  position: absolute;
+  width: 139px;
+  height: 38px;
+  left: 34px;
+  top: 610px;
+
+  background: radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #14CAF2 100%);
+  border-radius: 10px;
+}
+.doneButton span {
+  position: relative;
+  left: 40px;
+  top: 2px;
+
+  font-size: 24px;
+  line-height: 29px;
+
+  color: #4A6FF1;
+}
+.cancelButton {
+  position: absolute;
+  width: 139px;
+  height: 38px;
+  left: 206px;
+  top: 610px;
+
+  background: radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #14CAF2 100%);
+  border-radius: 10px;
+}
+.cancelButton span {
+  position: relative;
+  left: 35px;
+  top: 2px;
+
+  font-size: 24px;
+  line-height: 29px;
+
+  color: #4A6FF1;
+} */
