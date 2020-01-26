@@ -61,7 +61,7 @@ app.get('/api/ratefood', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// SENDING RATING
+// SENDING NEW RATING
 app.post('/api/ratedfood', (req, res, next) => {
   const text = `
       INSERT INTO "mealReports" ("mealId", "report")
@@ -77,6 +77,26 @@ app.post('/api/ratedfood', (req, res, next) => {
       return report;
     });
 });
+
+// UPDATING RATINGS
+app.put('/api/ratefood', (req, res, next) => {
+  const text = `
+  update "mealReports"
+  set "report" = $2
+  where "mealId" = $1
+  `;
+
+  const values = [`${req.body.mealId}`, `${req.body.report}`];
+
+  db.query(text, values)
+    .then(result => {
+      const report = result.rows;
+      res.json(report);
+      return report;
+    });
+});
+
+// })
 
 app.get('/api/list', (req, res, next) => {
   let { userId } = req.session;
