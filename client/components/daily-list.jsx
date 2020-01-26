@@ -9,8 +9,8 @@ const DailyList = props => {
       {
         props.weekday.map(element =>
           <p className="h3" key={element.eatenAt}
-            onClick={props.onClick ? props.onClick : ''}> {element.name}
-            <img src={element.image} alt={element.image} style={{ float: 'right', width: '25px', height: '25px' }} />
+            onClick={props.onClick ? props.onClick : null}> {element.name}
+            <img src={element.image} alt={element.image} />
           </p>)
       }
     </div>
