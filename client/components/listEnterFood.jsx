@@ -6,6 +6,11 @@ function ListMeals(props) {
       return (
         <div className="" key={x}>
           <span>{ x }</span>
+          <input type="button"
+            className="btn btn-danger"
+            value="Remove"
+            onClick={ () => props.onSubmit(x)}
+          />
         </div>
       );
     })

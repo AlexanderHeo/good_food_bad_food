@@ -44,7 +44,7 @@ class Enter extends React.Component {
           />
           <button
             type="submit"
-            className="addButton"
+            className="addButton btn btn-primary"
             value="Add"
           />
         </div>

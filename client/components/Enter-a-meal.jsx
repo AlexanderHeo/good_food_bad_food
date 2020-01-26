@@ -2,13 +2,14 @@ import React from 'react';
 import Enter from './enter.jsx';
 import ListMeals from './listEnterFood.jsx';
 
-class EnterFoodScreen extends React.Component {
+class EnterFood extends React.Component {
   constructor(props) {
     super(props);
     this.state = ({
       todaysMeals: []
     });
     this.addMeal = this.addMeal.bind(this);
+    this.removeFromList = this.removeFromList.bind(this);
   }
 
   addMeal(newMeal) {
@@ -34,6 +35,15 @@ class EnterFoodScreen extends React.Component {
       });
   }
 
+  removeFromList(removeMeal) {
+    const todaysMealsCopy = [...this.state.todaysMeals];
+    const removeIndex = todaysMealsCopy.indexOf(removeMeal);
+    todaysMealsCopy.splice(removeIndex, 1);
+    this.setState({
+      todaysMeals: todaysMealsCopy
+    });
+  }
+
   render() {
     return (
       <>
@@ -43,10 +53,11 @@ class EnterFoodScreen extends React.Component {
         />
         <ListMeals
           todaysMeals={this.state.todaysMeals}
+          onSubmit={this.removeFromList}
         />
       </>
     );
   }
 }
 
-export default EnterFoodScreen;
+export default EnterFood;
