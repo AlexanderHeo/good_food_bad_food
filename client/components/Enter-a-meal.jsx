@@ -47,14 +47,20 @@ class EnterFood extends React.Component {
   render() {
     return (
       <>
-        <Enter
-          onSubmit={this.addMeal}
-          todaysMeals={this.state.todaysMeals}
-        />
-        <ListMeals
-          todaysMeals={this.state.todaysMeals}
-          onSubmit={this.removeFromList}
-        />
+        <div className="container">
+          <Enter
+            onSubmit={this.addMeal}
+            todaysMeals={this.state.todaysMeals}
+          />
+          <ListMeals
+            todaysMeals={this.state.todaysMeals}
+            onSubmit={this.removeFromList}
+          />
+          <div className="row enterButtons justify-content-around mt-3">
+            <button className="halfButton">Home</button>
+            <button className="halfButton">Cancel</button>
+          </div>
+        </div>
       </>
     );
   }
