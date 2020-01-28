@@ -6,6 +6,8 @@ const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
 
+const bcrypt = require('bcrypt');
+
 const app = express();
 
 app.use(staticMiddleware);
@@ -16,6 +18,53 @@ app.use(express.json());
 app.get('/api/health-check', (req, res, next) => {
   db.query('select \'successfully connected\' as "message"')
     .then(result => res.json(result.rows[0]))
+    .catch(err => next(err));
+});
+
+app.post('/api/sign-up', (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return next(new ClientError('Invalid username / password!', 400));
+  }
+  bcrypt.hash(password, 10)
+    .then(hash => {
+      const hashedPassword = hash;
+      const sql = `
+      insert into "users"("username", "password")
+      values ($1, $2)
+      returning "username";
+      `;
+      const params = [username, hashedPassword];
+      db.query(sql, params)
+        .then(response => {
+          const user = response.rows[0];
+          if (!user) return next();
+          res.status(201).json(user);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/log-in', (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) return next(new ClientError('Invalid username / password!', 400));
+  const sql = `
+  select *
+    from "users"
+    where "username" = $1;
+  `;
+  const params = [username];
+  db.query(sql, params)
+    .then(response => {
+      if (!response.rows[0]) return next(new ClientError('User Account Does Not Exist!', 400));
+      const dbPassword = response.rows[0].password;
+      bcrypt.compare(password, dbPassword)
+        .then(result => {
+          if (!result) return next(new ClientError('Invalid username / password!', 400));
+          res.json('Log-In succeed!');
+        });
+    })
     .catch(err => next(err));
 });
 
