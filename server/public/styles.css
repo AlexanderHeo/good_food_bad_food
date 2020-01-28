@@ -1,40 +1,222 @@
-/* .doneButton {
-  position: absolute;
-  width: 139px;
-  height: 38px;
-  left: 34px;
-  top: 610px;
-
-  background: radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #14CAF2 100%);
-  border-radius: 10px;
-}
-.doneButton span {
-  position: relative;
-  left: 40px;
-  top: 2px;
-
-  font-size: 24px;
-  line-height: 29px;
-
+body {
+  font-family: 'Patua One', cursive;
   color: #4A6FF1;
 }
-.cancelButton {
-  position: absolute;
-  width: 139px;
-  height: 38px;
-  left: 206px;
-  top: 610px;
-
-  background: radial-gradient(50% 50% at 50% 50%, #FFFFFF 0%, #14CAF2 100%);
+.container {
+  position: relative;
+  width: 375px;
+  height: 667px;
+  border: 1px solid black;
+  background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
+}
+.header {
+  position: relative;
+  width: 326px;
+  left: 25px;
+  top: 14px;
+  text-align: center;
+  border: 2px solid #4A6FF1;
   border-radius: 10px;
 }
-.cancelButton span {
+.fullButton {
+  background-color: #96abf8;
+  width: 311px;
+  height: 38px;
+  border-radius: 10px;
+  color: rgb(15, 65, 247);
+}
+.halfButton {
+  background-color: #96abf8;
+  width: 120px;
+  height: 38px;
+  border-radius: 10px;
+}
+/* home page */
+.homeHeader {
   position: relative;
-  left: 35px;
-  top: 2px;
+  width: 326px;
+  height: 80px;
+  left: 12px;
+  top: 14px;
+  text-align: center;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  height: 100px;
+  font-size: 31px;
+}
 
-  font-size: 24px;
-  line-height: 29px;
-
-  color: #4A6FF1;
-} */
+/* Enter Meal */
+.input {
+  position: relative;
+  width: 327px;
+  height: 70px;
+  left: 10px;
+  top: 27px;
+  font-size: 30px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  text-align: center;
+}
+.inputButton {
+  position: relative;
+  width: 327px;
+  top: 40px;
+  left: 10px;
+  font-size: 20px;
+}
+.listBox {
+  position: relative;
+  top: 57px;
+  left: 10px;
+  border: 2px solid #4A6FF1;
+  border-radius: 20px;
+  height: 350px;
+  width: 326px;
+}
+.listMeals {
+  position: relative;
+  left: 10px;
+  top: 5px;
+}
+.listMeals span {
+  position: relative;
+  left: 10px;
+  font-size: 25px;
+}
+.listMeals button {
+  position: relative;
+  float: right;
+  left: -25px;
+}
+.listMealsButtons {
+  position: relative;
+  top: 75px;
+  left: 75px;
+}
+/* Enter Effect */
+.effectLabel {
+  position: relative;
+  top: 10px;
+  left: 10px;
+  width: 327px;
+  height: 100px;
+  font-size: 30px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  text-align: center;
+}
+.effectBox {
+  position: relative;
+  top: 20px;
+  left: 10px;
+  width: 327px;
+  height: 350px;
+  font-size: 20px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+}
+.effectBox p {
+  position: relative;
+  left: 15px;
+}
+.effectBox img {
+  position: relative;
+  height: 25px;
+  width: 25px;
+  float: right;
+  right: 34px;
+}
+.enterButtons {
+  position: relative;
+  top: 75px;
+  left: 54px;
+}
+/* choose effect */
+.chooseEffectFood {
+  text-align: center;
+}
+.chooseEffectBox {
+  width: 327px;
+  height: 363px;
+  font-size: 50px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+}
+.chooseEffectButtons {
+  position: relative;
+  top: 75px;
+  left: 75px;
+}
+.chooseEffectFaces img {
+  height: 80px;
+  width: 80px;
+}
+.chooseEffectFaces p {
+  font-size: 30px;
+}
+.chooseEffectFaces img {
+  position: relative;
+}
+/* see today */
+.chooseList {
+  width: 327px;
+  font-size: 30px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  text-align: center;
+}
+.seeToday {
+  position: relative;
+  left: 23px;
+  width: 327px;
+  font-size: 30px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  text-align: center;
+}
+.seeList {
+  width: 327px;
+  height: 385px;
+  font-size: 30px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  text-align: center;
+  overflow: scroll;
+}
+.seeList img {
+  position: relative;
+  height: 25px;
+  width: 25px;
+  left: 150px;
+}
+.seeList p {
+  position: relative;
+  left: 15px;
+}
+.seeListButton {
+  background-color: #96abf8;
+  width: 120px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 20px;
+  padding: 3px 10px;
+}
+/* open page */
+.openBox {
+  position: relative;
+  top: 30px;
+  left: 10px;
+  border: 2px solid #4A6FF1;
+  border-radius: 20px;
+  height: 450px;
+  width: 326px;
+}
+.openBox button {
+  position: relative;
+  top: 10px;
+  left: 4px;
+  background-color: #96abf8;
+  height: 70px;
+  border-radius: 10px;
+  font-size: 25px;
+}

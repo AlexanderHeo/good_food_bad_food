@@ -47,3 +47,4 @@ export default class DailyList extends React.Component {
     );
   }
 }
+
