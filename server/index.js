@@ -48,7 +48,7 @@ app.post('/api/enter', (req, res, next) => {
 // FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
   const SQL = `
-      SELECT m."userId", m."name", m."eatenAt", mp."report", mp."image"
+      SELECT m."userId", m."mealId", m."name", m."eatenAt", mp."report", mp."image"
       FROM "meals" as m
       JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
       WHERE m."userId" = 1
@@ -62,13 +62,14 @@ app.get('/api/ratefood', (req, res, next) => {
 });
 
 // SENDING NEW RATING
-app.post('/api/ratedfood', (req, res, next) => {
+app.patch('/api/rate/:mealId', (req, res, next) => {
   const text = `
-      INSERT INTO "mealReports" ("mealId", "report")
-      VALUES ($1, $2)
-      RETURNING *
+  UPDATE "mealReports"
+  SET "report" = $2, "image" = $3
+  WHERE "mealId" = $1
+  RETURNING *
     `;
-  const values = [`${req.body.mealId}`, `${req.body.report}`];
+  const values = [`${req.body.mealId}`, `${req.body.report}`, `${req.body.image}`];
 
   db.query(text, values)
     .then(result => {
@@ -76,27 +77,44 @@ app.post('/api/ratedfood', (req, res, next) => {
       res.json(report);
       return report;
     });
+});
+
+// GET INDIVIDUAL MEAL
+app.get('/api/rate/:mealId', (req, res, next) => {
+  const mealId = parseInt(req.params.mealId);
+  const SQL = `
+  SELECT m."name"
+  FROM "meals" as m
+  JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
+  WHERE m."mealId" = $1
+`;
+
+  const value = [mealId];
+  db.query(SQL, value)
+    .then(result => {
+      const [singleMeal] = result.rows;
+      res.status(200).json(singleMeal);
+    })
+    .catch(err => next(err));
 });
 
 // UPDATING RATINGS
-app.put('/api/ratefood', (req, res, next) => {
-  const text = `
-  update "mealReports"
-  set "report" = $2
-  where "mealId" = $1
-  `;
+// app.put('/api/ratefood', (req, res, next) => {
+//   const text = `
+//   update "mealReports"
+//   set "report" = $2
+//   where "mealId" = $1
+//   `;
 
-  const values = [`${req.body.mealId}`, `${req.body.report}`];
+//   const values = [`${req.body.mealId}`, `${req.body.report}`];
 
-  db.query(text, values)
-    .then(result => {
-      const report = result.rows;
-      res.json(report);
-      return report;
-    });
-});
-
-// })
+//   db.query(text, values)
+//     .then(result => {
+//       const report = result.rows;
+//       res.json(report);
+//       return report;
+//     });
+// });
 
 app.get('/api/list', (req, res, next) => {
   let { userId } = req.session;
