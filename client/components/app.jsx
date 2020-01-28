@@ -8,6 +8,8 @@ import HomePage from './home-page';
 import Enter from './Enter-a-meal';
 import RateMeal from './rate-meal';
 import List from './user-meals-status';
+import FDAWarning from './fdawarning';
+import DailyList from './daily-list';
 
 class App extends React.Component {
   constructor(props) {
@@ -20,12 +22,13 @@ class App extends React.Component {
       <Router>
         <Route path="/home" component={HomePage}></Route>
         <Route path="/enter" component={Enter}></Route>
-        <Route path="/rate" component={RateMeal}></Route>
+        <Route path="/daily-list" component={DailyList}></Route>
         <Route path="/list" component={List}></Route>
+        <Route path="/warning" component={FDAWarning}></Route>
+        <Route path="/rate/:mealId" component={RateMeal}></Route>
       </Router>
     );
   }
 }
 
 export default App;
-

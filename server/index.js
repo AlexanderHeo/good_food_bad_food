@@ -6,6 +6,8 @@ const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
 
+const bcrypt = require('bcrypt');
+
 const app = express();
 
 app.use(staticMiddleware);
@@ -16,6 +18,53 @@ app.use(express.json());
 app.get('/api/health-check', (req, res, next) => {
   db.query('select \'successfully connected\' as "message"')
     .then(result => res.json(result.rows[0]))
+    .catch(err => next(err));
+});
+
+app.post('/api/sign-up', (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return next(new ClientError('Invalid username / password!', 400));
+  }
+  bcrypt.hash(password, 10)
+    .then(hash => {
+      const hashedPassword = hash;
+      const sql = `
+      insert into "users"("username", "password")
+      values ($1, $2)
+      returning "username";
+      `;
+      const params = [username, hashedPassword];
+      db.query(sql, params)
+        .then(response => {
+          const user = response.rows[0];
+          if (!user) return next();
+          res.status(201).json(user);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/log-in', (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) return next(new ClientError('Invalid username / password!', 400));
+  const sql = `
+  select *
+    from "users"
+    where "username" = $1;
+  `;
+  const params = [username];
+  db.query(sql, params)
+    .then(response => {
+      if (!response.rows[0]) return next(new ClientError('User Account Does Not Exist!', 400));
+      const dbPassword = response.rows[0].password;
+      bcrypt.compare(password, dbPassword)
+        .then(result => {
+          if (!result) return next(new ClientError('Invalid username / password!', 400));
+          res.json('Log-In succeed!');
+        });
+    })
     .catch(err => next(err));
 });
 
@@ -48,9 +97,9 @@ app.post('/api/enter', (req, res, next) => {
 // FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
   const SQL = `
-      SELECT m."userId", m."name", m."eatenAt", mp."report", mp."image"
+      SELECT m."userId", m."mealId", m."name", m."eatenAt", mp."report", mp."image"
       FROM "meals" as m
-      JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
+      LEFT JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
       WHERE m."userId" = 1
     `;
   db.query(SQL)
@@ -61,22 +110,61 @@ app.get('/api/ratefood', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// SENDING RATING
-app.post('/api/ratedfood', (req, res, next) => {
+// SENDING NEW RATING
+app.patch('/api/rate/:mealId', (req, res, next) => {
   const text = `
-      INSERT INTO "mealReports" ("mealId", "report")
-      VALUES ($1, $2)
-      RETURNING *
+  UPDATE "mealReports"
+  SET "report" = $2, "image" = $3
+  WHERE "mealId" = $1
+  RETURNING *
     `;
-  const values = [`${req.body.mealId}`, `${req.body.report}`];
+  const values = [req.body.mealId, req.body.report, req.body.image];
 
   db.query(text, values)
     .then(result => {
       const report = result.rows;
       res.json(report);
       return report;
-    });
+    })
+    .catch(err => next(err));
 });
+
+// GET INDIVIDUAL MEAL
+app.get('/api/rate/:mealId', (req, res, next) => {
+  const mealId = parseInt(req.params.mealId);
+  const SQL = `
+  SELECT m."name"
+  FROM "meals" as m
+  LEFT JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
+  WHERE m."mealId" = $1
+`;
+
+  const value = [mealId];
+  db.query(SQL, value)
+    .then(result => {
+      const [singleMeal] = result.rows;
+      res.status(200).json(singleMeal);
+    })
+    .catch(err => next(err));
+});
+
+// UPDATING RATINGS
+// app.put('/api/ratefood', (req, res, next) => {
+//   const text = `
+//   update "mealReports"
+//   set "report" = $2
+//   where "mealId" = $1
+//   `;
+
+//   const values = [`${req.body.mealId}`, `${req.body.report}`];
+
+//   db.query(text, values)
+//     .then(result => {
+//       const report = result.rows;
+//       res.json(report);
+//       return report;
+//     });
+// });
 
 app.get('/api/list', (req, res, next) => {
   let { userId } = req.session;
