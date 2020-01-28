@@ -53,7 +53,6 @@ export default class RateMeal extends React.Component {
         return response.json();
       })
       .then(data => {
-        // this.setState({ meal: data });
         this.props.history.push('/daily-list');
       })
       .catch(err => {

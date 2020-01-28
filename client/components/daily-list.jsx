@@ -22,7 +22,6 @@ export default class DailyList extends React.Component {
       })
       .then(data => {
         this.setState({ meals: data });
-        // console.log('meals: ', this.state.meals);
       })
       .catch(err => {
         alert('Error: ', err);
