@@ -52,11 +52,13 @@ class EnterFood extends React.Component {
             onSubmit={this.addMeal}
             todaysMeals={this.state.todaysMeals}
           />
-          <ListMeals
-            todaysMeals={this.state.todaysMeals}
-            onSubmit={this.removeFromList}
-          />
-          <div className="row enterButtons justify-content-around mt-3">
+          <div className="listBox mt-3 mx-auto">
+            <ListMeals
+              todaysMeals={this.state.todaysMeals}
+              onSubmit={this.removeFromList}
+            />
+          </div>
+          <div className="row listMealsButtons justify-content-around mt-3">
             <button className="halfButton">Home</button>
             <button className="halfButton">Cancel</button>
           </div>

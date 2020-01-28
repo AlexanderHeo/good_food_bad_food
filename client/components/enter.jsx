@@ -27,7 +27,7 @@ class Enter extends React.Component {
   render() {
     return (
       <>
-        <form action="" onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           <div className="row">
             <div className="header">
               <h1 className="mt-4">Enter Meal</h1>
@@ -49,8 +49,6 @@ class Enter extends React.Component {
             value="Add"
           >Add</button>
         </form>
-        <div className="listBox mt-3 mx-auto"></div>
-
       </>
 
     );

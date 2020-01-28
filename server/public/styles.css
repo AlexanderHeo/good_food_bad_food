@@ -76,13 +76,22 @@ body {
 .listMeals {
   position: relative;
   left: 10px;
+  top: 5px;
 }
-.listMeals p {
-  left: 15px;
-}
-.listBox button {
+.listMeals span {
   position: relative;
-  left: 90px;
+  left: 10px;
+  font-size: 25px;
+}
+.listMeals button {
+  position: relative;
+  float: right;
+  left: -25px;
+}
+.listMealsButtons {
+  position: relative;
+  top: 75px;
+  left: 75px;
 }
 /* Enter Effect */
 .effectLabel {
@@ -120,7 +129,7 @@ body {
 .enterButtons {
   position: relative;
   top: 75px;
-  left: 56px;
+  left: 54px;
 }
 /* choose effect */
 .chooseEffectFood {
@@ -132,6 +141,11 @@ body {
   font-size: 50px;
   border: 2px solid #4A6FF1;
   border-radius: 10px;
+}
+.chooseEffectButtons {
+  position: relative;
+  top: 75px;
+  left: 75px;
 }
 .chooseEffectFaces img {
   height: 80px;
