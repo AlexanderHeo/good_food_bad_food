@@ -36,11 +36,12 @@ export default class DailyList extends React.Component {
       <div className="d-flex">
         {
           meals.map(element =>
-            <p className="h3" key={element.eatenAt}> {element.name}
-              <Link to={`/rate/${element.mealId}`}>
+            <Link to={`/rate/${element.mealId}`} key={element.eatenAt}>
+              <p className="h3"> {element.name}
                 <img src={element.image} alt={element.image} />
-              </Link>
-            </p>)
+              </p>
+            </Link>
+          )
         }
       </div>
     );

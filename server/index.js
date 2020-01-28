@@ -50,7 +50,7 @@ app.get('/api/ratefood', (req, res, next) => {
   const SQL = `
       SELECT m."userId", m."mealId", m."name", m."eatenAt", mp."report", mp."image"
       FROM "meals" as m
-      JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
+      LEFT JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
       WHERE m."userId" = 1
     `;
   db.query(SQL)
@@ -69,14 +69,15 @@ app.patch('/api/rate/:mealId', (req, res, next) => {
   WHERE "mealId" = $1
   RETURNING *
     `;
-  const values = [`${req.body.mealId}`, `${req.body.report}`, `${req.body.image}`];
+  const values = [req.body.mealId, req.body.report, req.body.image];
 
   db.query(text, values)
     .then(result => {
       const report = result.rows;
       res.json(report);
       return report;
-    });
+    })
+    .catch(err => next(err));
 });
 
 // GET INDIVIDUAL MEAL
@@ -85,7 +86,7 @@ app.get('/api/rate/:mealId', (req, res, next) => {
   const SQL = `
   SELECT m."name"
   FROM "meals" as m
-  JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
+  LEFT JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
   WHERE m."mealId" = $1
 `;
 
