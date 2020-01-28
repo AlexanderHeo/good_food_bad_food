@@ -148,24 +148,6 @@ app.get('/api/rate/:mealId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// UPDATING RATINGS
-// app.put('/api/ratefood', (req, res, next) => {
-//   const text = `
-//   update "mealReports"
-//   set "report" = $2
-//   where "mealId" = $1
-//   `;
-
-//   const values = [`${req.body.mealId}`, `${req.body.report}`];
-
-//   db.query(text, values)
-//     .then(result => {
-//       const report = result.rows;
-//       res.json(report);
-//       return report;
-//     });
-// });
-
 app.get('/api/list', (req, res, next) => {
   let { userId } = req.session;
 
