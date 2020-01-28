@@ -26,30 +26,31 @@ class Enter extends React.Component {
 
   render() {
     return (
-      <form action=""
-        onSubmit={ this.handleSubmit }
-      >
-
-        <div className="container">
-          <div className="header">
-            <span>Enter Meal</span>
+      <>
+        <form onSubmit={this.handleSubmit}>
+          <div className="row">
+            <div className="header">
+              <h1 className="mt-4">Enter Meal</h1>
+            </div>
           </div>
+
           <input
             type="text"
             className="input"
             placeholder="Enter Meal"
             name="enter"
-            value= { this.state.meals.meal }
-            onChange= { this.handleChange }
+            value={this.state.meals.meal}
+            onChange={this.handleChange}
           />
+
           <button
             type="submit"
-            className="addButton btn btn-primary"
+            className="fullButton inputButton"
             value="Add"
-          />
-        </div>
+          >Add</button>
+        </form>
+      </>
 
-      </form>
     );
   }
 }

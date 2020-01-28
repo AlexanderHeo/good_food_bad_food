@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom';
-import ListHeader from './list-header';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import DailyList from './daily-list';
+import ListHeader from './list-header';
 import WeeklyList from './weekly-list';
 
 export default class StatusList extends React.Component {
@@ -60,25 +55,29 @@ export default class StatusList extends React.Component {
     const currentDate = this.getWeekday();
     return (
       <Router>
-        <div>
-          <ListHeader weekday={currentDate} />
-          <ul>
-            <li>
-              <Link to="/">Daily</Link>
-            </li>
-            <li>
-              <Link to="/week">Weekly</Link>
-            </li>
-          </ul>
+        <div className="container">
 
-          <Switch>
-            <Route exact path="/">
-              <DailyList weekday={userData.filter(element => this.getWeekday(element.eatenAt) === currentDate)} />
-            </Route>
-            <Route path="/week">
-              <WeeklyList week={userData.filter(element => this.getWeek(element.eatenAt))} getWeekDay={this.getWeekday} />
-            </Route>
-          </Switch>
+          <div className="row">
+            <h1 className="header mt-4 mx-auto">
+              <span>See All Foods and Effects</span>
+            </h1>
+          </div>
+          <ListHeader weekday={currentDate} />
+          <div className="mx-auto">
+            <Link className="seeListButton col-sm-6" to="/">Daily</Link>
+            <Link className="seeListButton col-sm-6" to="/week">Weekly</Link>
+          </div>
+          <div className="seeList">
+            <Switch>
+              <Route exact path="/">
+                <DailyList weekday={userData.filter(element => this.getWeekday(element.eatenAt) === currentDate)} />
+              </Route>
+              <Route path="/week">
+                <WeeklyList week={userData.filter(element => this.getWeek(element.eatenAt))} getWeekDay={this.getWeekday} />
+              </Route>
+            </Switch>
+          </div>
+
         </div>
       </Router>
     );
