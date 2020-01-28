@@ -20,11 +20,25 @@ class Home extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <button type="submit" name="enter" onClick={this.handleClick}>Enter A Meal</button>
-        <button type="submit" name="rate" onClick={this.handleClick}>Enter you Feeling</button>
-        <button type="submit" name="list" onClick={this.handleClick}>Check Meal List</button>
-      </form>
+      <div className="container d-flex flex-column">
+
+        <div className="homeHeader d-flex">
+          <div>Good Food</div>
+          <div>Bad Food</div>
+        </div>
+
+        <div className="openBox">
+          <form onSubmit={this.handleSubmit}>
+            <div className="d-flex flex-column">
+              <button className="fullButton" type="submit" name="enter" onClick={this.handleClick}>Enter A Meal</button>
+              <button className="fullButton" type="submit" name="rate" onClick={this.handleClick}>Enter you Feeling</button>
+              <button className="fullButton" type="submit" name="list" onClick={this.handleClick}>Check Meal List</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
     );
   }
 }

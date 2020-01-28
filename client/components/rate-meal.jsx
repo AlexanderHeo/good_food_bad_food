@@ -43,22 +43,26 @@ export default class RateMeal extends React.Component {
       if (this.state.rateFood === false) {
         const allMeals = this.state.meals;
         return (
-          <div className={'container'} style={{ width: '375px', height: '667px' }}>
-            <div className={'enterEffectDiv'}></div>
-            <div className={'bg-primary'}>Choose the food you want to enter effect for:</div>
-            <div>
+          <div className="container">
+
+            <div className="row">
+              <h1 className="header">
+                <span>Enter Effect</span>
+              </h1>
+            </div>
+            <div className="effectLabel">
+              <span>
+                Choose the meal you want to enter effect for:
+              </span>
+            </div>
+
+            <div className="effectBox">
               <DailyList weekday={allMeals} onClick={this.handleFoodClick} />
             </div>
-            <button className={'.doneButton'} style={{ float: 'left' }}>
-              <span>
-                Done
-              </span>
-            </button>
-            <button className={'.cancelButton'} style={{ float: 'right' }}>
-              <span>
-                Cancel
-              </span>
-            </button>
+            <div className="enterButtons justify-content-around mt-3">
+              <button className="halfButton">Done</button>
+              <button className="halfButton">Cancel</button>
+            </div>
           </div>
         );
       } else if (this.state.rateFood === true) {
