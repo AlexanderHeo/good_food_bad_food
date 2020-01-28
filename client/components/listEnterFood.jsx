@@ -4,8 +4,8 @@ function ListMeals(props) {
   return (
     props.todaysMeals.map(x => {
       return (
-        <div className="listMeals d-flex" key={x}>
-          <p>{ x }</p>
+        <div className="listMeals mt-2" key={x}>
+          <span>{ x }</span>
           <button
             className="btn btn-danger"
             value="Remove"
