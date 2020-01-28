@@ -7,6 +7,8 @@ const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
 
 const bcrypt = require('bcrypt');
+const axios = require('axios');
+const pg = require('pg');
 
 const app = express();
 
@@ -72,22 +74,55 @@ app.post('/api/enter', (req, res, next) => {
   // const userId = req.session.userId;
   const userId = 1;
   const { meal } = req.body;
-  if (!userId) {
-    next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
-    return;
-  } else if (!meal) {
-    next(new ClientError('Please enter a meal.', 400));
-    return;
-  }
+  if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
+  else if (!meal) return next(new ClientError('Please enter a meal.', 400));
   const sql = `
-    insert into "meals" ("name", "userId")
-    values ($1, $2)
-    returning *;
+    with add_to_meals as (
+      insert into "meals" ("name", "userId")
+      values ($1, $2)
+      returning *
+    ), add_to_reports as (
+      insert into "mealReports" ("mealId")
+      select "mealId" from "add_to_meals"
+    )
+    select *
+    from "add_to_meals"
   `;
   const params = [meal, userId];
   db.query(sql, params)
     .then(result => {
-      res.status(201).json(result.rows[0]);
+      const addedMeal = result.rows[0];
+      return axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${'Arrabiata'}`)
+        .then(response => {
+          const mealData = response.data.meals[0];
+          const ingredients = [];
+          Object.keys(mealData).filter(key => {
+            if (key.includes('strIngredient') && mealData[key]) return ingredients.push(mealData[key]);
+          });
+          const insertValues = ingredients.map(ingredient => {
+            return `(${pg.Client.prototype.escapeLiteral(ingredient)})`;
+          }).join(',');
+          const insertValues2 = ingredients.map(ingredient => {
+            return `(${addedMeal.mealId}, ${pg.Client.prototype.escapeLiteral(ingredient)})`;
+          }).join(',');
+          const ingredientSQL = `
+          with add_to_ingredients as (
+            insert into "ingredients"("name")
+            values ${insertValues}
+            returning *
+          ), add_to_meal_ingredients as (
+            insert into "mealIngredients" ("mealId", "ingredientName")
+            values ${insertValues2}
+            returning *
+          )
+          select *
+          from "add_to_meal_ingredients";
+          `;
+          return db.query(ingredientSQL)
+            .then(ingreTable => {
+              res.json(ingreTable.rows);
+            });
+        });
     })
     .catch(error =>
       next(error)
