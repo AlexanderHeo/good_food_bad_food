@@ -63,11 +63,11 @@ export default class StatusList extends React.Component {
             </h1>
           </div>
           <ListHeader weekday={currentDate} />
-          <div className="mx-auto">
-            <Link className="seeListButton col-sm-6" to="/">Daily</Link>
-            <Link className="seeListButton col-sm-6" to="/week">Weekly</Link>
+          <div className="mx-auto seeListButton">
+            <Link className="buttons" to="/">Daily</Link>
+            <Link className="buttons" to="/week">Weekly</Link>
           </div>
-          <div className="seeList">
+          <div className="effectBox">
             <Switch>
               <Route exact path="/">
                 <DailyList />

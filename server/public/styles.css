@@ -100,7 +100,7 @@ body {
   left: 10px;
   width: 327px;
   height: 100px;
-  font-size: 30px;
+  font-size: 25px;
   border: 2px solid #4A6FF1;
   border-radius: 10px;
   text-align: center;
@@ -113,6 +113,22 @@ body {
   height: 350px;
   font-size: 20px;
   border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.effectBox::-webkit-scrollbar {
+  background-color: rgba(74, 110, 241, 0.493);
+  width: 10px;
+  border-radius: 10px;
+  margin: 0;
+}
+.effectBox::-webkit-scroll-track {
+  background-clip: content-box;
+}
+.effectBox::-webkit-scrollbar-thumb:vertical {
+  height: 10px;
+  background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
   border-radius: 10px;
 }
 .effectBox p {
@@ -135,9 +151,23 @@ body {
 .chooseEffectFood {
   text-align: center;
 }
-.chooseEffectBox {
+.chooseEffectLabel {
+  position: relative;
+  top: 10px;
+  left: 10px;
   width: 327px;
-  height: 363px;
+  height: 42px;
+  font-size: 25px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  text-align: center;
+}
+.chooseEffectBox {
+  position: relative;
+  top: 10px;
+  left: 10px;
+  width: 327px;
+  height: 425px;
   font-size: 50px;
   border: 2px solid #4A6FF1;
   border-radius: 10px;
@@ -147,15 +177,17 @@ body {
   top: 75px;
   left: 75px;
 }
-.chooseEffectFaces img {
-  height: 80px;
-  width: 80px;
-}
-.chooseEffectFaces p {
-  font-size: 30px;
+.chooseEffectFaces a {
+  position: relative;
+  font-size: 50px;
+  left: 30px;
 }
 .chooseEffectFaces img {
   position: relative;
+  float: right;
+  height: 60px;
+  width: 60px;
+  right: 80px;
 }
 /* see today */
 .chooseList {
@@ -181,19 +213,34 @@ body {
   border: 2px solid #4A6FF1;
   border-radius: 10px;
   text-align: center;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.seeList::-webkit-scrollbar {
+  background-color: rgba(74, 110, 241, 0.493);
+  width: 10px;
+  border-radius: 10px;
+  margin: 0;
+}
+.seeList::-webkit-scroll-track {
+  background-clip: content-box;
+}
+.seeList::-webkit-scrollbar-thumb:vertical {
+  height: 10px;
+  background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
+  border-radius: 10px;
 }
 .seeList img {
   position: relative;
   height: 25px;
   width: 25px;
-  left: 150px;
+  left: 105px;
 }
 .seeList p {
   position: relative;
-  left: 15px;
+  left: -60px;
 }
-.seeListButton {
+.seeListButton .buttons {
   background-color: #96abf8;
   width: 120px;
   height: 38px;
