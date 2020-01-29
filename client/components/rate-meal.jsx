@@ -1,5 +1,6 @@
 
 import React from 'react';
+import SeeIngredients from './see-ingredients';
 
 export default class RateMeal extends React.Component {
   constructor(props) {
@@ -83,6 +84,9 @@ export default class RateMeal extends React.Component {
             <a href="#" className="list-group-item list-group-item-action" onClick={this.handleRatingClick}>Bad
               <img src='/images/badFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
             </a>
+          </div>
+          <div>
+            <SeeIngredients mealId={this.props.match.params.mealId} />
           </div>
         </div>
       );
