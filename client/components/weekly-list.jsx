@@ -21,12 +21,13 @@ class WeeklyList extends React.Component {
     const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const imageSource = ['/images/badFace.jpg', '/images/neutralFace.jpg', '/images/happyFace.jpg'];
     return (
-      <div className="">
+      <div className="effectsBox">
         {
           weekAverage.map((element, index) =>
             <div className={`${weekdays[index]}`} key={weekdays[index]}>
-              <p className="h4">{weekdays[index]}</p>
-              <img src={imageSource[element - 1]} alt={element} />
+              <p className="">{weekdays[index]}
+                <img src={imageSource[element - 1]} alt={element} />
+              </p>
             </div>
           )
         }
