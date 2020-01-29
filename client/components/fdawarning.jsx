@@ -41,15 +41,15 @@ export default class FDAWarning extends React.Component {
     const warningObj = this.state.warning;
     if (warningObj.length === 0) {
       return (
-        <div>
-          <form onSubmit={this.handleSubmit} >
+        <form onSubmit={this.handleSubmit} >
+          <div className="container d-flex flex-column">
             <label>
               City:
               <input type="text" value={this.state.userCity} onChange={this.handleChange} />
             </label>
-            <button type="submit" />
-          </form>
-        </div>
+            <button className="halfButton" type="submit">Submit</button>
+          </div>
+        </form>
       );
     } else {
       const FDADisclaimer = warningObj.meta.disclaimer;
@@ -60,23 +60,27 @@ export default class FDAWarning extends React.Component {
       const FDADistribution = warningObj.results[0].distribution_pattern;
       const FDAQuantity = warningObj.results[0].product_quantity;
       return (
-        <div>
-          <form onSubmit={this.handleSubmit} >
+        <form onSubmit={this.handleSubmit}>
+          <div className="container d-flex flex-column">
             <label>
               City:
               <input type="text" value={this.state.userCity} onChange={this.handleChange} />
             </label>
-            <button type="submit" />
-          </form>
-          <h1>FDA Warning!</h1>
-          <h2>Disclaimer: {FDADisclaimer} </h2>
-          <h5>Product Description: {FDADescription}</h5>
-          <h5>Date issued: {FDAIssued} </h5>
-          <h5>Cities Impacted: {FDACity} </h5>
-          <h5>Reason for Recall: {FDAReason}</h5>
-          <h5>Distribution Pattern: {FDADistribution}</h5>
-          <h5>Quantity: {FDAQuantity} </h5>
-        </div>
+            <button className="halfButton" type="submit">Submit</button>
+            <div className="mx-auto">
+              <h1>FDA Warning:</h1>
+            </div>
+            <div>
+              <p className="fdaDisclaimer">Disclaimer:{FDADisclaimer}</p>
+              <p>Product Description: {FDADescription}</p>
+              <p>Date issued: {FDAIssued} </p>
+              <p>Cities Impacted: {FDACity} </p>
+              <p>Reason for Recall: {FDAReason}</p>
+              <p>Distribution Pattern: {FDADistribution}</p>
+              <p>Quantity: {FDAQuantity} </p>
+            </div>
+          </div>
+        </form>
       );
     }
   }

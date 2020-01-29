@@ -66,23 +66,34 @@ export default class RateMeal extends React.Component {
       return <div>LOADING...</div>;
     } else {
       return (
-        <div className={'container'} style={{ width: '375px', height: '667px' }}>
-          <div className={'bg-warning'}>
-              How did it make you feel?
+        <div className="container d-flex flex-column">
+
+          <div className="row">
+            <h1 className="header">
+              <span>Choose Effect</span>
+            </h1>
           </div>
-          <div className={'bg-info'}>
-            {mealName}
-          </div>
-          <div className="list-group">
-            <a href="#" className="list-group-item list-group-item-action" onClick={this.handleRatingClick}>Good
-              <img src='/images/happyFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
-            </a>
-            <a href="#" className="list-group-item list-group-item-action" onClick={this.handleRatingClick}>Ok
-              <img src='/images/neutralFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
-            </a>
-            <a href="#" className="list-group-item list-group-item-action" onClick={this.handleRatingClick}>Bad
-              <img src='/images/badFace.jpg' style={{ width: '25px', height: '25px', float: 'right' }}></img>
-            </a>
+          <p className="chooseEffectLabel">How did it make you feel?</p>
+
+          <div className="chooseEffectBox">
+            <div className="chooseEffectFood">{mealName}</div>
+            <div className="chooseEffectFaces d-flex flex-column">
+              <div>
+                <a href="#" onClick={this.handleRatingClick}>Good
+                  <img src='/images/happyFace.jpg'></img>
+                </a>
+              </div>
+              <div>
+                <a href="#" onClick={this.handleRatingClick}>Ok
+                  <img src='/images/neutralFace.jpg'></img>
+                </a>
+              </div>
+              <div>
+                <a href="#" onClick={this.handleRatingClick}>Bad
+                  <img src='/images/badFace.jpg'></img>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       );
