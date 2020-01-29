@@ -1,0 +1,21 @@
+server {
+
+  server_name gfbf.evanmontgomery.tech;
+
+  root /home/ubuntu/good-food-bad-food/server/public;
+
+  index index.html;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  location /api {
+    proxy_pass http://localhost:3002;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+}
