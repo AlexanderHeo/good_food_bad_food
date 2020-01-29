@@ -197,6 +197,25 @@ app.get('/api/rate/:mealId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/ingredients/:mealId', (req, res, next) => {
+  const mealId = parseInt(req.params.mealId);
+  if (!mealId) {
+    return next(new ClientError('Cannot find meal ID', 400));
+  }
+
+  const SQL = `
+  select "ingredientName"
+  from "mealIngredients"
+  where "mealId" = ${mealId}
+  `;
+
+  db.query(SQL)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.get('/api/list', (req, res, next) => {
   const { userId } = req.session;
 
