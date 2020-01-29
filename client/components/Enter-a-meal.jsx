@@ -25,7 +25,7 @@ class EnterFood extends React.Component {
       })
       .then(jsonData => {
         const todaysMealsCopy = [...this.state.todaysMeals];
-        const addedMeal = todaysMealsCopy.concat(jsonData.name);
+        const addedMeal = todaysMealsCopy.concat(newMeal.meal);
         this.setState({
           todaysMeals: addedMeal
         });
