@@ -70,7 +70,7 @@ export default class StatusList extends React.Component {
           <div className="seeList">
             <Switch>
               <Route exact path="/">
-                <DailyList weekday={userData.filter(element => this.getWeekday(element.eatenAt) === currentDate)} />
+                <DailyList />
               </Route>
               <Route path="/week">
                 <WeeklyList week={userData.filter(element => this.getWeek(element.eatenAt))} getWeekDay={this.getWeekday} />
