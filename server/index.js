@@ -28,18 +28,20 @@ app.post('/api/sign-up', (req, res, next) => {
   if (!username || !password) {
     return next(new ClientError('Invalid username / password!', 400));
   }
+  if (req.session.userId) return next(new ClientError('Please Exit current account before sign up!', 400));
   bcrypt.hash(password, 10)
     .then(hash => {
       const hashedPassword = hash;
       const sql = `
       insert into "users"("username", "password")
       values ($1, $2)
-      returning "username";
+      returning "username", "userId";
       `;
       const params = [username, hashedPassword];
       db.query(sql, params)
         .then(response => {
-          const user = response.rows[0];
+          const user = response.rows[0].username;
+          req.session.userId = response.rows[0].userId;
           if (!user) return next();
           res.status(201).json(user);
         })
@@ -51,6 +53,7 @@ app.post('/api/sign-up', (req, res, next) => {
 app.post('/api/log-in', (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) return next(new ClientError('Invalid username / password!', 400));
+  if (req.session.userId) return next(new ClientError('Please Exit current account before log in!', 400));
   const sql = `
   select *
     from "users"
@@ -64,15 +67,22 @@ app.post('/api/log-in', (req, res, next) => {
       bcrypt.compare(password, dbPassword)
         .then(result => {
           if (!result) return next(new ClientError('Invalid username / password!', 400));
+          req.session.userId = response.rows[0].userId;
           res.json('Log-In succeed!');
         });
     })
     .catch(err => next(err));
 });
 
+app.post('/api/log-out', (req, res, next) => {
+  if (!req.session.userId) return next(new ClientError('Please log-in before log-out!', 400));
+  delete req.session.userId;
+  res.json({ Success: 'Successful log-out' });
+});
+
 app.post('/api/enter', (req, res, next) => {
   // const userId = req.session.userId;
-  const userId = 1;
+  const userId = req.session.userId;
   const { meal } = req.body;
   if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
   else if (!meal) return next(new ClientError('Please enter a meal.', 400));
@@ -132,11 +142,12 @@ app.post('/api/enter', (req, res, next) => {
 
 // FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
+  const userId = req.session.userId;
   const SQL = `
-      SELECT m."userId", m."mealId", m."name", m."eatenAt", mp."report", mp."image"
+      SELECT m."mealId", m."name", m."eatenAt", mp."report", mp."image"
       FROM "meals" as m
       LEFT JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
-      WHERE m."userId" = 1
+      WHERE m."userId" = ${userId}
       order by "eatenAt" desc;
     `;
   db.query(SQL)
@@ -205,13 +216,9 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
 });
 
 app.get('/api/list', (req, res, next) => {
-  let { userId } = req.session;
+  const { userId } = req.session;
 
   // for testing default userId to 1;
-  if (!userId) {
-    userId = 1;
-  }
-
   const condition = new RegExp('^\\d+$');
   if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404));
   const sql = `
