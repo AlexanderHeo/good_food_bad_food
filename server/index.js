@@ -92,8 +92,9 @@ app.post('/api/enter', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       const addedMeal = result.rows[0];
-      return axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${'Arrabiata'}`)
+      return axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${addedMeal.name}`)
         .then(response => {
+          if (!response.data.meals) return res.status(201).json(addedMeal.mealId);
           const mealData = response.data.meals[0];
           const ingredients = [];
           Object.keys(mealData).filter(key => {
@@ -136,6 +137,7 @@ app.get('/api/ratefood', (req, res, next) => {
       FROM "meals" as m
       LEFT JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
       WHERE m."userId" = 1
+      order by "eatenAt" desc;
     `;
   db.query(SQL)
     .then(result => {
@@ -182,24 +184,6 @@ app.get('/api/rate/:mealId', (req, res, next) => {
     })
     .catch(err => next(err));
 });
-
-// UPDATING RATINGS
-// app.put('/api/ratefood', (req, res, next) => {
-//   const text = `
-//   update "mealReports"
-//   set "report" = $2
-//   where "mealId" = $1
-//   `;
-
-//   const values = [`${req.body.mealId}`, `${req.body.report}`];
-
-//   db.query(text, values)
-//     .then(result => {
-//       const report = result.rows;
-//       res.json(report);
-//       return report;
-//     });
-// });
 
 app.get('/api/list', (req, res, next) => {
   let { userId } = req.session;

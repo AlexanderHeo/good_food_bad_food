@@ -31,9 +31,9 @@ class Home extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <div className="d-flex flex-column">
               <button className="fullButton" type="submit" name="enter" onClick={this.handleClick}>Enter A Meal</button>
-              <button className="fullButton" type="submit" name="rate" onClick={this.handleClick}>Enter you Feeling</button>
+              <button className="fullButton" type="submit" name="daily-list" onClick={this.handleClick}>Enter you Feeling</button>
               <button className="fullButton" type="submit" name="list" onClick={this.handleClick}>Check Meal List</button>
-              <button className="fullButton" type="submit" name="list" onClick={this.handleClick}>FDA Warnings</button>
+              <button className="fullButton" type="submit" name="warning" onClick={this.handleClick}>FDA Warnings</button>
             </div>
           </form>
         </div>
