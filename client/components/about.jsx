@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function About() {
   return (
     <div className="container d-flex flex-column">
-      <h1>Welcome to Good Food Bad Food!</h1>
+      <h2>Welcome to Good Food Bad Food!</h2>
       <h5>Thank you for downloading this app! This app
         is for people who need to track their diet due
         to a disease.
@@ -25,6 +25,7 @@ function About() {
         you will be able to avoid bad affecting foods
         in the future!
       </h5>
+      <div>Developed By: Evan Montgomery, Andrew Zhou, and Alex Heo</div>
       <div className="row listMealsButtons justify-content-around mt-3">
         <Link className="halfButton text-center" to="/home">Home</Link>
       </div>
