@@ -33,9 +33,13 @@ body {
   cursor: pointer;
 }
 .fullButton:hover {
+  height: 70px;
+  width: 331px;
   box-shadow: 2px 2px #0f41f7;
 }
 .halfButton:hover {
+  height: 43px;
+  width: 331px;
   box-shadow: 2px 2px #0f41f7;
 }
 /* login-signup */
@@ -210,7 +214,7 @@ body {
   color: #0f41f7;
 }
 .fda {
-  height: 285px;
+  height: 350px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -227,3 +231,12 @@ body {
   height: 10px;
   background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
   border-radius: 10px;
+}
+.fdablank {
+  height: 542px;
+  width: 326px;
+}
+.fdablankinvalid {
+  height: 518px;
+  width: 326px;
+}
