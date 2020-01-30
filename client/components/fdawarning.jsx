@@ -17,7 +17,6 @@ export default class FDAWarning extends React.Component {
     const userCity = this.state.userCity;
     fetch(`https://api.fda.gov/food/enforcement.json?search=city:"${userCity}"`)
       .then(response => {
-
         return response.json();
       })
       .then(data => {
