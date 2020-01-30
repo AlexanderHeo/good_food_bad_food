@@ -215,7 +215,7 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
 });
 
 app.get('/api/list', (req, res, next) => {
-  const { userId } = 1;
+  const { userId } = req.session.userId;
 
   // for testing default userId to 1;
   const condition = new RegExp('^\\d+$');
