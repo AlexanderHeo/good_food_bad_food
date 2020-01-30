@@ -69,13 +69,13 @@ export default class FDAWarning extends React.Component {
       const FDADescription = warningObj.results[0].product_description;
       const FDAIssued = warningObj.results[0].report_date;
       const FDACity = warningObj.results[0].city;
-      const FDAState = warningObj.results[0].state;
+      // const FDAState = warningObj.results[0].state;
       const FDAReason = warningObj.results[0].reason_for_recall;
       const FDADistribution = warningObj.results[0].distribution_pattern;
       const FDAQuantity = warningObj.results[0].product_quantity;
-      const dateYear = FDAIssued.slice(0, 4);
-      const dateMonth = FDAIssued.slice(4, 6);
-      const dateDay = FDAIssued.slice(6, 8);
+      // const dateYear = FDAIssued.slice(0, 4);
+      // const dateMonth = FDAIssued.slice(4, 6);
+      // const dateDay = FDAIssued.slice(6, 8);
 
       return (
         <form onSubmit={this.handleSubmit}>
@@ -86,13 +86,19 @@ export default class FDAWarning extends React.Component {
               <button className="halfButton" type="submit">Submit</button>
             </div>
             <div>
-              <p className="fdaDisclaimer">Disclaimer: {FDADisclaimer}</p>
-              <p>Product Description: {FDADescription}</p>
-              <p>Date Issued: {dateMonth}-{dateDay}-{dateYear} </p>
-              <p>City Impacted: {FDACity}, {FDAState} </p>
-              <p>Reason: {FDAReason}</p>
-              <p>Distribution Pattern: {FDADistribution}</p>
-              <p>Quantity: {FDAQuantity} </p>
+
+              <p className="text-danger">Disclaimer:{FDADisclaimer}</p>
+              <div className="fda">
+                <p>Product Description: {FDADescription}</p>
+                <p>Date issued: {FDAIssued} </p>
+                <p>Cities Impacted: {FDACity} </p>
+                <p>Reason for Recall: {FDAReason}</p>
+                <p>Distribution Pattern: {FDADistribution}</p>
+                <p>Quantity: {FDAQuantity} </p>
+              </div>
+            </div>
+            <div className="row listMealsButtons justify-content-around mt-3">
+              <button className="halfButton">Home</button>
             </div>
           </div>
         </form>
