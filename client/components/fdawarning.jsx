@@ -41,12 +41,12 @@ export default class FDAWarning extends React.Component {
     if (warningObj.length === 0) {
       return (
         <form onSubmit={this.handleSubmit} >
-          <div className="container d-flex flex-column">
-            <label>
-              City:
+          <div className="container">
+            <div className="mt-4 d-flex justify-content-center">
+              <label className="mt-1">City:</label>
               <input type="text" value={this.state.userCity} onChange={this.handleChange} />
-            </label>
-            <button className="halfButton" type="submit">Submit</button>
+              <button className="halfButton" type="submit">Submit</button>
+            </div>
           </div>
         </form>
       );
@@ -60,12 +60,12 @@ export default class FDAWarning extends React.Component {
       const FDAQuantity = warningObj.results[0].product_quantity;
       return (
         <form onSubmit={this.handleSubmit}>
-          <div className="container d-flex flex-column">
-            <label>
-              City:
+          <div className="container">
+            <div className="mt-4 d-flex justify-content-center">
+              <label className="mt-1">City:</label>
               <input type="text" value={this.state.userCity} onChange={this.handleChange} />
-            </label>
-            <button className="halfButton" type="submit">Submit</button>
+              <button className="halfButton" type="submit">Submit</button>
+            </div>
             <div className="mx-auto">
               <h1>FDA Warning:</h1>
             </div>

@@ -58,16 +58,16 @@ export default class StatusList extends React.Component {
         <div className="container">
 
           <div className="row">
-            <h1 className="header mt-4 mx-auto">
+            <h1 className="header ml-4 mt-4 mx-auto">
               <span>See All Foods and Effects</span>
             </h1>
           </div>
           <ListHeader weekday={currentDate} />
-          <div className="mx-auto seeListButton">
+          <div className="d-flex justify-content-around text-center seeListButton">
             <Link className="buttons" to="/daily">Daily</Link>
             <Link className="buttons" to="/week">Weekly</Link>
           </div>
-          <div className="effectBox">
+          <div className="effectBox ml-2 mt-2">
             <Switch>
               <Route exact path="/daily">
                 <DailyList />

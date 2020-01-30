@@ -28,7 +28,6 @@ app.post('/api/sign-up', (req, res, next) => {
   if (!username || !password) {
     return next(new ClientError('Invalid username / password!', 400));
   }
-  if (req.session.userId) return next(new ClientError('Please Exit current account before sign up!', 400));
   bcrypt.hash(password, 10)
     .then(hash => {
       const hashedPassword = hash;
@@ -42,8 +41,8 @@ app.post('/api/sign-up', (req, res, next) => {
         .then(response => {
           const user = response.rows[0].username;
           req.session.userId = response.rows[0].userId;
-          if (!user) return next();
-          res.status(201).json(user);
+          if (!user) return next(new ClientError('Please Enter A Unique UserName', 400));
+          res.status(201).json({ success: 's' });
         })
         .catch(err => next(err));
     })
@@ -53,7 +52,6 @@ app.post('/api/sign-up', (req, res, next) => {
 app.post('/api/log-in', (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) return next(new ClientError('Invalid username / password!', 400));
-  if (req.session.userId) return next(new ClientError('Please Exit current account before log in!', 400));
   const sql = `
   select *
     from "users"
@@ -68,16 +66,21 @@ app.post('/api/log-in', (req, res, next) => {
         .then(result => {
           if (!result) return next(new ClientError('Invalid username / password!', 400));
           req.session.userId = response.rows[0].userId;
-          res.json('Log-In succeed!');
+          res.json({ success: 'Log-In succeed!' });
         });
     })
     .catch(err => next(err));
 });
 
-app.post('/api/log-out', (req, res, next) => {
+app.get('/api/log-out', (req, res, next) => {
   if (!req.session.userId) return next(new ClientError('Please log-in before log-out!', 400));
   delete req.session.userId;
-  res.json({ Success: 'Successful log-out' });
+  res.json({ success: 'Successful log-out' });
+});
+
+app.get('/api/isloggedin', (req, res, next) => {
+  if (!req.session.userId) return res.json({ error: 'not logged in!' });
+  res.json({ success: 'logged in' });
 });
 
 app.post('/api/enter', (req, res, next) => {
@@ -230,7 +233,7 @@ app.get('/api/list', (req, res, next) => {
   where "m"."userId" = $1
   order by "eatenAt" desc;
   `;
-  const params = [1];
+  const params = [userId];
   db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
