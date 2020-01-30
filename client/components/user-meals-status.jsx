@@ -56,7 +56,6 @@ export default class StatusList extends React.Component {
     return (
       <Router>
         <div className="container">
-
           <div className="row">
             <h1 className="header ml-4 mt-4 mx-auto">
               <span>See All Foods and Effects</span>
@@ -77,7 +76,6 @@ export default class StatusList extends React.Component {
               </Route>
             </Switch>
           </div>
-
         </div>
       </Router>
     );
