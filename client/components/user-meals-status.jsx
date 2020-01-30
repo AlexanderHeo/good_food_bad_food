@@ -64,8 +64,8 @@ export default class StatusList extends React.Component {
           </div>
           <ListHeader weekday={currentDate} />
           <div className="d-flex justify-content-around text-center seeListButton">
-            <Link className="buttons" to="/daily">Daily</Link>
-            <Link className="buttons" to="/week">Weekly</Link>
+            <Link className="halfButton" to="/daily">Daily</Link>
+            <Link className="halfButton" to="/week">Weekly</Link>
           </div>
           <div className="effectBox ml-2 mt-2">
             <Switch>
@@ -77,7 +77,9 @@ export default class StatusList extends React.Component {
               </Route>
             </Switch>
           </div>
-
+          <div className="row listMealsButtons justify-content-around mt-3">
+            <button className="halfButton">Home</button>
+          </div>
         </div>
       </Router>
     );
