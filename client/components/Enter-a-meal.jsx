@@ -12,6 +12,15 @@ class EnterFood extends React.Component {
     this.removeFromList = this.removeFromList.bind(this);
   }
 
+  componentDidMount() {
+    fetch('/api/isloggedin')
+      .then(response => response.json())
+      .then(result => {
+        if (result.error) return this.props.history.push('/ls');
+      })
+      .catch(err => console.error(err));
+  }
+
   addMeal(newMeal) {
     fetch('/api/enter', {
       method: 'POST',

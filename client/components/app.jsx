@@ -6,6 +6,9 @@ import FDAWarning from './fdawarning';
 import HomePage from './home-page';
 import RateMeal from './rate-meal';
 import List from './user-meals-status';
+import LoginSignup from './Login-Signup';
+import Login from './Login';
+import Signup from './Signup';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,6 +19,9 @@ class App extends React.Component {
   render() {
     return (
       <Router>
+        <Route path="/ls" component={LoginSignup}></Route>
+        <Route path="/login" component={Login}></Route>
+        <Route path="/signup" component={Signup}></Route>
         <Route path="/home" component={HomePage}></Route>
         <Route path="/enter" component={Enter}></Route>
         <Route path="/entereffects" component={EnterEffects}></Route>
