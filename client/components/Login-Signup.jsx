@@ -18,7 +18,7 @@ const LoginSignup = props => {
       </div>
       <div className="col d-flex justify-content-around mt-5">
         <Link className="halfButton text-center" to="/login">Log In</Link>
-        <Link className="halfButton text-center" to="/signup">Sign Up!</Link>
+        <Link className="halfButton text-center" to="/signup">Sign Up</Link>
       </div>
     </div>
   );

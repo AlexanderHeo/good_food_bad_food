@@ -6,4 +6,4 @@
 node_modules
 server/sessions/*.json
 server/public/main.js*
-/server/gfbf.evanmontgomery.tech
+server/gfbf.evanmontgomery.tech
