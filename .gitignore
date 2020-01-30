@@ -1,7 +1,9 @@
 .env
 .idea
 .vscode
+.tech
 .DS_Store
 node_modules
 server/sessions/*.json
 server/public/main.js*
+/server/gfbf.evanmontgomery.tech
