@@ -71,13 +71,15 @@ export default class FDAWarning extends React.Component {
               <h1>FDA Warning:</h1>
             </div>
             <div>
-              <p className="fdaDisclaimer">Disclaimer:{FDADisclaimer}</p>
-              <p>Product Description: {FDADescription}</p>
-              <p>Date issued: {FDAIssued} </p>
-              <p>Cities Impacted: {FDACity} </p>
-              <p>Reason for Recall: {FDAReason}</p>
-              <p>Distribution Pattern: {FDADistribution}</p>
-              <p>Quantity: {FDAQuantity} </p>
+              <p className="text-danger">Disclaimer:{FDADisclaimer}</p>
+              <div className="fda">
+                <p>Product Description: {FDADescription}</p>
+                <p>Date issued: {FDAIssued} </p>
+                <p>Cities Impacted: {FDACity} </p>
+                <p>Reason for Recall: {FDAReason}</p>
+                <p>Distribution Pattern: {FDADistribution}</p>
+                <p>Quantity: {FDAQuantity} </p>
+              </div>
             </div>
           </div>
         </form>
