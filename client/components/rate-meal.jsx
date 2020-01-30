@@ -1,5 +1,6 @@
 
 import React from 'react';
+import SeeIngredients from './see-ingredients';
 
 export default class RateMeal extends React.Component {
   constructor(props) {
@@ -53,7 +54,7 @@ export default class RateMeal extends React.Component {
         return response.json();
       })
       .then(data => {
-        this.props.history.push('/daily-list');
+        this.props.history.push('/entereffects');
       })
       .catch(err => {
         alert('Error: ', err);
@@ -94,6 +95,9 @@ export default class RateMeal extends React.Component {
                 </a>
               </div>
             </div>
+          </div>
+          <div>
+            <SeeIngredients mealId={this.props.match.params.mealId} />
           </div>
         </div>
       );

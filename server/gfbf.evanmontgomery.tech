@@ -11,6 +11,10 @@ server {
   }
 
   location /api {
+<<<<<<< HEAD
     proxy_pass http://localhost:3003;
+=======
+    proxy_pass http://localhost:3001;
+>>>>>>> 7d9d3c262c0dc85b9614c64395b4f87c6abc0d6f
   }
 }
