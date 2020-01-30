@@ -30,6 +30,7 @@ class Signup extends React.Component {
       },
       body: JSON.stringify(goodStuff)
     };
+
     fetch('/api/sign-up', init)
       .then(response => response.json())
       .then(result => {
@@ -51,12 +52,10 @@ class Signup extends React.Component {
   render() {
     return (
       <div className="container">
-
         <div className="row ls-icons d-flex justify-content-around my-5 text-center">
           <img src="images/angel.png" alt="" />
           <img src="images/devil.png" alt="" />
         </div>
-
         <form onSubmit={this.handleSubmit}>
           <div className="row d-flex justify-content-center">
             <div className="form-group d-flex flex-column text-center">

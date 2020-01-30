@@ -54,9 +54,8 @@ export default class StatusList extends React.Component {
     if (!userData[0]) return null;
     const currentDate = this.getWeekday();
     return (
-      <Router>
-        <div className="container">
-
+      <div className="container">
+        <Router>
           <div className="row">
             <h1 className="header ml-4 mt-4 mx-auto">
               <span>See All Foods and Effects</span>
@@ -77,11 +76,11 @@ export default class StatusList extends React.Component {
               </Route>
             </Switch>
           </div>
-          <div className="row listMealsButtons justify-content-around mt-3">
-            <button className="halfButton">Home</button>
-          </div>
+        </Router>
+        <div className="row listMealsButtons justify-content-around mt-3">
+          <Link className="halfButton text-center" to="/home">Home</Link>
         </div>
-      </Router>
+      </div>
     );
   }
 }
