@@ -28,26 +28,32 @@ class Enter extends React.Component {
     return (
       <>
         <form onSubmit={this.handleSubmit}>
-          <div className="row">
-            <div className="header">
-              <h1 className="mt-4">Enter Meal</h1>
+          <div className="d-flex flex-column">
+            <div className="row d-flex justify-content-center mt-3">
+              <div className="header">
+                <h1 className="">Enter Meal</h1>
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="d-flex justify-content-center ml-4">
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="ex. Hamburger"
+                  name="enter"
+                  value={this.state.meals.meal}
+                  onChange={this.handleChange}
+                />
+              </div>
             </div>
           </div>
-
-          <input
-            type="text"
-            className="input"
-            placeholder="Enter Meal"
-            name="enter"
-            value={this.state.meals.meal}
-            onChange={this.handleChange}
-          />
-
-          <button
-            type="submit"
-            className="fullButton inputButton"
-            value="Add"
-          >Add</button>
+          <div className="d-flex justify-content-center">
+            <button
+              type="submit"
+              className="fullButton mt-2"
+              value="Add"
+            >Add</button>
+          </div>
         </form>
       </>
 
