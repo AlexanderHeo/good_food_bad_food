@@ -81,6 +81,9 @@ export default class FDAWarning extends React.Component {
                 <p>Quantity: {FDAQuantity} </p>
               </div>
             </div>
+            <div className="row listMealsButtons justify-content-around mt-3">
+              <button className="halfButton">Home</button>
+            </div>
           </div>
         </form>
       );
