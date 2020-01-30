@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class Signup extends React.Component {
   constructor(props) {
@@ -52,11 +53,12 @@ class Signup extends React.Component {
   render() {
     return (
       <div className="container">
-        <div className="row ls-icons d-flex justify-content-around my-5 text-center">
+        <h1 className="header mt-3 mx-auto">Sign Up</h1>
+        <div className="row ls-icons d-flex justify-content-around my-3 text-center">
           <img src="images/angel.png" alt="" />
           <img src="images/devil.png" alt="" />
         </div>
-        <form onSubmit={this.handleSubmit}>
+        <form className="ls" onSubmit={this.handleSubmit}>
           <div className="row d-flex justify-content-center">
             <div className="form-group d-flex flex-column text-center">
               <label>Create A Username</label>
@@ -70,10 +72,13 @@ class Signup extends React.Component {
             </div>
           </div>
           <div className="row d-flex justify-content-center mt-5">
-            <button type="submit" className="btn btn-primary">Create the Account!</button>
+            <button type="submit" className="halfButton">Create the Account!</button>
           </div>
           <div>{this.state.message}</div>
         </form>
+        <div className="row listMealsButtons justify-content-around mt-3">
+          <Link className="halfButton text-center" to="/home">Home</Link>
+        </div>
       </div>
     );
   }
