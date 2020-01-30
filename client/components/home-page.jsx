@@ -45,20 +45,19 @@ class Home extends React.Component {
     if (status) return null;
     return (
       <div className="container d-flex flex-column">
-
-        <div className="homeHeader d-flex">
+        <div className="homeHeader d-flex flex-column mt-2">
           <div>Good Food</div>
           <div>Bad Food</div>
         </div>
 
-        <div className="openBox">
+        <div className="openBox mt-3">
           <form onSubmit={this.handleSubmit}>
-            <div className="d-flex flex-column">
-              <button className="fullButton" type="submit" name="enter" onClick={this.handleClick}>Enter A Meal</button>
-              <button className="fullButton" type="submit" name="entereffects" onClick={this.handleClick}>Enter you Feeling</button>
-              <button className="fullButton" type="submit" name="list" onClick={this.handleClick}>Check Meal List</button>
-              <button className="fullButton" type="submit" name="warning" onClick={this.handleClick}>FDA Warnings</button>
-              <button type="submit" onClick={this.handleLogOut}>Log Out</button>
+            <div className="d-flex flex-column mx-auto">
+              <button className="fullButton mx-auto my-3" type="submit" name="enter" onClick={this.handleClick}>Enter A Meal</button>
+              <button className="fullButton mx-auto my-3" type="submit" name="entereffects" onClick={this.handleClick}>Enter you Feeling</button>
+              <button className="fullButton mx-auto my-3" type="submit" name="list" onClick={this.handleClick}>Check Meal List</button>
+              <button className="fullButton mx-auto my-3" type="submit" name="warning" onClick={this.handleClick}>FDA Warnings</button>
+              <button className="fullButton mx-auto mt-5 mb-3" type="submit" onClick={this.handleLogOut}>Log Out</button>
             </div>
           </form>
         </div>
