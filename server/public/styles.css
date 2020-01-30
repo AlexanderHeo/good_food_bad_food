@@ -16,18 +16,27 @@ body {
 }
 .fullButton {
   background: linear-gradient(45deg, #96abf8 0%, #d3dcf8 50%, #becaf3 100%);
-  width: 311px;
+  width: 326px;
   height: 65px;
   border-radius: 10px;
   font-size: 30px;
   color: #0f41f7;
+  cursor: pointer;
 }
 .halfButton {
   background: linear-gradient(45deg, #96abf8 0%, #d3dcf8 50%, #becaf3 100%);
-  width: 120px;
+  width: 326px;
   height: 38px;
   border-radius: 10px;
   color: #0f41f7;
+  font-size: 20px;
+  cursor: pointer;
+}
+.fullButton:hover {
+  box-shadow: 2px 2px #0f41f7;
+}
+.halfButton:hover {
+  box-shadow: 2px 2px #0f41f7;
 }
 /* login-signup */
 .ls-icons img {
@@ -62,6 +71,7 @@ body {
   border: 2px solid #4A6FF1;
   border-radius: 20px;
   height: 350px;
+  width: 326px;
 }
 .listMeals {
   position: relative;
@@ -199,3 +209,21 @@ body {
   padding: 3px 10px;
   color: #0f41f7;
 }
+.fda {
+  height: 285px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.fda::-webkit-scrollbar {
+  background-color: rgba(74, 110, 241, 0.493);
+  width: 10px;
+  border-radius: 10px;
+  margin: 0;
+}
+.fda::-webkit-scroll-track {
+  background-clip: content-box;
+}
+.fda::-webkit-scrollbar-thumb:vertical {
+  height: 10px;
+  background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
+  border-radius: 10px;
