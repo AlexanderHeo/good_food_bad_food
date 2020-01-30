@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
   constructor(props) {
@@ -53,26 +53,27 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="container">14
-        <div className="row ls-icons d-flex justify-content-around my-5 text-center">
+      <div className="container">
+        <h1 className="header mt-3 mx-auto">Log In</h1>
+        <div className="row ls-icons d-flex justify-content-around my-3 text-center">
           <img src="images/angel.png" alt="" />
           <img src="images/devil.png" alt="" />
         </div>
-        <form onSubmit={this.handleSubmit}>
+        <form className="ls" onSubmit={this.handleSubmit}>
           <div className="row d-flex justify-content-center">
-            <div className="form-group d-flex flex-column">
-              <label>Create A Username</label>
+            <div className="form-group d-flex flex-column text-center">
+              <label>Enter Your Username</label>
               <input type="text" id="signupUsername" name="username" onChange={this.handleChange} />
             </div>
           </div>
           <div className="row d-flex justify-content-center">
-            <div className="form-group d-flex flex-column">
-              <label>Enter A Password</label>
+            <div className="form-group d-flex flex-column text-center">
+              <label>Enter Your Password</label>
               <input type="password" id="signupPassword" name="password" onChange={this.handleChange} />
             </div>
           </div>
           <div className="row d-flex justify-content-center mt-5">
-            <button type="submit" className="btn btn-primary">Log In to Account</button>
+            <button type="submit" className="halfButton">Log In to Account</button>
           </div>
           <div>{this.state.message}</div>
         </form>
@@ -80,6 +81,9 @@ class Login extends React.Component {
           this.state.status
             ? <Redirect from='/login' to='/home'></Redirect> : null
         }
+        <div className="row listMealsButtons justify-content-around mt-3">
+          <Link className="halfButton text-center" to="/home">Home</Link>
+        </div>
       </div>
     );
   }
