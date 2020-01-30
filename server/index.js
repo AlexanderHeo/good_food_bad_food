@@ -81,7 +81,8 @@ app.post('/api/log-out', (req, res, next) => {
 });
 
 app.post('/api/enter', (req, res, next) => {
-  const userId = req.session.userId;
+  const userId = 1;
+  // const userId = req.session.userId;
   const { meal } = req.body;
   if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
   else if (!meal) return next(new ClientError('Please enter a meal.', 400));
@@ -141,7 +142,8 @@ app.post('/api/enter', (req, res, next) => {
 
 // FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
-  const userId = req.session.userId;
+  const userId = 1;
+  // const userId = req.session.userId;
   const SQL = `
       SELECT m."mealId", m."name", m."eatenAt", mp."report", mp."image"
       FROM "meals" as m
@@ -215,7 +217,8 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
 });
 
 app.get('/api/list', (req, res, next) => {
-  const { userId } = req.session;
+  const userId = 1;
+  // const { userId } = req.session;
 
   // for testing default userId to 1;
   const condition = new RegExp('^\\d+$');
