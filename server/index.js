@@ -233,7 +233,7 @@ app.get('/api/list', (req, res, next) => {
   where "m"."userId" = $1
   order by "eatenAt" desc;
   `;
-  const params = [1];
+  const params = [userId];
   db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
