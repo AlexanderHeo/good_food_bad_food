@@ -218,7 +218,7 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
 });
 
 app.get('/api/list', (req, res, next) => {
-  const { userId } = req.session.userId;
+  const { userId } = req.session;
 
   // for testing default userId to 1;
   const condition = new RegExp('^\\d+$');
@@ -233,7 +233,7 @@ app.get('/api/list', (req, res, next) => {
   where "m"."userId" = $1
   order by "eatenAt" desc;
   `;
-  const params = [1];
+  const params = [userId];
   db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
