@@ -81,7 +81,6 @@ app.post('/api/log-out', (req, res, next) => {
 });
 
 app.post('/api/enter', (req, res, next) => {
-  // const userId = req.session.userId;
   const userId = req.session.userId;
   const { meal } = req.body;
   if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
@@ -192,6 +191,25 @@ app.get('/api/rate/:mealId', (req, res, next) => {
     .then(result => {
       const [singleMeal] = result.rows;
       res.status(200).json(singleMeal);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/ingredients/:mealId', (req, res, next) => {
+  const mealId = parseInt(req.params.mealId);
+  if (!mealId) {
+    return next(new ClientError('Cannot find meal ID', 400));
+  }
+
+  const SQL = `
+  select "ingredientName"
+  from "mealIngredients"
+  where "mealId" = ${mealId}
+  `;
+
+  db.query(SQL)
+    .then(result => {
+      res.json(result.rows);
     })
     .catch(err => next(err));
 });
