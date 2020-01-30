@@ -96,7 +96,7 @@ export default class RateMeal extends React.Component {
               </div>
             </div>
           </div>
-          <div>
+          <div className="seeIngredients">
             <SeeIngredients mealId={this.props.match.params.mealId} />
           </div>
         </div>

@@ -24,7 +24,6 @@ export default class SeeIngredients extends React.Component {
 
   render() {
     const data = this.state.ingredients;
-    // console.log('ingredient data: ', data);
     if (!data) {
       return <div><div></div>Loading ingredients...</div>;
     } else {
