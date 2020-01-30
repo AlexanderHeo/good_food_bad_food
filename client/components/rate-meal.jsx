@@ -70,14 +70,16 @@ export default class RateMeal extends React.Component {
         <div className="container d-flex flex-column">
 
           <div className="row">
-            <h1 className="header">
-              <span>Choose Effect</span>
-            </h1>
+            <div className="d-flex flex-column justify-content-center">
+              <h1 className="header mt-3 ml-4">
+                <span>Choose Effect</span>
+              </h1>
+              <p className="chooseEffectLabel mt-2 ml-4">How did it make you feel?</p>
+            </div>
           </div>
-          <p className="chooseEffectLabel">How did it make you feel?</p>
 
-          <div className="chooseEffectBox">
-            <div className="chooseEffectFood">{mealName}</div>
+          <div className="chooseEffectBox mt-2 ml-2">
+            <div className="text-center">{mealName}</div>
             <div className="chooseEffectFaces d-flex flex-column">
               <div>
                 <a href="#" onClick={this.handleRatingClick}>Good
