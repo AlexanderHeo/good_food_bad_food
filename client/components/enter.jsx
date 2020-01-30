@@ -56,7 +56,6 @@ class Enter extends React.Component {
           </div>
         </form>
       </>
-
     );
   }
 }

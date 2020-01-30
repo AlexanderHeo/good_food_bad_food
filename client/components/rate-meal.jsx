@@ -42,6 +42,7 @@ export default class RateMeal extends React.Component {
       reportNumber = 1;
       ratingImage = '/images/badFace.jpg';
     }
+
     const dataToSend = { mealId: mealId, report: reportNumber, image: ratingImage };
     fetch('/api/rate/mealId', {
       method: 'PATCH',
@@ -50,6 +51,7 @@ export default class RateMeal extends React.Component {
       },
       body: JSON.stringify(dataToSend)
     })
+
       .then(response => {
         return response.json();
       })
@@ -68,7 +70,6 @@ export default class RateMeal extends React.Component {
     } else {
       return (
         <div className="container d-flex flex-column">
-
           <div className="row">
             <div className="d-flex flex-column justify-content-center">
               <h1 className="header mt-3 ml-4">
@@ -77,7 +78,6 @@ export default class RateMeal extends React.Component {
               <p className="chooseEffectLabel mt-2 ml-4">How did it make you feel?</p>
             </div>
           </div>
-
           <div className="chooseEffectBox mt-2 ml-2">
             <div className="text-center">{mealName}</div>
             <div className="chooseEffectFaces d-flex flex-column">
