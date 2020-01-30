@@ -69,7 +69,6 @@ class EnterFood extends React.Component {
           </div>
           <div className="row listMealsButtons justify-content-around mt-3">
             <button className="halfButton">Home</button>
-            <button className="halfButton">Cancel</button>
           </div>
         </div>
       </>
