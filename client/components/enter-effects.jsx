@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import DailyList from './daily-list';
 
 function EnterEffects() {
@@ -16,7 +17,7 @@ function EnterEffects() {
         <DailyList />
       </div>
       <div className="row listMealsButtons justify-content-around mt-3">
-        <button className="halfButton">Home</button>
+        <Link className="halfButton text-center" to="/home">Home</Link>
       </div>
     </div>
   );
