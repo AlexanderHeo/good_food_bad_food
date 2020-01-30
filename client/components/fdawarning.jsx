@@ -86,13 +86,19 @@ export default class FDAWarning extends React.Component {
               <button className="halfButton" type="submit">Submit</button>
             </div>
             <div>
-              <p className="fdaDisclaimer">Disclaimer: {FDADisclaimer}</p>
-              <p>Product Description: {FDADescription}</p>
-              <p>Date Issued: {dateMonth}-{dateDay}-{dateYear} </p>
-              <p>City Impacted: {FDACity}, {FDAState} </p>
-              <p>Reason: {FDAReason}</p>
-              <p>Distribution Pattern: {FDADistribution}</p>
-              <p>Quantity: {FDAQuantity} </p>
+
+              <p className="text-danger">Disclaimer:{FDADisclaimer}</p>
+              <div className="fda">
+                <p>Product Description: {FDADescription}</p>
+                <p>Date issued: {FDAIssued} </p>
+                <p>Cities Impacted: {FDACity} </p>
+                <p>Reason for Recall: {FDAReason}</p>
+                <p>Distribution Pattern: {FDADistribution}</p>
+                <p>Quantity: {FDAQuantity} </p>
+              </div>
+            </div>
+            <div className="row listMealsButtons justify-content-around mt-3">
+              <button className="halfButton">Home</button>
             </div>
           </div>
         </form>
