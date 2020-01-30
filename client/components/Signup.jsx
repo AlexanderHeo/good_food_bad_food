@@ -50,17 +50,29 @@ class Signup extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
+
+        <div className="row ls-icons d-flex justify-content-around my-5 text-center">
+          <img src="images/angel.png" alt="" />
+          <img src="images/devil.png" alt="" />
+        </div>
+
         <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <label>Create A Username</label>
-            <input type="text" id="signupUsername" name="username" onChange={this.handleChange} />
+          <div className="row d-flex justify-content-center">
+            <div className="form-group d-flex flex-column text-center">
+              <label>Create A Username</label>
+              <input type="text" id="signupUsername" name="username" onChange={this.handleChange} />
+            </div>
           </div>
-          <div className="form-group">
-            <label>Enter Your Password</label>
-            <input type="password" id="signupPassword" name="password" onChange={this.handleChange} />
+          <div className="row d-flex justify-content-center">
+            <div className="form-group d-flex flex-column text-center">
+              <label>Enter Your Password</label>
+              <input type="password" id="signupPassword" name="password" onChange={this.handleChange} />
+            </div>
           </div>
-          <button type="submit" className="btn btn-primary">Create the Account!</button>
+          <div className="row d-flex justify-content-center mt-5">
+            <button type="submit" className="btn btn-primary">Create the Account!</button>
+          </div>
           <div>{this.state.message}</div>
         </form>
       </div>

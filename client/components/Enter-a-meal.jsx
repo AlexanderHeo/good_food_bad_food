@@ -61,7 +61,7 @@ class EnterFood extends React.Component {
             onSubmit={this.addMeal}
             todaysMeals={this.state.todaysMeals}
           />
-          <div className="listBox mt-3 mx-auto">
+          <div className="listBox mx-auto mt-2">
             <ListMeals
               todaysMeals={this.state.todaysMeals}
               onSubmit={this.removeFromList}
