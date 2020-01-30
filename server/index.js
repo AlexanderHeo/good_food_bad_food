@@ -81,7 +81,6 @@ app.post('/api/log-out', (req, res, next) => {
 });
 
 app.post('/api/enter', (req, res, next) => {
-  // const userId = req.session.userId;
   const userId = req.session.userId;
   const { meal } = req.body;
   if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
