@@ -142,7 +142,6 @@ app.post('/api/enter', (req, res, next) => {
     );
 });
 
-// FOOD LIST WITH OR WITHOUT RATINGS
 app.get('/api/ratefood', (req, res, next) => {
   const userId = req.session.userId;
   const SQL = `
@@ -160,7 +159,6 @@ app.get('/api/ratefood', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// SENDING NEW RATING
 app.patch('/api/rate/:mealId', (req, res, next) => {
   const text = `
   UPDATE "mealReports"
@@ -179,7 +177,6 @@ app.patch('/api/rate/:mealId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// GET INDIVIDUAL MEAL
 app.get('/api/rate/:mealId', (req, res, next) => {
   const mealId = parseInt(req.params.mealId);
   const SQL = `
@@ -220,7 +217,6 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
 app.get('/api/list', (req, res, next) => {
   const { userId } = req.session;
 
-  // for testing default userId to 1;
   const condition = new RegExp('^\\d+$');
   if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404));
   const sql = `
