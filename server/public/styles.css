@@ -136,8 +136,8 @@ body {
 }
 .chooseEffectBox {
   width: 327px;
-  height: 425px;
-  font-size: 50px;
+  height: 315px;
+  font-size: 32px;
   border: 2px solid #4A6FF1;
   border-radius: 10px;
 }
@@ -242,4 +242,26 @@ body {
 }
 .ls {
   font-size: 27px;
+}
+.ingredients {
+  height: 148px;
+  width: 326px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.ingredients::-webkit-scrollbar {
+  background-color: rgba(74, 110, 241, 0.493);
+  width: 10px;
+  border-radius: 10px;
+  margin: 0;
+}
+.ingredients::-webkit-scroll-track {
+  background-clip: content-box;
+}
+.ingredients::-webkit-scrollbar-thumb:vertical {
+  height: 10px;
+  background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
+  border-radius: 10px;
 }
