@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default class FDAWarning extends React.Component {
   constructor(props) {
@@ -43,11 +44,14 @@ export default class FDAWarning extends React.Component {
         <form onSubmit={this.handleSubmit} >
           <div className="container">
             <div className="mt-4 d-flex justify-content-center">
-              <label className="mt-1"></label>
               <input type="text" value={this.state.userCity} onChange={this.handleChange} placeholder="Enter your city" />
               <button className="halfButton" type="submit">Submit</button>
             </div>
             <div>Please enter a valid city name.</div>
+            <div className="fdablankinvalid"></div>
+            <div className="row justify-content-around">
+              <Link className="halfButton text-center" to="/home">Home</Link>
+            </div>
           </div>
         </form>
       );
@@ -57,9 +61,12 @@ export default class FDAWarning extends React.Component {
         <form onSubmit={this.handleSubmit} >
           <div className="container">
             <div className="mt-4 d-flex justify-content-center">
-              <label className="mt-1"></label>
               <input type="text" value={this.state.userCity} onChange={this.handleChange} placeholder="Enter your city" />
               <button className="halfButton" type="submit">Submit</button>
+            </div>
+            <div className="fdablank"></div>
+            <div className="row justify-content-around">
+              <Link className="halfButton text-center" to="/home">Home</Link>
             </div>
           </div>
         </form>
@@ -81,7 +88,6 @@ export default class FDAWarning extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <div className="container">
             <div className="mt-4 d-flex justify-content-center">
-              <label className="mt-1"></label>
               <input type="text" value={this.state.userCity} onChange={this.handleChange} />
               <button className="halfButton" type="submit">Submit</button>
             </div>
@@ -97,8 +103,8 @@ export default class FDAWarning extends React.Component {
                 <p>Quantity: {FDAQuantity} </p>
               </div>
             </div>
-            <div className="row listMealsButtons justify-content-around mt-3">
-              <button className="halfButton">Home</button>
+            <div className="row justify-content-around mt-2">
+              <Link className="halfButton text-center" to="/home">Home</Link>
             </div>
           </div>
         </form>
