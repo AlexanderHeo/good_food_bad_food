@@ -199,3 +199,6 @@ body {
   padding: 3px 10px;
   color: #0f41f7;
 }
+.hidden {
+  display: none;
+}
