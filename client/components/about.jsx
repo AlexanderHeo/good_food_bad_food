@@ -12,7 +12,7 @@ function About() {
       <h5>There are many diseases that affect what you are
         able to eat. Eating something that does not
         agree with you can result in anything from
-        minor discomfort to a hospital trip.
+        minor discomfort to a hospital visit.
       </h5>
       <h5>
         You can use GFBF to track what you eat,
