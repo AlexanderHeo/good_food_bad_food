@@ -84,6 +84,7 @@ app.get('/api/isloggedin', (req, res, next) => {
 });
 
 app.post('/api/enter', (req, res, next) => {
+  // const userId = 1;
   const userId = req.session.userId;
   const { meal } = req.body;
   if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
@@ -143,6 +144,7 @@ app.post('/api/enter', (req, res, next) => {
 });
 
 app.get('/api/ratefood', (req, res, next) => {
+  // const userId = 1;
   const userId = req.session.userId;
   const SQL = `
       SELECT m."mealId", m."name", m."eatenAt", mp."report", mp."image"
@@ -215,6 +217,7 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
 });
 
 app.get('/api/list', (req, res, next) => {
+  // const userId = 1;
   const { userId } = req.session;
 
   const condition = new RegExp('^\\d+$');

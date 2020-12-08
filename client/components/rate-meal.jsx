@@ -99,6 +99,7 @@ export default class RateMeal extends React.Component {
             </div>
           </div>
           <div className="ingredients mt-3 mx-auto">
+
             <SeeIngredients mealId={this.props.match.params.mealId} />
           </div>
         </div>
