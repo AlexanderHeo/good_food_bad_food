@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Enter from './enter.jsx';
 import ListMeals from './listEnterFood.jsx';
 
@@ -10,6 +11,15 @@ class EnterFood extends React.Component {
     });
     this.addMeal = this.addMeal.bind(this);
     this.removeFromList = this.removeFromList.bind(this);
+  }
+
+  componentDidMount() {
+    fetch('/api/isloggedin')
+      .then(response => response.json())
+      .then(result => {
+        if (result.error) return this.props.history.push('/ls');
+      })
+      .catch(err => console.error(err));
   }
 
   addMeal(newMeal) {
@@ -52,15 +62,14 @@ class EnterFood extends React.Component {
             onSubmit={this.addMeal}
             todaysMeals={this.state.todaysMeals}
           />
-          <div className="listBox mt-3 mx-auto">
+          <div className="listBox mx-auto mt-2">
             <ListMeals
               todaysMeals={this.state.todaysMeals}
               onSubmit={this.removeFromList}
             />
           </div>
           <div className="row listMealsButtons justify-content-around mt-3">
-            <button className="halfButton">Home</button>
-            <button className="halfButton">Cancel</button>
+            <Link className="halfButton text-center" to="/home">Home</Link>
           </div>
         </div>
       </>
