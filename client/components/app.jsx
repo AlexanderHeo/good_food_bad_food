@@ -20,10 +20,10 @@ class App extends React.Component {
   render() {
     return (
       <Router>
+        <Route path="/home" component={HomePage}></Route>
         <Route path="/ls" component={LoginSignup}></Route>
         <Route path="/login" component={Login}></Route>
         <Route path="/signup" component={Signup}></Route>
-        <Route path="/home" component={HomePage}></Route>
         <Route path="/enter" component={Enter}></Route>
         <Route path="/entereffects" component={EnterEffects}></Route>
         <Route path="/list" component={List}></Route>
