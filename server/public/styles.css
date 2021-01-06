@@ -153,6 +153,35 @@ body {
   width: 60px;
   right: 80px;
 }
+.seeIngredients .list-item {
+  position: relative;
+  top: 10px;
+  left: 10px;
+  width: 327px;
+  height: 130px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.seeIngredients::-webkit-scrollbar {
+  background-color: rgba(74, 110, 241, 0.493);
+  width: 10px;
+  border-radius: 10px;
+  margin: 0;
+}
+.seeIngredients::-webkit-scroll-track {
+  background-clip: content-box;
+}
+.seeIngredients::-webkit-scrollbar-thumb:vertical {
+  height: 10px;
+  background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
+  border-radius: 10px;
+}
+.seeIngredients li {
+  font-size: 20px;
+}
+
 /* see today */
 .chooseList {
   width: 327px;
