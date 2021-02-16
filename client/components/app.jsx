@@ -43,9 +43,9 @@ export default App;
 
 const Wrapper = styled.div`
 	color: var(--primary-6);
-	font-size: 10px;
+	font-size: 12px;
 	a {
 		color: var(--primary-6);
-		font-size: 2em;
+		font-size: 1.5em;
 	}
 `;
