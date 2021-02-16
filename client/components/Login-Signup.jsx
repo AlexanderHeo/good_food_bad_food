@@ -45,8 +45,8 @@ const Container = styled.div`
 	width: 100%;
 	height: 100%;
 	background-color: var(--primary-6);
-	border: 25px solid var(--primary-6);
-	border-radius: 30px;
+	border: 18px solid var(--primary-6);
+	border-radius: 32px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -55,15 +55,23 @@ const Container = styled.div`
 		width: 100%;
 		height: 100%;
 		background-color: var(--gray-0);
-		border-radius: 20px;
+		border-radius: 18px;
 	}
 
 	.app-logo {
 		width: 100%;
-		height: 85%;
+		height: 75%;
 		text-align: center;
+
 		.title {
-			padding: 50px 0;
+			font-size: 2.85rem;
+			padding: 100px 0;
+			@media (min-width: 375px) {
+				font-size: 3.2rem;
+			}
+			@media (min-width: 375px) and (min-height: 668px) {
+				font-size: 3.5rem;
+			}
 		}
 	}
 
@@ -74,10 +82,16 @@ const Container = styled.div`
 		align-items: center;
 
 		.button {
-			padding: 10px 20px;
-			margin: 0 10px;
-			border: 5px solid var(--primary-6);
-			border-radius: 25px;
+			padding: 12px 24px;
+			margin: 0 12px;
+			border: 6px solid var(--primary-6);
+			border-radius: 24px;
+		}
+		.button:hover,
+		.button:active {
+			background-color: var(--primary-6);
+			color: var(--primary-0);
+			cursor: pointer;
 		}
 	}
 `
