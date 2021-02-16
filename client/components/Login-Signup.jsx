@@ -4,26 +4,8 @@ import styled from 'styled-components';
 import MobileFrame from './UI/Mobile-Frame';
 
 const LoginSignup = props => {
-  return (<>
-    <MobileFrame test='testesetest123123'>
-      {/* <div className="container">
-        <div className="col">
-          <div className="d-flex justify-content-center align-items-center ls-icons">
-            <div className="text-success">Good Food</div>
-            <img className="" src="/images/angel.png" alt="" />
-          </div>
-        </div>
-        <div className="col">
-          <div className="d-flex justify-content-center align-items-center ls-icons">
-            <div className="text-danger">Bad Food</div>
-            <img className="" src="/images/devil.png" alt="" />
-          </div>
-        </div>
-        <div className="col d-flex justify-content-around mt-5">
-          <Link className="halfButton text-center" to="/login">Log In</Link>
-          <Link className="halfButton text-center" to="/signup">Sign Up</Link>
-        </div>
-      </div> */}
+  return (
+    <MobileFrame>
       <Container>
         <div className="main">
           <div className="app-logo">
@@ -36,7 +18,7 @@ const LoginSignup = props => {
         </div>
       </Container>
     </MobileFrame>
-  </>);
+  );
 };
 
 export default LoginSignup;
@@ -82,12 +64,6 @@ const Container = styled.div`
 		align-items: center;
 
 		.button {
-			/* padding: 12px 24px;
-			margin: 0 12px;
-			border: 6px solid var(--primary-6);
-			border-radius: 24px;
-			font-weight: 700; */
-
 			@media (min-width: 321px) {
 				font-size: 1.5em;
 			}

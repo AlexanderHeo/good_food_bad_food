@@ -1,21 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 class Login extends React.Component {
   state = {
     username: '',
     password: '',
-    status: false,
-    message: ''
+    isLoggedIn: false,
+    errorMessage: '',
+    pwErrorMessage: ''
   };
 
-  handleButtonClick(e) {
+  handleButtonClick = e => {
     e.preventDefault()
-    this.loginAccount()
+    if (!this.state.username) {
+      this.setState({ errorMessage: 'Please enter username' })
+    } else if (!this.state.password) {
+      this.setState({ errorMessage: 'Please enter password' })
+    } else {
+      this.loginAccount()
+    }
   }
 
-  loginAccount() {
+  loginAccount = () => {
     const goodStuff = {
       username: this.state.username,
       password: this.state.password
@@ -32,18 +39,30 @@ class Login extends React.Component {
       .then(response => response.json())
       .then(result => {
         if (result.success) {
-          this.setState({ status: true });
+          this.setState({ isLoggedIn: true });
         } else {
-          this.setState({ message: result.error });
+          this.setState({ pwErrorMessage: result.error });
         }
       })
       .catch(err => console.error(err));
   }
 
-  handleChange(event) {
-    const type = event.target.name;
-    if (type === 'username') return this.setState({ username: event.target.value });
-    this.setState({ password: event.target.value });
+  handleChange = event => {
+    const type = event.target.name
+    const value = event.target.value
+    if (type === 'username') {
+      this.setState({
+        username: value,
+        errorMessage: '',
+        pwErrorMessage: ''
+      })
+    } else if (type === 'password') {
+      this.setState({
+        password: value,
+        errorMessage: '',
+        pwErrorMessage: ''
+      });
+    }
   }
 
   render() {
@@ -65,20 +84,32 @@ class Login extends React.Component {
             <label className="label">Password</label>
             <input
               className="input"
-              type="text"
-              name="username"
+              type="password"
+              name="password"
               onChange={ this.handleChange }/>
           </fieldset>
-          <div className="button-container">
-            <button
-              className="button"
-              onClick={ this.handleButtonClick }>Log In</button>
-            <Link
-              className="button"
-              to="ls"
-            >Cancel
-            </Link>
-          </div>
+          {
+            this.state.isLoggedIn
+              ? <Redirect from='/login' to='home' />
+              : null
+          }
+          {
+            this.state.errorMessage
+              ? <div className="errorMessage">{ this.state.errorMessage }</div>
+              : this.state.pwErrorMessage
+                ? <div className="errorMessage">{ this.state.pwErrorMessage }</div>
+                : <div className="button-container">
+                  <button
+                    className="button"
+                    onClick={ this.handleButtonClick }>Log In</button>
+                  <Link
+                    className="button"
+                    to="/ls"
+                  >Cancel
+                  </Link>
+                </div>
+          }
+
         </form>
       </LoginContainer>
       // <div className="container">
@@ -106,7 +137,7 @@ class Login extends React.Component {
       //     <div>{this.state.message}</div>
       //   </form>
       //   {
-      //     this.state.status
+      //     this.state.isLoggedIn
       //       ? <Redirect from='/login' to='/home'></Redirect> : null
       //   }
       //   <div className="row listMealsButtons justify-content-around mt-3">
@@ -158,6 +189,12 @@ const LoginContainer = styled.div`
 		}
 		.button-container {
 			margin-top: 100px;
+		}
+		.errorMessage {
+			position: absolute;
+			font-size: 1.5rem;
+			color: var(--warning-4);
+			font-weight: 700;
 		}
 	}
 `
