@@ -42,6 +42,8 @@ class App extends React.Component {
 export default App;
 
 const Wrapper = styled.div`
+	width: 100%;
+	height: 100%;
 	color: var(--primary-6);
 	font-size: 12px;
 	a {

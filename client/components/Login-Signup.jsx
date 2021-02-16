@@ -82,11 +82,11 @@ const Container = styled.div`
 		align-items: center;
 
 		.button {
-			padding: 12px 24px;
+			/* padding: 12px 24px;
 			margin: 0 12px;
 			border: 6px solid var(--primary-6);
 			border-radius: 24px;
-			font-weight: 700;
+			font-weight: 700; */
 
 			@media (min-width: 321px) {
 				font-size: 1.5em;
@@ -95,11 +95,6 @@ const Container = styled.div`
 				font-size: 1.6em;
 			}
 		}
-		.button:hover,
-		.button:active {
-			background-color: var(--primary-6);
-			color: var(--primary-0);
-			cursor: pointer;
-		}
+
 	}
 `
