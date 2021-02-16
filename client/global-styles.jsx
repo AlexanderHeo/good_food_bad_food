@@ -57,6 +57,8 @@ const GlobalStyles = createGlobalStyle`
 		--caution-7: #A27C1A;
 		--caution-8: #7C5E10;
 		--caution-9: #513C06;
+
+		font-family: 'Roboto', sans-serif;
 	}
 `
 

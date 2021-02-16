@@ -86,6 +86,14 @@ const Container = styled.div`
 			margin: 0 12px;
 			border: 6px solid var(--primary-6);
 			border-radius: 24px;
+			font-weight: 700;
+
+			@media (min-width: 321px) {
+				font-size: 1.5em;
+			}
+			@media (min-width: 321px) and (min-height: 800px) {
+				font-size: 1.6em;
+			}
 		}
 		.button:hover,
 		.button:active {
