@@ -46,6 +46,6 @@ const Wrapper = styled.div`
 	font-size: 12px;
 	a {
 		color: var(--primary-6);
-		font-size: 1.5em;
+		font-size: 1.4em;
 	}
 `;
