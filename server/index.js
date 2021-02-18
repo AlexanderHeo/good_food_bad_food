@@ -85,13 +85,13 @@ app.get('/api/isloggedin', (req, res, next) => {
 
 app.post('/api/enter', (req, res, next) => {
   const userId = req.session.userId;
-  const { meal } = req.body;
+  const { meal, mealtime } = req.body;
   if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
   else if (!meal) return next(new ClientError('Please enter a meal.', 400));
   const sql = `
     with add_to_meals as (
-      insert into "meals" ("name", "userId")
-      values ($1, $2)
+      insert into "meals" ("name", "userId", "mealtime")
+      values ($1, $2, $3)
       returning *
     ), add_to_reports as (
       insert into "mealReports" ("mealId")
@@ -100,7 +100,7 @@ app.post('/api/enter', (req, res, next) => {
     select *
     from "add_to_meals"
   `;
-  const params = [meal, userId];
+  const params = [meal, userId, mealtime];
   db.query(sql, params)
     .then(result => {
       const addedMeal = result.rows[0];
@@ -224,6 +224,7 @@ app.get('/api/list', (req, res, next) => {
   const sql = `
   select "m"."name",
   "m"."eatenAt",
+  "m"."mealtime",
   "r"."report",
   "r"."image"
   from "meals" as "m"

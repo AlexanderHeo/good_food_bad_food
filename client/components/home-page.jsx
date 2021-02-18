@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import Spinner from './Loader';
+import TodaysMeals from './Todays-Meals';
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true
-    };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleLogOut = this.handleLogOut.bind(this);
+class HomePage extends Component {
+  state = {
+    isLoading: true,
+    list: [],
+    listLoaded: false,
+    todaysList: []
   }
 
   componentDidMount() {
@@ -20,18 +19,39 @@ class Home extends React.Component {
         this.setState({ isLoading: false });
       })
       .catch(err => console.error(err));
+    fetch('/api/list')
+      .then(response => response.json())
+      .then(result => {
+        // const today = new Date()
+        // const date = today.getDate()
+        // let month = today.getMonth() + 1
+        // const year = today.getFullYear()
+        // if ((month.toString()).length < 2) {
+        //   month = '0' + (month.toString())
+        // }
+
+        /* FOR TESTING PURPOSES */
+        const todaysDate = '2021-02-18'
+        // const todaysDate = `${year}-${month}-${date}`
+        const todaysMeals = result.filter(x => x.eatenAt.slice(0, 10) === todaysDate)
+        this.setState({
+          list: result,
+          listLoaded: true,
+          todaysList: todaysMeals
+        })
+      })
   }
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
   }
 
-  handleClick(event) {
+  handleClick = event => {
     const { history } = this.props;
     history.push(`/${event.target.name}`);
   }
 
-  handleLogOut() {
+  handleLogOut = () => {
     fetch('/api/log-out')
       .then(response => response.json())
       .then(result => {
@@ -41,29 +61,92 @@ class Home extends React.Component {
   }
 
   render() {
-    const status = this.state.isLoading;
-    if (status) return null;
-    return (
-      <div className="container d-flex flex-column">
-        <div className="homeHeader d-flex flex-column mt-2">
-          <div>Good Food</div>
-          <div>Bad Food</div>
-        </div>
-        <div className="openBox mt-3">
-          <form onSubmit={this.handleSubmit}>
-            <div className="d-flex flex-column mx-auto">
-              <button className="fullButton mx-auto mt-2" type="submit" name="enter" onClick={this.handleClick}>Enter A Meal</button>
-              <button className="fullButton mx-auto mt-2" type="submit" name="entereffects" onClick={this.handleClick}>Rate A Meal</button>
-              <button className="fullButton mx-auto mt-2" type="submit" name="list" onClick={this.handleClick}>View Meal Ratings</button>
-              <button className="fullButton mx-auto mt-2" type="submit" name="warning" onClick={this.handleClick}>FDA Warnings</button>
-              <button className="fullButton mx-auto mt-2" type="submit" name="about" onClick={this.handleClick}>About</button>
-              <button className="fullButton mx-auto mt-5 mb-3" type="submit" onClick={this.handleLogOut}>Log Out</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
+	  if (this.state.isLoading) return <Spinner />;
+
+	  return (
+	    <Container>
+	      <section className='helloSection'>
+	        <div className='hello'>Hello, user!</div>
+	      </section>
+	      <section className='todaySection'>
+	        <div className='todayTitle'>Today</div>
+	        {
+	          this.state.listLoaded
+	            ? <TodaysMeals todaysMeals={ this.state.todaysList }/>
+	            : <Spinner />
+	        }
+	        {/* <div
+	          className='todayContainer'
+	          id='todayContainer'
+	          onClick={ this.handleSectionClick }>
+	          <div className='mealContainer'>
+	            <div className='breakfast meal'><span className='mealName' >Breakfast</span><span className='mealRating' ><div></div></span></div>
+	            <div className='lunch meal' ><span className='mealName' >Lunch</span><span className='mealRating' ><div></div></span></div>
+	            <div className='dinner meal' ><span className='mealName' >Dinner</span><span className='mealRating' ><div></div></span></div>
+	            <div className='snacks meal' ><span className='mealName' >Snacks</span><span className='mealRating' ><div></div></span></div>
+	          </div>
+	        </div> */}
+	      </section>
+	      {/* <section className='reviewSection'>
+	        <div className='reviewTitle'>Review</div>
+	        <div
+	          className='reviewContainer'
+	          id='reviewContainer'
+	          onClick={ this.handleSectionClick }></div>
+	      </section>
+	      <section className='actions'>
+
+	      </section> */}
+	    </Container>
+	  );
   }
 }
 
-export default Home;
+export default HomePage;
+
+const Container = styled.div`
+	width: 100vw;
+	height: 100vh;
+
+	.helloSection {
+		width: 100%;
+		height: 15%;
+		.hello {
+			font-size: 2rem;
+			padding: 15px 25px;
+		}
+	}
+
+	.todaySection {
+		height: 40%;
+		display: flex;
+		padding: 6px 12px;
+		flex-direction: column;
+		align-items: center;
+		.todayTitle {
+			font-size: 1.1rem;
+			width: 100%;
+			text-align: left;
+		}
+
+	}
+
+	.reviewSection {
+		height: 30%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		border: 10px solid dodgerblue;
+		.reviewTitle {
+			font-size: 1.2rem;
+			width: 100%;
+			text-align: left;
+		}
+		.reviewContainer {
+			width: 80%;
+			height: 70%;
+			border: 5px solid red;
+			margin-top: 5px;
+		}
+	}
+`
