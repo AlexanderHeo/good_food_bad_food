@@ -90,13 +90,16 @@ app.post('/api/enter', (req, res, next) => {
   else if (!meal) return next(new ClientError('Please enter a meal.', 400));
   const sql = `
     with add_to_meals as (
-      insert into "meals" ("name", "userId", "mealtime")
-      values ($1, $2, $3)
+      insert into "meals" ("name", "userId")
+      values ($1, $2)
       returning *
     ), add_to_reports as (
       insert into "mealReports" ("mealId")
       select "mealId" from "add_to_meals"
-    )
+    ), add_to_mealtime as (
+			insert into "mealtime" ("mealId", "mealtime")
+			values ('mealId', $3)
+		)
     select *
     from "add_to_meals"
   `;
@@ -224,10 +227,11 @@ app.get('/api/list', (req, res, next) => {
   const sql = `
   select "m"."name",
   "m"."eatenAt",
-  "m"."mealtime",
+	"t"."mealtime",
   "r"."report",
   "r"."image"
   from "meals" as "m"
+	left join "mealtime" as "t" using ("mealId")
   left join "mealReports" as "r" using ("mealId")
   where "m"."userId" = $1
   order by "eatenAt" desc;
