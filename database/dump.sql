@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.10 (Ubuntu 10.10-0ubuntu0.18.04.1)
--- Dumped by pg_dump version 10.10 (Ubuntu 10.10-0ubuntu0.18.04.1)
+-- Dumped from database version 10.15 (Ubuntu 10.15-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.15 (Ubuntu 10.15-0ubuntu0.18.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -32,6 +32,7 @@ ALTER TABLE public.meals ALTER COLUMN "mealId" DROP DEFAULT;
 DROP SEQUENCE public."users_userId_seq";
 DROP TABLE public.users;
 DROP TABLE public."userIngredients";
+DROP TABLE public.mealtime;
 DROP SEQUENCE public."meals_mealId_seq";
 DROP TABLE public.meals;
 DROP TABLE public."mealReports";
@@ -134,6 +135,16 @@ ALTER SEQUENCE public."meals_mealId_seq" OWNED BY public.meals."mealId";
 
 
 --
+-- Name: mealtime; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mealtime (
+    "mealId" integer,
+    mealtime character(1)
+);
+
+
+--
 -- Name: userIngredients; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -226,6 +237,11 @@ COPY public."mealReports" ("mealId", report, image) FROM stdin;
 2	2	/images/neutralFace.jpg
 3	2	/images/neutralFace.jpg
 5	3	/images/happyFace.jpg
+12	3	/images/happyFace.jpg
+11	3	/images/happyFace.jpg
+13	3	images/happyFace.jpg
+14	2	images/neutralFace.jpg
+15	1	images/badFace.jpg
 \.
 
 
@@ -234,16 +250,34 @@ COPY public."mealReports" ("mealId", report, image) FROM stdin;
 --
 
 COPY public.meals ("mealId", name, "eatenAt", "userId") FROM stdin;
-1	BLT	2020-01-22 18:54:40.912531+00	1
-3	Mutton	2020-01-23 18:51:46.844296+00	1
-2	water2.0	2020-01-23 18:31:46.63852+00	1
-4	ksgagaglas	2020-01-25 00:58:50.839627+00	1
-5	food1	2020-01-27 20:31:18.709119+00	1
-6	sgsg	2020-01-28 01:27:22.054725+00	1
-7	sgsg	2020-01-28 01:28:31.69958+00	1
-8	sgsg	2020-01-28 01:29:22.814181+00	1
-9	sgsg	2020-01-28 18:29:15.84586+00	1
-10	sgsg	2020-01-28 18:31:54.144487+00	1
+1	BLT	2020-01-22 10:54:40.912531-08	1
+3	Mutton	2020-01-23 10:51:46.844296-08	1
+2	water2.0	2020-01-23 10:31:46.63852-08	1
+4	ksgagaglas	2020-01-24 16:58:50.839627-08	1
+5	food1	2020-01-27 12:31:18.709119-08	1
+6	sgsg	2020-01-27 17:27:22.054725-08	1
+7	sgsg	2020-01-27 17:28:31.69958-08	1
+8	sgsg	2020-01-27 17:29:22.814181-08	1
+9	sgsg	2020-01-28 10:29:15.84586-08	1
+10	sgsg	2020-01-28 10:31:54.144487-08	1
+11	eggs	2021-01-06 11:07:55.392543-08	5
+12	hash browns	2021-01-06 11:08:03.06037-08	5
+13	chicken quesedilla	2021-02-17 19:40:15.472662-08	5
+14	potato, eggs	2021-02-17 19:40:15.472662-08	5
+15	shrimp ramen	2021-02-17 19:40:15.472662-08	5
+\.
+
+
+--
+-- Data for Name: mealtime; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.mealtime ("mealId", mealtime) FROM stdin;
+11	b
+12	b
+13	l
+14	b
+15	d
 \.
 
 
@@ -262,6 +296,8 @@ COPY public."userIngredients" ("userId", ingredient, unfavorable) FROM stdin;
 COPY public.users ("userId", username, password, location) FROM stdin;
 1	Evan	learningfuze	Irvine
 2	Alex	$2b$10$vMdVPyc.VY.KFAYn8hfBMexet.gtfJfaEhVCI5esI7O.nAKo5rNKu	\N
+4	fender	$2b$10$3rfRs3ClG11HpJqM91JSvOxdomMr2EglOKsq3OOxoya81xkpSzYlO	\N
+5	alex	$2b$10$YMhm/IaR7OCematju.psUuRr/DBbksHRR1TQlhZhNEBVTLr5uViZ2	\N
 \.
 
 
@@ -269,14 +305,14 @@ COPY public.users ("userId", username, password, location) FROM stdin;
 -- Name: meals_mealId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."meals_mealId_seq"', 10, true);
+SELECT pg_catalog.setval('public."meals_mealId_seq"', 15, true);
 
 
 --
 -- Name: users_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."users_userId_seq"', 3, true);
+SELECT pg_catalog.setval('public."users_userId_seq"', 5, true);
 
 
 --
