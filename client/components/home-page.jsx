@@ -29,10 +29,11 @@ class HomePage extends Component {
         // if ((month.toString()).length < 2) {
         //   month = '0' + (month.toString())
         // }
+        // const todaysDate = `${year}-${month}-${date}`
 
         /* FOR TESTING PURPOSES */
         const todaysDate = '2021-02-18'
-        // const todaysDate = `${year}-${month}-${date}`
+
         const todaysMeals = result.filter(x => x.eatenAt.slice(0, 10) === todaysDate)
         this.setState({
           list: result,
@@ -75,17 +76,6 @@ class HomePage extends Component {
 	            ? <TodaysMeals todaysMeals={ this.state.todaysList }/>
 	            : <Spinner />
 	        }
-	        {/* <div
-	          className='todayContainer'
-	          id='todayContainer'
-	          onClick={ this.handleSectionClick }>
-	          <div className='mealContainer'>
-	            <div className='breakfast meal'><span className='mealName' >Breakfast</span><span className='mealRating' ><div></div></span></div>
-	            <div className='lunch meal' ><span className='mealName' >Lunch</span><span className='mealRating' ><div></div></span></div>
-	            <div className='dinner meal' ><span className='mealName' >Dinner</span><span className='mealRating' ><div></div></span></div>
-	            <div className='snacks meal' ><span className='mealName' >Snacks</span><span className='mealRating' ><div></div></span></div>
-	          </div>
-	        </div> */}
 	      </section>
 	      {/* <section className='reviewSection'>
 	        <div className='reviewTitle'>Review</div>
