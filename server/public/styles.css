@@ -1,7 +1,21 @@
-body {
-  font-family: 'Patua One', cursive;
-  color: #0f41f7;
+.button {
+	padding: 8px 24px;
+	margin: 0 12px;
+	border: 4px solid var(--primary-6);
+	border-radius: 24px;
+	font-weight: 700;
+	font-size: 1.4em;
+	color: var(--primary-6);
+	background-color: var(--primary-0);
 }
+.button:hover,
+.button:active {
+	background-color: var(--primary-6);
+	color: var(--primary-0);
+	cursor: pointer;
+}
+
+/*
 .container {
   width: 375px;
   height: 667px;
@@ -42,7 +56,7 @@ body {
   width: 331px;
   box-shadow: 2px 2px #0f41f7;
 }
-/* login-signup */
+/* login-signup
 .ls-icons img {
   height: 100px;
   width: 100px;
@@ -50,19 +64,19 @@ body {
 .ls-icons div {
   font-size: 80px;
 }
-/* home page */
+/* home page
 .homeHeader {
   text-align: center;
   border: 2px solid #4A6FF1;
   border-radius: 10px;
   font-size: 31px;
 }
-/* open page */
+/* open page
 .openBox {
   border: 2px solid #4A6FF1;
   border-radius: 20px;
 }
-/* Enter Meal */
+/* Enter Meal
 .input {
   width: 326px;
   font-size: 30px;
@@ -92,7 +106,7 @@ body {
   float: right;
   left: -25px;
 }
-/* Enter Effect */
+/* Enter Effect
 .effectLabel {
   width: 327px;
   font-size: 25px;
@@ -126,7 +140,7 @@ body {
 .effectBox img {
   height: 25px;
 }
-/* choose effect */
+/* choose effect
 .chooseEffectLabel {
   width: 327px;
   font-size: 25px;
@@ -153,7 +167,36 @@ body {
   width: 60px;
   right: 80px;
 }
-/* see today */
+.seeIngredients .list-item {
+  position: relative;
+  top: 10px;
+  left: 10px;
+  width: 327px;
+  height: 130px;
+  border: 2px solid #4A6FF1;
+  border-radius: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.seeIngredients::-webkit-scrollbar {
+  background-color: rgba(74, 110, 241, 0.493);
+  width: 10px;
+  border-radius: 10px;
+  margin: 0;
+}
+.seeIngredients::-webkit-scroll-track {
+  background-clip: content-box;
+}
+.seeIngredients::-webkit-scrollbar-thumb:vertical {
+  height: 10px;
+  background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
+  border-radius: 10px;
+}
+.seeIngredients li {
+  font-size: 20px;
+}
+
+/* see today
 .chooseList {
   width: 327px;
   font-size: 30px;
@@ -265,3 +308,4 @@ body {
   background: linear-gradient(180deg, #FFB13B 0%, #FFFFFF 53.69%, #FFB13B 100%);
   border-radius: 10px;
 }
+*/
