@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import EnterMeal from './Enter-Meal'
-import Loader from './Loader'
 import TodaysMealItem from './Todays-Meal-Item'
 
 class TodaysMeals extends Component {
@@ -96,49 +95,43 @@ class TodaysMeals extends Component {
 	  return (
 	    <Container>
 	      {
-	        this.state.ready
-	          ? <>
-	            {
-	              this.state.breakfastReady
-	                ? <TodaysMealItem
-	                  food={ this.state.breakfast }
-	                  mealtime='breakfast'
-	                   />
-	                : <button
-	                  onClick={ () => this.handleMealTimeClick('breakfast') }
-	                  className='meal mealTime'>Breakfast</button>
-	            }
-	            {
-	              this.state.lunchReady
-	                ? <TodaysMealItem
-	                  food={ this.state.lunch }
-	                  mealtime='lunch'
-	                  />
-	                : <button
-	                  onClick={ () => this.handleMealTimeClick('lunch') }
-	                  className='meal mealTime'>Lunch</button>
-	            }
-	            {
-	              this.state.dinnerReady
-	                ? <TodaysMealItem
-	                  food={ this.state.dinner }
-	                  mealtime='dinner' />
-	                : <button
-	                  onClick={ () => this.handleMealTimeClick('dinner') }
-	                  className='meal mealTime'>Dinner</button>
-	            }
-	            {
-	              this.state.snacksReady
-	                ? <TodaysMealItem
-	                  food={ this.state.snacks }
-	                  mealtime='snacks'
-	                  />
-	                : <button
-	                  onClick={ () => this.handleMealTimeClick('snacks') }
-	                  className='meal mealTime'>Snacks</button>
-	            }
-	          </>
-	          : <Loader />
+	        this.state.breakfastReady
+	          ? <TodaysMealItem
+	            food={ this.state.breakfast }
+	            mealtime='breakfast'
+	          />
+	          : <button
+	            onClick={ () => this.handleMealTimeClick('breakfast') }
+	            className='meal mealTime'>Breakfast</button>
+	      }
+	      {
+	        this.state.lunchReady
+	          ? <TodaysMealItem
+	            food={ this.state.lunch }
+	            mealtime='lunch'
+	          />
+	          : <button
+	            onClick={ () => this.handleMealTimeClick('lunch') }
+	            className='meal mealTime'>Lunch</button>
+	      }
+	      {
+	        this.state.dinnerReady
+	          ? <TodaysMealItem
+	            food={ this.state.dinner }
+	            mealtime='dinner' />
+	          : <button
+	            onClick={ () => this.handleMealTimeClick('dinner') }
+	            className='meal mealTime'>Dinner</button>
+	      }
+	      {
+	        this.state.snacksReady
+	          ? <TodaysMealItem
+	            food={ this.state.snacks }
+	            mealtime='snacks'
+	          />
+	          : <button
+	            onClick={ () => this.handleMealTimeClick('snacks') }
+	            className='meal mealTime'>Snacks</button>
 	      }
 	      {
 	        this.state.enterModalDisplayed &&
