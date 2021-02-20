@@ -22,17 +22,17 @@ class HomePage extends Component {
     fetch('/api/list')
       .then(response => response.json())
       .then(result => {
-        // const today = new Date()
-        // const date = today.getDate()
-        // let month = today.getMonth() + 1
-        // const year = today.getFullYear()
-        // if ((month.toString()).length < 2) {
-        //   month = '0' + (month.toString())
-        // }
-        // const todaysDate = `${year}-${month}-${date}`
+        const today = new Date()
+        const date = today.getDate()
+        let month = today.getMonth() + 1
+        const year = today.getFullYear()
+        if ((month.toString()).length < 2) {
+          month = '0' + (month.toString())
+        }
+        const todaysDate = `${year}-${month}-${date}`
 
-        /* FOR TESTING PURPOSES */
-        const todaysDate = '2021-02-18'
+        // /* FOR TESTING PURPOSES */
+        // const todaysDate = '2021-02-18'
 
         const todaysMeals = result.filter(x => x.eatenAt.slice(0, 10) === todaysDate)
         this.setState({
