@@ -7,8 +7,8 @@ const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
 
 const bcrypt = require('bcrypt');
-const axios = require('axios');
-const pg = require('pg');
+// const axios = require('axios');
+// const pg = require('pg');
 
 const app = express();
 
@@ -98,7 +98,8 @@ app.post('/api/enter', (req, res, next) => {
       select "mealId" from "add_to_meals"
     ), add_to_mealtime as (
 			insert into "mealtime" ("mealId", "mealtime")
-			values ('mealId', $3)
+			values (
+				(select "mealId" from "add_to_meals"), $3)
 		)
     select *
     from "add_to_meals"
@@ -106,39 +107,40 @@ app.post('/api/enter', (req, res, next) => {
   const params = [meal, userId, mealtime];
   db.query(sql, params)
     .then(result => {
-      const addedMeal = result.rows[0];
-      return axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${addedMeal.name}`)
-        .then(response => {
-          if (!response.data.meals) return res.status(201).json(addedMeal.mealId);
-          const mealData = response.data.meals[0];
-          const ingredients = [];
-          Object.keys(mealData).filter(key => {
-            if (key.includes('strIngredient') && mealData[key]) return ingredients.push(mealData[key]);
-          });
-          const insertValues = ingredients.map(ingredient => {
-            return `(${pg.Client.prototype.escapeLiteral(ingredient)})`;
-          }).join(',');
-          const insertValues2 = ingredients.map(ingredient => {
-            return `(${addedMeal.mealId}, ${pg.Client.prototype.escapeLiteral(ingredient)})`;
-          }).join(',');
-          const ingredientSQL = `
-          with add_to_ingredients as (
-            insert into "ingredients"("name")
-            values ${insertValues}
-            returning *
-          ), add_to_meal_ingredients as (
-            insert into "mealIngredients" ("mealId", "ingredientName")
-            values ${insertValues2}
-            returning *
-          )
-          select *
-          from "add_to_meal_ingredients";
-          `;
-          return db.query(ingredientSQL)
-            .then(ingreTable => {
-              res.json(ingreTable.rows);
-            });
-        });
+      res.status(200).json(result)
+      // const addedMeal = result.rows[0];
+      // return axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${addedMeal.name}`)
+      //   .then(response => {
+      //     if (!response.data.meals) return res.status(201).json(addedMeal.mealId);
+      //     const mealData = response.data.meals[0];
+      //     const ingredients = [];
+      //     Object.keys(mealData).filter(key => {
+      //       if (key.includes('strIngredient') && mealData[key]) return ingredients.push(mealData[key]);
+      //     });
+      //     const insertValues = ingredients.map(ingredient => {
+      //       return `(${pg.Client.prototype.escapeLiteral(ingredient)})`;
+      //     }).join(',');
+      //     const insertValues2 = ingredients.map(ingredient => {
+      //       return `(${addedMeal.mealId}, ${pg.Client.prototype.escapeLiteral(ingredient)})`;
+      //     }).join(',');
+      //     const ingredientSQL = `
+      //     with add_to_ingredients as (
+      //       insert into "ingredients"("name")
+      //       values ${insertValues}
+      //       returning *
+      //     ), add_to_meal_ingredients as (
+      //       insert into "mealIngredients" ("mealId", "ingredientName")
+      //       values ${insertValues2}
+      //       returning *
+      //     )
+      //     select *
+      //     from "add_to_meal_ingredients";
+      //     `;
+      //     return db.query(ingredientSQL)
+      //       .then(ingreTable => {
+      //         res.json(ingreTable.rows);
+      //       });
+      //   });
     })
     .catch(error =>
       next(error)
