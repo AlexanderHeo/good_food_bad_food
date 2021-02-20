@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import EnterMeal from './Enter-Meal'
 import Loader from './Loader'
 import TodaysMealItem from './Todays-Meal-Item'
 
@@ -13,33 +14,82 @@ class TodaysMeals extends Component {
 	  lunch: [],
 	  dinner: [],
 	  snacks: [],
-	  ready: false
+	  ready: false,
+	  enterModalDisplayed: false,
+	  entering: ''
 	}
 
 	componentDidMount() {
 	  const { todaysMeals } = this.props
-	  const breakfast = todaysMeals.filter(x => x.mealtime === 'b')
-	  const lunch = todaysMeals.filter(x => x.mealtime === 'l')
-	  const dinner = todaysMeals.filter(x => x.mealtime === 'd')
-	  const snacks = todaysMeals.filter(x => x.mealtime === 's')
+	  const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
+	  const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
+	  const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
+	  const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
 
-	  this.setState({
-	    breakfast: breakfast[0],
-	    lunch: lunch[0],
-	    dinner: dinner[0],
-	    snacks: snacks[0],
-	    ready: true,
-	    breakfastReady: true
-	  })
+	  if (breakfast.length > 0) {
+	    this.setState({
+	      breakfastReady: true,
+	      breakfast: breakfast[0],
+	      ready: true
+	    })
+	  }
+	  if (lunch.length > 0) {
+	    this.setState({
+	      lunchReady: true,
+	      lunch: lunch[0],
+	      ready: true
+	    })
+	  }
+	  if (dinner.length > 0) {
+	    this.setState({
+	      dinnerReady: true,
+	      dinner: dinner[0],
+	      ready: true
+	    })
+	  }
+	  if (snacks.length > 0) {
+	    this.setState({
+	      snacksReady: true,
+	      snacks: snacks[0],
+	      ready: true
+	    })
+	  }
 	}
 
 	handleMealTimeClick = mealtime => {
-	  fetch('/api/enter')
+	  if (mealtime === 'return') {
+	    this.setState({
+	      entering: '',
+	      enterModalDisplayed: false
+	    })
+	  } else {
+	    this.setState({
+	      entering: mealtime,
+	      enterModalDisplayed: true
+	    })
+	  }
+	}
+
+	addFood = (food, mealtime) => {
+	  const data = {
+	    meal: food,
+	    mealtime
+	  }
+	  fetch('/api/enter', {
+	    method: 'POST',
+	    headers: {
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify(data)
+	  })
 	    .then(response => response.json())
 	    .then(result => {
-	      // console.log(result)
+	      const ready = `${mealtime}Ready`
+	      this.setState({
+	        [mealtime]: result.rows[0],
+	        [ready]: true
+	      })
 	    })
-	    .catch(err => console.error(err))
 	}
 
 	render() {
@@ -52,37 +102,51 @@ class TodaysMeals extends Component {
 	              this.state.breakfastReady
 	                ? <TodaysMealItem
 	                  food={ this.state.breakfast }
-	                  mealtime='breakfast' />
-	                : <div
+	                  mealtime='breakfast'
+	                   />
+	                : <button
 	                  onClick={ () => this.handleMealTimeClick('breakfast') }
-	                  className='meal mealTime'>Breakfast</div>
+	                  className='meal mealTime'>Breakfast</button>
 	            }
 	            {
 	              this.state.lunchReady
 	                ? <TodaysMealItem
-	                  food={ this.state.lunch } />
-	                : <div
+	                  food={ this.state.lunch }
+	                  mealtime='lunch'
+	                  />
+	                : <button
 	                  onClick={ () => this.handleMealTimeClick('lunch') }
-	                  className='meal mealTime'>Lunch</div>
+	                  className='meal mealTime'>Lunch</button>
 	            }
 	            {
 	              this.state.dinnerReady
 	                ? <TodaysMealItem
-	                  food={ this.state.dinner } />
-	                : <div
+	                  food={ this.state.dinner }
+	                  mealtime='dinner' />
+	                : <button
 	                  onClick={ () => this.handleMealTimeClick('dinner') }
-	                  className='meal mealTime'>Dinner</div>
+	                  className='meal mealTime'>Dinner</button>
 	            }
 	            {
 	              this.state.snacksReady
 	                ? <TodaysMealItem
-	                  food={ this.state.snacks } />
-	                : <div
+	                  food={ this.state.snacks }
+	                  mealtime='snacks'
+	                  />
+	                : <button
 	                  onClick={ () => this.handleMealTimeClick('snacks') }
-	                  className='meal mealTime'>Snacks</div>
+	                  className='meal mealTime'>Snacks</button>
 	            }
 	          </>
 	          : <Loader />
+	      }
+	      {
+	        this.state.enterModalDisplayed &&
+	          <EnterMeal
+	            mealtime={ this.state.entering }
+	            return={ this.handleMealTimeClick }
+	            addFood={ this.addFood }
+	          />
 	      }
 	    </Container>
 	  )
@@ -92,10 +156,15 @@ class TodaysMeals extends Component {
 export default TodaysMeals
 
 const Container = styled.div`
+	position: relative;
 	width: 100%;
 	height: 100%;
 	.meal {
 		height: 25%;
+		width: 100%;
+		outline: none;
+		border: none;
+		color: var(--primary-6);
 		display: flex;
 		align-items: center;
 	}
