@@ -16,8 +16,8 @@ class TodaysMeals extends Component {
 	  snacksReady: false,
 	  enterModalDisplayed: false,
 	  enteringFor: '',
-	  resultModalDisplayed: true,
-	  resultFor: 'breakfast',
+	  resultModalDisplayed: false,
+	  resultFor: '',
 	  breakfastReaction: ''
 	}
 
