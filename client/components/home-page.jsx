@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import dateFormatter from './Date-Formatter';
 import Spinner from './Loader';
 import TodaysMeals from './Todays-Meals';
 
@@ -23,18 +24,14 @@ class HomePage extends Component {
       .then(response => response.json())
       .then(result => {
         const today = new Date()
-        const date = today.getDate()
-        let month = today.getMonth() + 1
-        const year = today.getFullYear()
-        if ((month.toString()).length < 2) {
-          month = '0' + (month.toString())
-        }
-        const todaysDate = `${year}-${month}-${date}`
+        const todaysDate = dateFormatter(today)
 
-        // /* FOR TESTING PURPOSES */
-        // const todaysDate = '2021-02-18'
+        const todaysMeals = result.filter(x => {
+          const eatenAtDate = new Date(x.eatenAt)
+          const eatenAt = dateFormatter(eatenAtDate)
 
-        const todaysMeals = result.filter(x => x.eatenAt.slice(0, 10) === todaysDate)
+          return eatenAt === todaysDate
+        })
         this.setState({
           list: result,
           listLoaded: true,

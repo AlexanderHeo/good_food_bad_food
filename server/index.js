@@ -228,7 +228,7 @@ app.get('/api/list', (req, res, next) => {
   if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404));
   const sql = `
   select "m"."name",
-  "m"."eatenAt",
+  ("m"."eatenAt"),
 	"t"."mealtime",
   "r"."report",
   "r"."image"
