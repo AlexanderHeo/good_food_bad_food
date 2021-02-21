@@ -168,11 +168,11 @@ app.get('/api/ratefood', (req, res, next) => {
 app.patch('/api/rate/:mealId', (req, res, next) => {
   const text = `
   UPDATE "mealReports"
-  SET "report" = $2, "image" = $3
+  SET "report" = $2
   WHERE "mealId" = $1
   RETURNING *
     `;
-  const values = [req.body.mealId, req.body.report, req.body.image];
+  const values = [req.body.mealId, req.body.report];
 
   db.query(text, values)
     .then(result => {
@@ -229,9 +229,9 @@ app.get('/api/list', (req, res, next) => {
   const sql = `
   select "m"."name",
   "m"."eatenAt",
+	"m"."mealId",
 	"t"."mealtime",
-  "r"."report",
-  "r"."image"
+  "r"."report"
   from "meals" as "m"
 	left join "mealtime" as "t" using ("mealId")
   left join "mealReports" as "r" using ("mealId")
@@ -240,7 +240,9 @@ app.get('/api/list', (req, res, next) => {
   `;
   const params = [userId];
   db.query(sql, params)
-    .then(result => res.json(result.rows))
+    .then(result => {
+      res.json(result.rows)
+    })
     .catch(err => next(err));
 });
 
