@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import dateFormatter from './Date-Formatter'
 import EnterMeal from './Enter-Meal'
 import EnterResult from './Enter-Result'
 import TodaysMealItem from './Todays-Meal-Item'
 
 class TodaysMeals extends Component {
 	state = {
+	  isLoading: true,
+	  list: [],
+	  listLoaded: false,
+	  todaysMeals: [],
 	  breakfast: [],
 	  lunch: [],
 	  dinner: [],
@@ -22,36 +27,58 @@ class TodaysMeals extends Component {
 	}
 
 	componentDidMount() {
-	  const { todaysMeals } = this.props
-	  const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
-	  const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
-	  const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
-	  const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
 
-	  if (breakfast.length > 0) {
-	    this.setState({
-	      breakfastReady: true,
-	      breakfast: breakfast[0]
+	  fetch('/api/list')
+	    .then(response => response.json())
+	    .then(result => {
+	      const today = new Date()
+	      const todaysDate = dateFormatter(today)
+
+	      const todaysMeals = result.filter(x => {
+	        const eatenAtDate = new Date(x.eatenAt)
+	        const eatenAt = dateFormatter(eatenAtDate)
+
+	        return eatenAt === todaysDate
+	      })
+
+	      const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
+	      const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
+	      const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
+	      const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
+
+	      if (breakfast.length > 0) {
+	        this.setState({
+	          breakfastReady: true,
+	          breakfast: breakfast[0]
+	        })
+	      }
+	      if (lunch.length > 0) {
+	        this.setState({
+	          lunchReady: true,
+	          lunch: lunch[0]
+	        })
+	      }
+	      if (dinner.length > 0) {
+	        this.setState({
+	          dinnerReady: true,
+	          dinner: dinner[0]
+	        })
+	      }
+	      if (snacks.length > 0) {
+	        this.setState({
+	          snacksReady: true,
+	          snacks: snacks[0]
+	        })
+	      }
+
+	      this.setState({
+	        isLoading: false,
+	        list: result,
+	        listLoaded: true,
+	        todaysMeals: todaysMeals
+	      })
 	    })
-	  }
-	  if (lunch.length > 0) {
-	    this.setState({
-	      lunchReady: true,
-	      lunch: lunch[0]
-	    })
-	  }
-	  if (dinner.length > 0) {
-	    this.setState({
-	      dinnerReady: true,
-	      dinner: dinner[0]
-	    })
-	  }
-	  if (snacks.length > 0) {
-	    this.setState({
-	      snacksReady: true,
-	      snacks: snacks[0]
-	    })
-	  }
+
 	}
 
 	handleClick = (action, parameter) => {
@@ -97,8 +124,36 @@ class TodaysMeals extends Component {
 	    })
 	}
 
-	addResult = (result, mealtime) => {
-	  // add result to db
+	addResult = (food, result) => {
+	  const mealId = food.mealId
+	  let report
+	  if (result === 'upVote') report = 3
+	  else if (result === 'downVote') report = 1
+
+	  const mealResult = {
+	    mealId, report
+	  }
+	  fetch(`/api/rate/${mealId}`, {
+	    method: 'PATCH',
+	    headers: {
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify(mealResult)
+	  })
+	    .then(response => response.json())
+	    .then(data => {
+	      const listCopy = [...this.state.list]
+	      for (let i = 0; i < listCopy.length; i++) {
+	      	if (listCopy[i].mealId === mealId) {
+	          listCopy[i].report = report
+	          this.setState({
+	            list: listCopy,
+	            resultModalDisplayed: false,
+	            resultsFor: ''
+	          })
+	        }
+	      }
+	    })
 	}
 
 	render() {

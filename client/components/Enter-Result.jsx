@@ -14,7 +14,7 @@ class EnterResult extends Component {
 	  if (name === 'return') {
 	    this.props.return('return')
 	  } else {
-	    this.props.addResult(name, this.props.mealtime)
+	    this.props.addResult(this.props.foodItems, name)
 	  }
 	}
 
@@ -27,7 +27,7 @@ class EnterResult extends Component {
 	      <h2 className='mealtime'>{ this.props.mealtime }</h2>
 	      <h2 className='foodItems'>{ this.props.foodItems.name }</h2>
 	      <div className="voteButtonContainer">
-	        <button name='upvote' className='voteButton upVote' onClick={ this.handleClick }>
+	        <button name='upVote' className='voteButton upVote' onClick={ this.handleClick }>
 	          <UpVote />
 	        </button>
 	        <button name='downVote' className='voteButton downVote' onClick={ this.handleClick }>
