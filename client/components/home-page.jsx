@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import dateFormatter from './Date-Formatter';
 import Spinner from './Loader';
 import TodaysMeals from './Todays-Meals';
 
 class HomePage extends Component {
   state = {
-    isLoading: true,
-    list: [],
-    listLoaded: false,
-    todaysList: []
+    isLoading: true
   }
 
   componentDidMount() {
@@ -20,24 +16,6 @@ class HomePage extends Component {
         this.setState({ isLoading: false });
       })
       .catch(err => console.error(err));
-    fetch('/api/list')
-      .then(response => response.json())
-      .then(result => {
-        const today = new Date()
-        const todaysDate = dateFormatter(today)
-
-        const todaysMeals = result.filter(x => {
-          const eatenAtDate = new Date(x.eatenAt)
-          const eatenAt = dateFormatter(eatenAtDate)
-
-          return eatenAt === todaysDate
-        })
-        this.setState({
-          list: result,
-          listLoaded: true,
-          todaysList: todaysMeals
-        })
-      })
   }
 
   handleSubmit = event => {
@@ -68,11 +46,7 @@ class HomePage extends Component {
 	      </section>
 	      <section className='todaySection'>
 	        <div className='todayTitle'>Today</div>
-	        {
-	          this.state.listLoaded
-	            ? <TodaysMeals todaysMeals={ this.state.todaysList }/>
-	            : <Spinner />
-	        }
+	        <TodaysMeals />
 	      </section>
 	      {/* <section className='reviewSection'>
 	        <div className='reviewTitle'>Review</div>
