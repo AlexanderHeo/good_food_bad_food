@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Spinner from './Loader';
 import TodaysMeals from './Todays-Meals';
+import WeeklyReview from './Weekly-Review';
 
 class HomePage extends Component {
   state = {
@@ -48,14 +49,11 @@ class HomePage extends Component {
 	        <div className='todayTitle'>Today</div>
 	        <TodaysMeals />
 	      </section>
-	      {/* <section className='reviewSection'>
-	        <div className='reviewTitle'>Review</div>
-	        <div
-	          className='reviewContainer'
-	          id='reviewContainer'
-	          onClick={ this.handleSectionClick }></div>
+	      <section className='reviewSection'>
+	        <div className='reviewTitle'>This Week</div>
+	        <WeeklyReview />
 	      </section>
-	      <section className='actions'>
+	      {/* <section className='actions'>
 
 	      </section> */}
 	    </Container>
@@ -93,11 +91,10 @@ const Container = styled.div`
 	}
 
 	.reviewSection {
-		height: 30%;
+		padding: 36px 12px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		border: 10px solid dodgerblue;
 		.reviewTitle {
 			font-size: 1.2rem;
 			width: 100%;
