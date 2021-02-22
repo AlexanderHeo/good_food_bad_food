@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import Backdrop from './Backdrop'
 
-const Setting = () => (
+const Setting = props => (
   <Container>
     <Backdrop />
-    <div className='setting'>
+    <div className={ props.clicked ? `${'setting'} ${'clicked'}` : 'setting'}>
       <button>Change Setting</button>
       <button>About</button>
     </div>
@@ -15,9 +15,6 @@ const Setting = () => (
 export default Setting
 
 const Container = styled.div`
-	/* width: 100%;
-	height: 100%;
-	background-color: var(--primary-0); */
 
 	.setting {
 		position: absolute;
@@ -31,5 +28,14 @@ const Container = styled.div`
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		transform: translateY(1000px);
+	}
+	.setting.clicked {
+		animation: slideUp 0.3s forwards;
+	}
+	@keyframes slideUp {
+		to {
+			transform: translateY(0);
+		}
 	}
 `
