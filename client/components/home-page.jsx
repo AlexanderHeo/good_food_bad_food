@@ -31,13 +31,7 @@ class HomePage extends Component {
     history.push(`/${event.target.name}`);
   }
 
-	handleBDClick = () => {
-	  this.setState({
-	    hamburgerClicked: !this.state.hamburgerClicked
-	  })
-	}
-
-	handleFooterClick = e => {
+	handleFooterClick = () => {
 	  this.setState({
 	    hamburgerClicked: !this.state.hamburgerClicked
 	  })
@@ -70,12 +64,17 @@ class HomePage extends Component {
 	        <WeeklyReview />
 	      </section>
 
-        <section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'clicked'}` : 'settingsSection' }
-        >
-          <Settings
-            clicked={ this.state.hamburgerClicked }
-            handleClick={ this.handleBDClick } />
-        </section>
+        {
+          this.state.hamburgerClicked &&
+						<section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'clicked'}` : 'settingsSection' }
+						>
+						  <Settings
+						    clicked={ this.state.hamburgerClicked }
+						    handleClick={ this.handleFooterClick }
+						    logout={ this.handleLogOut } />
+						</section>
+
+        }
 
         <FooterContainer>
         	<Footer

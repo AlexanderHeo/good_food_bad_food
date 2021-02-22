@@ -13,6 +13,9 @@ class Setting extends Component {
 	  if (name === 'main') this.setState({ settingDisplay: 'main' })
 	  else if (name === 'setting') this.setState({ settingDisplay: 'setting' })
 	  else if (name === 'about') this.setState({ settingDisplay: 'about' })
+	  else if (name === 'signout') this.setState({ settingDisplay: 'signout' })
+	  else if (name === 'confirm') this.props.logout()
+	  else if (name === 'return') this.props.handleClick()
 	}
 
 	render() {
@@ -22,8 +25,18 @@ class Setting extends Component {
 	    SettingDisplay = <section className='main'>
 	      <h1 className='title'>Settings</h1>
 	      <div className='buttonContainer'>
-	        <button name='setting' className='button' onClick={ this.handleClick }>Change Settings</button>
-	        <button name='about' className='button' onClick={ this.handleClick }>About</button>
+	        <button name='setting' className='button' onClick={ this.handleClick }
+	        >
+						Change Settings
+	        </button>
+	        <button name='about' className='button' onClick={ this.handleClick }
+	        >
+						About
+	        </button>
+	        <button name='signout' className='button' onClick={ this.handleClick }
+	        >
+						Sign Out
+	        </button>
 	      </div>
 	    </section>
 	  } else if (display === 'setting') {
@@ -40,6 +53,20 @@ class Setting extends Component {
 	        <h1>THIS APP IS ABOUT:</h1>
 	        <p>There is nothing to see here, please come back in future versions to see the complete About Me page.</p>
 	        <button className='button' name='main' onClick={ this.handleClick }>return</button>
+	      </>
+	    )
+	  } else if (display === 'signout') {
+	    SettingDisplay = (
+	      <>
+	        <h1>CONFIRM YOU SIGNING OUT?</h1>
+	        <button className='button' name='confirm' onClick={ this.handleClick }
+	        >
+						Yes
+	        </button>
+	        <button className='button' name='return' onClick={ this.handleClick }
+	        >
+						No
+	        </button>
 	      </>
 	    )
 	  }
