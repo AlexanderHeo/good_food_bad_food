@@ -68,4 +68,28 @@ const Container = styled.div`
 			border-radius: 10px;
 		}
 	}
+	.hamburger.clicked .bar1 {
+		animation: barOne 0.3s forwards
+	}
+	.hamburger.clicked .bar2 {
+		animation: fadeOut 0.5s forwards
+	}
+	.hamburger.clicked .bar3 {
+		animation: barThree 0.3s forwards
+	}
+	@keyframes barOne {
+		to {
+			transform: translate(0, 11px) rotate(45deg) ;
+		}
+	}
+	@keyframes fadeOut {
+		to {
+			opacity: 0
+		}
+	}
+	@keyframes barThree {
+		to {
+			transform: translate(0, -11px) rotate(-45deg);
+		}
+	}
 `

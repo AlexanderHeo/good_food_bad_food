@@ -66,7 +66,7 @@ class HomePage extends Component {
 
         <section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'clicked'}` : 'settingsSection' }
         >
-          <Settings />
+          <Settings clicked={ this.state.hamburgerClicked } />
         </section>
 
         <FooterContainer>
@@ -130,13 +130,11 @@ const Container = styled.div`
 		left: 0;
 		width: 100%;
 		height: calc(100% - 80px);
-		display: flex;
+		display: none;
 		align-items: flex-end;
-
-		transform: translateY(1000px);
 	}
-	.clicked {
-		transform: translateY(0);
+	.settingsSection.clicked {
+		display: flex;
 	}
 `
 const FooterContainer = styled.div`
@@ -144,4 +142,5 @@ const FooterContainer = styled.div`
 	bottom: 0;
 	left: 0;
 	width: 100%;
+	z-index: 1000;
 `
