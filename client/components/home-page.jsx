@@ -9,7 +9,7 @@ import WeeklyReview from './Weekly-Review';
 class HomePage extends Component {
   state = {
     isLoading: true,
-    hamburgerClicked: true
+    hamburgerClicked: false
   }
 
   componentDidMount() {
@@ -33,7 +33,7 @@ class HomePage extends Component {
 
 	handleBDClick = () => {
 	  this.setState({
-	    hamburgerClicked: false
+	    hamburgerClicked: !this.state.hamburgerClicked
 	  })
 	}
 
@@ -78,7 +78,10 @@ class HomePage extends Component {
         </section>
 
         <FooterContainer>
-        	<Footer clicked={ this.handleFooterClick }/>
+        	<Footer
+            clicked={ this.state.hamburgerClicked }
+            handleClick={ this.handleFooterClick }
+          />
         </FooterContainer>
 	    </Container>
 	  );

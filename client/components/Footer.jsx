@@ -1,42 +1,22 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
-class Footer extends Component {
-	state = {
-	  clicked: false
-	}
-
-	handleClick = e => {
-	  e.preventDefault()
-	  this.setState({
-	    clicked: !this.state.clicked
-	  })
-	  this.props.clicked(e)
-	}
-
-	render() {
-	  return (
-	    <Container>
-	      <button
-	        name='hamburger'
-	        onClick={ this.handleClick }
-	      >
-	        <Hamburger clicked={ this.state.clicked }/>
-	      </button>
-	    </Container>
-	  )
-	}
-}
+const Footer = props => (
+  <Container>
+    <button
+      name='hamburger'
+      onClick={ props.handleClick }
+    >
+      <div className={ props.clicked ? `${'hamburger'} ${'clicked'}` : 'hamburger' }>
+        <div className='bar bar1' />
+        <div className='bar bar2' />
+        <div className='bar bar3' />
+      </div>
+    </button>
+  </Container>
+)
 
 export default Footer
-
-const Hamburger = props => (
-  <div className={ props.clicked ? `${'hamburger'} ${'clicked'}` : 'hamburger' }>
-    <div className='bar bar1' />
-    <div className='bar bar2' />
-    <div className='bar bar3' />
-  </div>
-)
 
 const Container = styled.div`
 	width: 100%;
