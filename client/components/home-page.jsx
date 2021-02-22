@@ -9,7 +9,7 @@ import WeeklyReview from './Weekly-Review';
 class HomePage extends Component {
   state = {
     isLoading: true,
-    hamburgerClicked: false
+    hamburgerClicked: true
   }
 
   componentDidMount() {
