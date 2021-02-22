@@ -4,7 +4,7 @@ import Backdrop from './Backdrop'
 
 const Setting = props => (
   <Container>
-    <Backdrop />
+    <Backdrop handleClick={ props.handleClick } />
     <div className={ props.clicked ? `${'setting'} ${'clicked'}` : 'setting'}>
       <button>Change Setting</button>
       <button>About</button>
