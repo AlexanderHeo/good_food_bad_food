@@ -90,7 +90,7 @@ class Login extends React.Component {
           </fieldset>
           {
             this.state.isLoggedIn
-              ? <Redirect from='/login' to='home' />
+              ? <Redirect from='/login' to={{ pathname: 'home', state: { username: this.state.username } }}/>
               : null
           }
           {

@@ -48,12 +48,12 @@ class HomePage extends Component {
 
   render() {
 	  if (this.state.isLoading) return <Spinner />;
-
+    const username = this.props.location.state.username
 	  return (
 	    <Container>
 
 	      <section className='helloSection'>
-	        <div className='hello'>Hello, user!</div>
+	        <div className='hello'>Hello, { username }!</div>
 	      </section>
 	      <section className='todaySection'>
 	        <div className='todayTitle'>Today</div>
