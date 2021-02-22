@@ -156,7 +156,7 @@ const Table = styled.table`
 	/* border: 1px solid dodgerblue; */
 	margin: 6px 0;
 	text-align: center;
-	background-color: var(--primary-1);
+	background-color: var(--primary-0);
 
 	.tableHead {
 		border-bottom: 1px solid var(--primary-6);

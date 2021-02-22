@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import Footer from './Footer';
 import Spinner from './Loader';
+import Settings from './Settings';
 import TodaysMeals from './Todays-Meals';
 import WeeklyReview from './Weekly-Review';
 
 class HomePage extends Component {
   state = {
-    isLoading: true
+    isLoading: true,
+    hamburgerClicked: false
   }
 
   componentDidMount() {
@@ -28,6 +31,12 @@ class HomePage extends Component {
     history.push(`/${event.target.name}`);
   }
 
+	handleFooterClick = e => {
+	  this.setState({
+	    hamburgerClicked: !this.state.hamburgerClicked
+	  })
+	}
+
   handleLogOut = () => {
     fetch('/api/log-out')
       .then(response => response.json())
@@ -42,6 +51,7 @@ class HomePage extends Component {
 
 	  return (
 	    <Container>
+
 	      <section className='helloSection'>
 	        <div className='hello'>Hello, user!</div>
 	      </section>
@@ -53,9 +63,15 @@ class HomePage extends Component {
 	        <div className='reviewTitle'>This Week</div>
 	        <WeeklyReview />
 	      </section>
-	      {/* <section className='actions'>
 
-	      </section> */}
+        <section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'clicked'}` : 'settingsSection' }
+        >
+          <Settings />
+        </section>
+
+        <FooterContainer>
+        	<Footer clicked={ this.handleFooterClick }/>
+        </FooterContainer>
 	    </Container>
 	  );
   }
@@ -107,4 +123,25 @@ const Container = styled.div`
 			margin-top: 5px;
 		}
 	}
+
+	.settingsSection {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: calc(100% - 80px);
+		display: flex;
+		align-items: flex-end;
+
+		transform: translateY(1000px);
+	}
+	.clicked {
+		transform: translateY(0);
+	}
+`
+const FooterContainer = styled.div`
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
 `
