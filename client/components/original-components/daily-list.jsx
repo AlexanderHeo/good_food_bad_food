@@ -9,8 +9,13 @@ export default class DailyList extends React.Component {
     };
   }
 
-  getWeekday() {
-    const date = new Date();
+  getWeekday(targetDate) {
+    let date;
+    if (targetDate) {
+      date = new Date(targetDate);
+    } else {
+      date = new Date();
+    }
     const options = { weekday: 'long' };
     return new Intl.DateTimeFormat('en-US', options).format(date).toLowerCase();
   }
