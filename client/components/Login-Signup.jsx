@@ -1,27 +1,78 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import MobileFrame from './UI/Mobile-Frame';
 
-const LoginSignup = props => {
-  return (
-    <MobileFrame>
-      <Container>
-        <div className="main">
-          <div className="app-logo">
-            <h1 className="title">Good Food<br/>Bad Food</h1>
-          </div>
-          <div className="button-container">
-            <Link className="button" to="/login">Log In</Link>
-            <Link className="button" to="/signup">Sign Up</Link>
-          </div>
-        </div>
-      </Container>
-    </MobileFrame>
-  );
-};
+class LoginSignup extends Component {
+	state = {
+	  goodfood: false,
+	  badfood: false,
+	  blackout: false,
+	  login: false
+	}
+
+	componentDidMount() {
+	  setTimeout(
+	    () => this.setState({ goodfood: true }), 800
+	  )
+	  setTimeout(
+	    () => this.setState({ badfood: true }), 1600
+	  )
+	  setTimeout(
+	    () => this.setState({ blackout: true }), 2400
+	  )
+	  setTimeout(
+	    () => this.setState({ login: true }), 4400
+	  )
+	}
+
+	render() {
+	  return (
+	    <MobileFrame>
+	      <Blackout>
+	        <div className={this.state.blackout ? `${'blackout'} ${'start'}` : 'blackout'} />
+	      </Blackout>
+	      <Container>
+	        <div className="main">
+	          <div className="app-logo">
+	            <h1 className={this.state.goodfood ? `${'title'} ${'goodfood'}` : 'title' }>Good Food</h1>
+	          </div>
+	          <div className="app-logo">
+	            <h1 className={this.state.badfood ? `${'title'} ${'badfood'}` : 'title' }>Bad Food</h1>
+	          </div>
+	        </div>
+	        {
+	          this.state.login
+	            ? <Redirect to={{ pathname: '/login' }}/>
+	            : null
+	        }
+	      </Container>
+	    </MobileFrame>
+	  );
+	}
+}
 
 export default LoginSignup;
+
+const Blackout = styled.div`
+	.blackout {
+		width: 100vw;
+		height: 100vh;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background-color: var(--primary-6);
+		opacity: 0;
+	}
+	.start {
+		animation: startBlackout 1.8s forwards;
+	}
+	@keyframes startBlackout {
+		to {
+			opacity: 1;
+		}
+	}
+`
 
 const Container = styled.div`
 	width: 100%;
@@ -29,21 +80,18 @@ const Container = styled.div`
 	background-color: var(--primary-6);
 	border: 18px solid var(--primary-6);
 	border-radius: 32px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 
 	.main {
-		width: 100%;
 		height: 100%;
-		background-color: var(--gray-0);
+		background-color: var(--primary-0);
 		border-radius: 18px;
 	}
 
 	.app-logo {
-		width: 100%;
-		height: 75%;
-		text-align: center;
+		height: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
 		.title {
 			font-size: 2.85rem;
@@ -57,11 +105,28 @@ const Container = styled.div`
 		}
 	}
 
+	.goodfood {
+		animation: goodfood 1.4s forwards;
+	}
+	.badfood {
+		animation: badfood 1.4s forwards;
+	}
+
+	@keyframes goodfood {
+		to {
+			transform: scale(35) translateY(20px);
+		}
+	}
+	@keyframes badfood {
+		to {
+			transform: scale(35) translateY(-40px);
+		}
+	}
+
 	.button-container {
 		width: 100%;
 		display: flex;
 		justify-content: center;
-		align-items: center;
 
 		.button {
 			@media (min-width: 321px) {
