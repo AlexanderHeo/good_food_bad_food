@@ -66,14 +66,13 @@ class HomePage extends Component {
 
         {
           this.state.hamburgerClicked &&
-						<section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'clicked'}` : 'settingsSection' }
+						<section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'open'}` : `${'settingsSection'} ${'closed'}` }
 						>
 						  <Settings
 						    clicked={ this.state.hamburgerClicked }
 						    handleClick={ this.handleFooterClick }
 						    logout={ this.handleLogOut } />
 						</section>
-
         }
 
         <FooterContainer>
@@ -140,11 +139,13 @@ const Container = styled.div`
 		left: 0;
 		width: 100%;
 		height: calc(100% - 80px);
-		display: none;
 		align-items: flex-end;
 	}
-	.settingsSection.clicked {
+	.settingsSection.open {
 		display: flex;
+	}
+	.settingsSection.closed {
+		display: none;
 	}
 `
 const FooterContainer = styled.div`
