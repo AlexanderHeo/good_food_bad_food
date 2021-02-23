@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { AddPlus, ReturnChevron } from './Icons'
 
 class EnterMeal extends Component {
 	state = {
@@ -68,19 +69,19 @@ class EnterMeal extends Component {
 
 export default EnterMeal
 
-const AddPlus = () => (
-  <div className='addBar'>
-    <div className='addBar1'></div>
-    <div className='addBar2'></div>
-  </div>
-)
+// const AddPlus = () => (
+//   <div className='addBar'>
+//     <div className='addBar1'></div>
+//     <div className='addBar2'></div>
+//   </div>
+// )
 
-const ReturnChevron = () => (
-  <>
-    <div className='bar1'></div>
-    <div className='bar2'></div>
-  </>
-)
+// const ReturnChevron = () => (
+//   <>
+//     <div className='bar1'></div>
+//     <div className='bar2'></div>
+//   </>
+// )
 
 const Container = styled.div`
 	position: absolute;
@@ -105,43 +106,9 @@ const Container = styled.div`
 		top: 0;
 		left: 0;
 		margin: 12px;
-
-		.bar1, .bar2 {
-			width: 4px;
-			height: 20px;
-			border-radius: 10px;
-			background-color: var(--primary-6);
-		}
-		.bar1 {
-			transform: translate(12px, 4.5px) rotate(50deg);
-		}
-		.bar2 {
-			transform: translate(12px, -4.5px) rotate(-50deg);
-		}
 	}
 	.addButton {
 		margin: 0 6px;
-	.addBar {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		.addBar1, .addBar2 {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 4px;
-			height: 30px;
-			border-radius: 10px;
-			background-color: var(--primary-6);
-		}
-		.addBar1 {
-			transform: translate(19px, 4px);
-		}
-		.addBar2 {
-			transform: translate(19px, 5px) rotate(90deg);
-		}
-	}
 	}
 
 	.mealtime {

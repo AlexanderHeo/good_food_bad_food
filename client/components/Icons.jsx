@@ -122,3 +122,124 @@ const HamburgerContainer = styled.div`
 	}
 
 `
+
+export const AddPlus = props => (
+  <AddPlusContainer>
+    <div className='addBar1'></div>
+    <div className='addBar2'></div>
+  </AddPlusContainer>
+)
+
+const AddPlusContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.addBar1, .addBar2 {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 4px;
+		height: 30px;
+		border-radius: 10px;
+		background-color: var(--primary-6);
+	}
+	.addBar1 {
+		transform: translate(19px, 4px);
+	}
+	.addBar2 {
+		transform: translate(19px, 5px) rotate(90deg);
+	}
+`
+
+export const ReturnChevron = () => (
+  <ReturnChevronContainer>
+    <div className='bar1'></div>
+    <div className='bar2'></div>
+  </ReturnChevronContainer>
+)
+
+const ReturnChevronContainer = styled.div`
+	.bar1, .bar2 {
+		width: 4px;
+		height: 20px;
+		border-radius: 10px;
+		background-color: var(--primary-6);
+	}
+	.bar1 {
+		transform: translate(12px, 4.5px) rotate(50deg);
+	}
+	.bar2 {
+		transform: translate(12px, -4.5px) rotate(-50deg);
+	}
+`
+export const UpVote = () => (
+  <UpVoteContainer>
+    <div className='up1'/>
+    <div className='up'/>
+    <div className='up2'/>
+  </UpVoteContainer>
+)
+
+const UpVoteContainer = styled.div`
+
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	margin-top: 5px;
+
+	.up1, .up2, .up {
+		width: 4px;
+		border-radius: 10px;
+		background-color: var(--primary-6);
+	}
+	.up1, .up2 {
+		height: 15px;
+	}
+	.up1 {
+		transform: rotate(35deg);
+	}
+	.up2 {
+		transform: rotate(-35deg);
+	}
+	.up {
+		height: 30px;
+	}
+`
+
+export const DownVote = () => (
+  <DownVoteContainer>
+    <div className='down1'/>
+    <div className='down'/>
+    <div className='down2'/>
+  </DownVoteContainer>
+)
+
+const DownVoteContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: baseline;
+	width: 100%;
+	height: 100%;
+	margin-top: 5px;
+
+	.down1, .down2, .down {
+		width: 4px;
+		border-radius: 10px;
+		background-color: var(--primary-6);
+	}
+	.down1, .down2 {
+		height: 15px;
+	}
+	.down1 {
+		transform: rotate(-35deg);
+	}
+	.down2 {
+		transform: rotate(35deg);
+	}
+	.down {
+		height: 30px;
+	}
+
+`
