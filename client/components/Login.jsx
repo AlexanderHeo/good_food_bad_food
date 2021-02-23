@@ -70,7 +70,7 @@ class Login extends React.Component {
       <LoginContainer>
         <h1 className="title">Log In</h1>
         <form
-          className="login-form"
+          className="form"
         >
           <fieldset className="fieldset">
             <label className="label">Username</label>
@@ -90,7 +90,7 @@ class Login extends React.Component {
           </fieldset>
           {
             this.state.isLoggedIn
-              ? <Redirect from='/login' to='home' />
+              ? <Redirect from='/login' to={{ pathname: 'home', state: { username: this.state.username } }}/>
               : null
           }
           {
@@ -130,7 +130,7 @@ const LoginContainer = styled.div`
 		align-items: center;
 	}
 
-	.login-form {
+	.form {
 		width: 100%;
 		height: 80%;
 		padding: 0 20px;

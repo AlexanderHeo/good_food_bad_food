@@ -29,56 +29,51 @@ class TodaysMeals extends Component {
 
 	componentDidMount() {
 
-	  fetch('/api/list')
-	    .then(response => response.json())
-	    .then(result => {
-	      const today = new Date()
-	      const todaysDate = dateFormatter(today)
+	  const today = new Date()
+	  const todaysDate = dateFormatter(today)
+	  const todaysMeals = this.props.list.filter(x => {
+	    const eatenAtDate = new Date(x.eatenAt)
+	    const eatenAt = dateFormatter(eatenAtDate)
 
-	      const todaysMeals = result.filter(x => {
-	        const eatenAtDate = new Date(x.eatenAt)
-	        const eatenAt = dateFormatter(eatenAtDate)
+	    return eatenAt === todaysDate
+	  })
 
-	        return eatenAt === todaysDate
-	      })
+	  const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
+	  const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
+	  const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
+	  const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
 
-	      const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
-	      const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
-	      const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
-	      const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
-
-	      if (breakfast.length > 0) {
-	        this.setState({
-	          breakfastReady: true,
-	          breakfast: breakfast[0]
-	        })
-	      }
-	      if (lunch.length > 0) {
-	        this.setState({
-	          lunchReady: true,
-	          lunch: lunch[0]
-	        })
-	      }
-	      if (dinner.length > 0) {
-	        this.setState({
-	          dinnerReady: true,
-	          dinner: dinner[0]
-	        })
-	      }
-	      if (snacks.length > 0) {
-	        this.setState({
-	          snacksReady: true,
-	          snacks: snacks[0]
-	        })
-	      }
-
-	      this.setState({
-	        isLoading: false,
-	        list: result,
-	        listLoaded: true,
-	        todaysMeals: todaysMeals
-	      })
+	  if (breakfast.length > 0) {
+	    this.setState({
+	      breakfastReady: true,
+	      breakfast: breakfast[0]
 	    })
+	  }
+	  if (lunch.length > 0) {
+	    this.setState({
+	      lunchReady: true,
+	      lunch: lunch[0]
+	    })
+	  }
+	  if (dinner.length > 0) {
+	    this.setState({
+	      dinnerReady: true,
+	      dinner: dinner[0]
+	    })
+	  }
+	  if (snacks.length > 0) {
+	    this.setState({
+	      snacksReady: true,
+	      snacks: snacks[0]
+	    })
+	  }
+
+	  this.setState({
+	    isLoading: false,
+	    list: this.props.list,
+	    listLoaded: true,
+	    todaysMeals: todaysMeals
+	  })
 
 	}
 
@@ -86,19 +81,23 @@ class TodaysMeals extends Component {
 	  if (action === 'enter') {
 	    this.setState({
 	      enterModalDisplayed: true,
-	      enteringFor: parameter
+	      enteringFor: parameter,
+	      listLoaded: false
+
 	    })
 	  } else if (action === 'return') {
 	    this.setState({
+	      listLoaded: true,
 	      resultModalDisplayed: false,
 	      resultFor: '',
-	      enteringFor: '',
-	      enterModalDisplayed: false
+	      enterModalDisplayed: false,
+	      enteringFor: ''
 	    })
 	  } else if (action === 'edit') {
 	    this.setState({
 	      resultModalDisplayed: true,
-	      resultFor: parameter
+	      resultFor: parameter,
+	      listLoaded: false
 	    })
 	  }
 	}
@@ -118,9 +117,12 @@ class TodaysMeals extends Component {
 	    .then(response => response.json())
 	    .then(result => {
 	      const ready = `${mealtime}Ready`
+	      const listCopy = [...this.state.list]
+	      listCopy.unshift(result.rows[0])
 	      this.setState({
 	        [mealtime]: result.rows[0],
-	        [ready]: true
+	        [ready]: true,
+	        list: listCopy
 	      })
 	    })
 	}
@@ -150,7 +152,8 @@ class TodaysMeals extends Component {
 	          this.setState({
 	            list: listCopy,
 	            resultModalDisplayed: false,
-	            resultsFor: ''
+	            resultsFor: '',
+	            listLoaded: true
 	          })
 	        }
 	      }
@@ -160,81 +163,79 @@ class TodaysMeals extends Component {
 	render() {
 	  const resFor = this.state.resultFor
 	  const foodItems = this.state.[resFor]
+
+	  let TodayDisplay
+	  if (this.state.isLoading) {
+	    TodayDisplay = <Loader />
+	  } else if (!this.state.isLoading && this.state.listLoaded) {
+	    TodayDisplay = <>
+	      {
+	        this.state.breakfastReady
+	          ? <TodaysMealItem
+	            food={ this.state.breakfast }
+	            mealtime='breakfast'
+	            handleClick={ this.handleClick }
+	          />
+	          : <button
+	            onClick={ () => this.handleClick('enter', 'breakfast') }
+	            className='meal mealTime'
+	          >Breakfast</button>
+	      }
+	      {
+	        this.state.lunchReady
+	          ? <TodaysMealItem
+	            food={ this.state.lunch }
+	            mealtime='lunch'
+	            handleClick={ this.handleClick }
+	          />
+	          : <button
+	            onClick={ () => this.handleClick('enter', 'lunch') }
+	            className='meal mealTime'
+	          >Lunch</button>
+	      }
+	      {
+	        this.state.dinnerReady
+	          ? <TodaysMealItem
+	            food={ this.state.dinner }
+	            mealtime='dinner'
+	            handleClick={ this.handleClick }
+	          />
+	          : <button
+	            onClick={ () => this.handleClick('enter', 'dinner') }
+	            className='meal mealTime'
+	          >Dinner</button>
+	      }
+	      {
+	        this.state.snacksReady
+	          ? <TodaysMealItem
+	            food={ this.state.snacks }
+	            mealtime='snacks'
+	            handleClick={ this.handleClick }
+	          />
+	          : <button
+	            onClick={ () => this.handleClick('enter', 'snacks') }
+	            className='meal mealTime'
+	          >Snacks</button>
+	      }
+	    </>
+	  } else if (this.state.enterModalDisplayed) {
+	    TodayDisplay = <EnterMeal
+	      mealtime={ this.state.enteringFor }
+	      return={ this.handleClick }
+	      addFood={ this.addFood }
+	    />
+	  } else if (this.state.resultModalDisplayed) {
+	    TodayDisplay = <EnterResult
+	      mealtime={ this.state.resultFor }
+	      foodItems={ foodItems }
+	      return={ this.handleClick }
+	      addResult={ this.addResult }
+	    />
+	  }
+
 	  return (
 	    <Container>
-	      {
-	        !this.state.isLoading
-	          ? <>
-	            {
-	              this.state.breakfastReady
-	                ? <TodaysMealItem
-	                  food={ this.state.breakfast }
-	                  mealtime='breakfast'
-	                  handleClick={ this.handleClick }
-	                />
-	                : <button
-	                  onClick={ () => this.handleClick('enter', 'breakfast') }
-	                  className='meal mealTime'
-	                >Breakfast</button>
-	            }
-	            {
-	              this.state.lunchReady
-	                ? <TodaysMealItem
-	                  food={ this.state.lunch }
-	                  mealtime='lunch'
-	                  handleClick={ this.handleClick }
-	                />
-	                : <button
-	                  onClick={ () => this.handleClick('enter', 'lunch') }
-	                  className='meal mealTime'
-	                >Lunch</button>
-	            }
-	            {
-	              this.state.dinnerReady
-	                ? <TodaysMealItem
-	                  food={ this.state.dinner }
-	                  mealtime='dinner'
-	                  handleClick={ this.handleClick }
-	                />
-	                : <button
-	                  onClick={ () => this.handleClick('enter', 'dinner') }
-	                  className='meal mealTime'
-	                >Dinner</button>
-	            }
-	            {
-	              this.state.snacksReady
-	                ? <TodaysMealItem
-	                  food={ this.state.snacks }
-	                  mealtime='snacks'
-	                  handleClick={ this.handleClick }
-	                />
-	                : <button
-	                  onClick={ () => this.handleClick('enter', 'snacks') }
-	                  className='meal mealTime'
-	                >Snacks</button>
-	            }
-	            {
-	              this.state.enterModalDisplayed &&
-									<EnterMeal
-									  mealtime={ this.state.enteringFor }
-									  return={ this.handleClick }
-									  addFood={ this.addFood }
-									/>
-	            }
-	            {
-	              this.state.resultModalDisplayed &&
-								<EnterResult
-								  mealtime={ this.state.resultFor }
-								  foodItems={ foodItems }
-								  return={ this.handleClick }
-								  addResult={ this.addResult }
-								/>
-	            }
-	          </>
-	          : <Loader />
-
-	      }
-
+	      { TodayDisplay }
 	    </Container>
 	  )
 	}
