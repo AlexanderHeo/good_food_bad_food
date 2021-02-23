@@ -126,7 +126,7 @@ class Login extends React.Component {
 	      </form>
 	      <div className='linkContainer'>
 	        <Link
-	          to='/resetPassword'
+	          to='/reset'
 	          className='link'
 	        >reset password</Link>
 	        <Link
