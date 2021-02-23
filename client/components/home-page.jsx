@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Spinner from './Loader';
+import Footer from './Footer';
+import Loader from './Loader';
+import Settings from './Settings';
 import TodaysMeals from './Todays-Meals';
 import WeeklyReview from './Weekly-Review';
 
 class HomePage extends Component {
   state = {
-    isLoading: true
+    isLoading: true,
+    hamburgerClicked: false,
+    list: [],
+    listLoaded: false
   }
 
   componentDidMount() {
@@ -17,6 +22,15 @@ class HomePage extends Component {
         this.setState({ isLoading: false });
       })
       .catch(err => console.error(err));
+
+    fetch('/api/list')
+	    .then(response => response.json())
+	    .then(result => {
+        this.setState({
+          list: result,
+          listLoaded: true
+        })
+      })
   }
 
   handleSubmit = event => {
@@ -28,6 +42,12 @@ class HomePage extends Component {
     history.push(`/${event.target.name}`);
   }
 
+	handleFooterClick = () => {
+	  this.setState({
+	    hamburgerClicked: !this.state.hamburgerClicked
+	  })
+	}
+
   handleLogOut = () => {
     fetch('/api/log-out')
       .then(response => response.json())
@@ -38,24 +58,48 @@ class HomePage extends Component {
   }
 
   render() {
-	  if (this.state.isLoading) return <Spinner />;
-
+	  if (this.state.isLoading) return <Loader />;
+    const username = this.props.location.state.username
 	  return (
 	    <Container>
+
 	      <section className='helloSection'>
-	        <div className='hello'>Hello, user!</div>
+	        <div className='hello'>Hello, { username }!</div>
 	      </section>
 	      <section className='todaySection'>
 	        <div className='todayTitle'>Today</div>
-	        <TodaysMeals />
+          {
+            this.state.listLoaded
+              ? <TodaysMeals list={ this.state.list } />
+              : <Loader />
+          }
 	      </section>
 	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
-	        <WeeklyReview />
+          {
+            this.state.listLoaded
+              ? <WeeklyReview list={ this.state.list } />
+              : <Loader />
+          }
 	      </section>
-	      {/* <section className='actions'>
 
-	      </section> */}
+        {
+          this.state.hamburgerClicked &&
+						<section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'open'}` : `${'settingsSection'} ${'closed'}` }
+						>
+						  <Settings
+						    clicked={ this.state.hamburgerClicked }
+						    handleClick={ this.handleFooterClick }
+						    logout={ this.handleLogOut } />
+						</section>
+        }
+
+        <FooterContainer>
+        	<Footer
+            clicked={ this.state.hamburgerClicked }
+            handleClick={ this.handleFooterClick }
+          />
+        </FooterContainer>
 	    </Container>
 	  );
   }
@@ -107,4 +151,26 @@ const Container = styled.div`
 			margin-top: 5px;
 		}
 	}
+
+	.settingsSection {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: calc(100% - 80px);
+		align-items: flex-end;
+	}
+	.settingsSection.open {
+		display: flex;
+	}
+	.settingsSection.closed {
+		display: none;
+	}
+`
+const FooterContainer = styled.div`
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
 `

@@ -5,7 +5,7 @@ import About from './about';
 import Enter from './Enter-a-meal';
 import EnterEffects from './enter-effects';
 import FDAWarning from './fdawarning';
-import HomePage from './home-page';
+import HomePage from './Home-Page';
 import Login from './Login';
 import LoginSignup from './Login-Signup';
 import RateMeal from './rate-meal';
