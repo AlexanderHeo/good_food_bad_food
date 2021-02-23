@@ -1,17 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Hamburger } from './Icons'
 
 const Footer = props => (
   <Container>
     <button
       name='hamburger'
       onClick={ props.handleClick }
+      className='button'
     >
-      <div className={ props.clicked ? `${'hamburger'} ${'clicked'}` : 'hamburger' }>
+      <Hamburger clicked={ props.clicked }/>
+      {/* <div className={ props.clicked ? `${'hamburger'} ${'clicked'}` : 'hamburger' }>
         <div className='bar bar1' />
         <div className='bar bar2' />
         <div className='bar bar3' />
-      </div>
+      </div> */}
     </button>
   </Container>
 )
@@ -25,14 +28,16 @@ const Container = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	button {
+	.button {
 		padding: 0;
 		border-radius: 50%;
 		background-color: var(--primary-1);
 		outline: none;
+		width: 50px;
+		height: 50px
 	}
 
-	.hamburger {
+	/* .hamburger {
 		width: 50px;
 		height: 50px;
 		display: flex;
@@ -71,5 +76,5 @@ const Container = styled.div`
 		to {
 			transform: translate(0, -11px) rotate(-45deg);
 		}
-	}
+	} */
 `
