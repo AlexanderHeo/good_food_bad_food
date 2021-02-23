@@ -29,56 +29,51 @@ class TodaysMeals extends Component {
 
 	componentDidMount() {
 
-	  fetch('/api/list')
-	    .then(response => response.json())
-	    .then(result => {
-	      const today = new Date()
-	      const todaysDate = dateFormatter(today)
+	  const today = new Date()
+	  const todaysDate = dateFormatter(today)
+	  const todaysMeals = this.props.list.filter(x => {
+	    const eatenAtDate = new Date(x.eatenAt)
+	    const eatenAt = dateFormatter(eatenAtDate)
 
-	      const todaysMeals = result.filter(x => {
-	        const eatenAtDate = new Date(x.eatenAt)
-	        const eatenAt = dateFormatter(eatenAtDate)
+	    return eatenAt === todaysDate
+	  })
 
-	        return eatenAt === todaysDate
-	      })
+	  const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
+	  const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
+	  const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
+	  const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
 
-	      const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
-	      const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
-	      const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
-	      const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
-
-	      if (breakfast.length > 0) {
-	        this.setState({
-	          breakfastReady: true,
-	          breakfast: breakfast[0]
-	        })
-	      }
-	      if (lunch.length > 0) {
-	        this.setState({
-	          lunchReady: true,
-	          lunch: lunch[0]
-	        })
-	      }
-	      if (dinner.length > 0) {
-	        this.setState({
-	          dinnerReady: true,
-	          dinner: dinner[0]
-	        })
-	      }
-	      if (snacks.length > 0) {
-	        this.setState({
-	          snacksReady: true,
-	          snacks: snacks[0]
-	        })
-	      }
-
-	      this.setState({
-	        isLoading: false,
-	        list: result,
-	        listLoaded: true,
-	        todaysMeals: todaysMeals
-	      })
+	  if (breakfast.length > 0) {
+	    this.setState({
+	      breakfastReady: true,
+	      breakfast: breakfast[0]
 	    })
+	  }
+	  if (lunch.length > 0) {
+	    this.setState({
+	      lunchReady: true,
+	      lunch: lunch[0]
+	    })
+	  }
+	  if (dinner.length > 0) {
+	    this.setState({
+	      dinnerReady: true,
+	      dinner: dinner[0]
+	    })
+	  }
+	  if (snacks.length > 0) {
+	    this.setState({
+	      snacksReady: true,
+	      snacks: snacks[0]
+	    })
+	  }
+
+	  this.setState({
+	    isLoading: false,
+	    list: this.props.list,
+	    listLoaded: true,
+	    todaysMeals: todaysMeals
+	  })
 
 	}
 

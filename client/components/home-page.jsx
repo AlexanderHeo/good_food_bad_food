@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Footer from './Footer';
-import Spinner from './Loader';
+import Loader from './Loader';
 import Settings from './Settings';
 import TodaysMeals from './Todays-Meals';
 import WeeklyReview from './Weekly-Review';
@@ -9,7 +9,9 @@ import WeeklyReview from './Weekly-Review';
 class HomePage extends Component {
   state = {
     isLoading: true,
-    hamburgerClicked: false
+    hamburgerClicked: false,
+    list: [],
+    listLoaded: false
   }
 
   componentDidMount() {
@@ -20,6 +22,15 @@ class HomePage extends Component {
         this.setState({ isLoading: false });
       })
       .catch(err => console.error(err));
+
+    fetch('/api/list')
+	    .then(response => response.json())
+	    .then(result => {
+        this.setState({
+          list: result,
+          listLoaded: true
+        })
+      })
   }
 
   handleSubmit = event => {
@@ -47,7 +58,7 @@ class HomePage extends Component {
   }
 
   render() {
-	  if (this.state.isLoading) return <Spinner />;
+	  if (this.state.isLoading) return <Loader />;
     const username = this.props.location.state.username
 	  return (
 	    <Container>
@@ -57,11 +68,19 @@ class HomePage extends Component {
 	      </section>
 	      <section className='todaySection'>
 	        <div className='todayTitle'>Today</div>
-	        <TodaysMeals />
+          {
+            this.state.listLoaded
+              ? <TodaysMeals list={ this.state.list } />
+              : <Loader />
+          }
 	      </section>
 	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
-	        <WeeklyReview />
+          {
+            this.state.listLoaded
+              ? <WeeklyReview list={ this.state.list } />
+              : <Loader />
+          }
 	      </section>
 
         {
