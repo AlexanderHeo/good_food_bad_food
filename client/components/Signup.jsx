@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReturnChevron } from './Icons';
 import State from './StateChooser';
 
 class Signup extends React.Component {
@@ -58,12 +57,6 @@ class Signup extends React.Component {
 	render() {
 	  return (
 	    <Container>
-	      <Link
-	        to='/ls'
-	        className='returnButton'
-	      >
-	        <ReturnChevron />
-	      </Link>
 	      <h1 className='title'>Sign Up</h1>
 	      <form className='form' onSubmit={ this.handleSubmit }>
 	        <fieldset className='fieldset'>
@@ -133,35 +126,10 @@ class Signup extends React.Component {
 	          <button className='button'>Sign Up</button>
 	        </div>
 	      </form>
+	      <div className='linkContainer'>
+	      	<Link to='/login' className='link'>login</Link>
+	      </div>
 	    </Container>
-	  // <div className="container">
-	  //   <h1 className="header mt-3 mx-auto">Sign Up</h1>
-	  //   <div className="row ls-icons d-flex justify-content-around my-3 text-center">
-	  //     <img src="images/angel.png" alt="" />
-	  //     <img src="images/devil.png" alt="" />
-	  //   </div>
-	  //   <form className="ls" onSubmit={this.handleSubmit}>
-	  //     <div className="row d-flex justify-content-center">
-	  //       <div className="form-group d-flex flex-column text-center">
-	  //         <label>Create A Username</label>
-	  //         <input type="text" id="signupUsername" name="username" onChange={this.handleChange} />
-	  //       </div>
-	  //     </div>
-	  //     <div className="row d-flex justify-content-center">
-	  //       <div className="form-group d-flex flex-column text-center">
-	  //         <label>Enter Your Password</label>
-	  //         <input type="password" id="signupPassword" name="password" onChange={this.handleChange} />
-	  //       </div>
-	  //     </div>
-	  //     <div className="row d-flex justify-content-center mt-5">
-	  //       <button type="submit" className="halfButton">Create the Account!</button>
-	  //     </div>
-	  //     <div>{this.state.message}</div>
-	  //   </form>
-	  //   <div className="row listMealsButtons justify-content-around mt-3">
-	  //     <Link className="halfButton text-center" to="/home">Home</Link>
-	  //   </div>
-	  // </div>
 	  );
 	}
 }
@@ -189,7 +157,9 @@ const Container = styled.div`
 	}
 
 	.title {
-		margin: 36px 0;
+		width: 100%;
+		text-align: center;
+		margin-top: 20%;
 	}
 
 	.form {
@@ -200,7 +170,7 @@ const Container = styled.div`
 		justify-content: center;
 	}
 	.fieldset {
-		padding: 18px 0;
+		padding: 12px 0;
 		width: 100%;
 	}
 	.label {
@@ -235,6 +205,18 @@ const Container = styled.div`
 		.button {
 			width: 90%;
 			margin: 10px 0;
+		}
+	}
+	.linkContainer {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		text-align: center;
+		margin-bottom: 24px;
+		.link {
+			font-size: 0.8rem;
+			text-decoration: underline;
 		}
 	}
 `
