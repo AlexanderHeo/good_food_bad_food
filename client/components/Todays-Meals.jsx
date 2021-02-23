@@ -118,9 +118,12 @@ class TodaysMeals extends Component {
 	    .then(response => response.json())
 	    .then(result => {
 	      const ready = `${mealtime}Ready`
+	      const listCopy = [...this.state.list]
+	      listCopy.unshift(result.rows[0])
 	      this.setState({
 	        [mealtime]: result.rows[0],
-	        [ready]: true
+	        [ready]: true,
+	        list: listCopy
 	      })
 	    })
 	}
