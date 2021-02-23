@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import styled from 'styled-components';
 // import About from './about';
 // import Enter from './Enter-a-meal';
@@ -35,6 +35,7 @@ class App extends React.Component {
           {/* <Route path="/warning" component={FDAWarning}></Route> */}
           {/* <Route path="/rate/:mealId" component={RateMeal}></Route> */}
           {/* <Route path="/about" component={About}></Route> */}
+          <Redirect from='/' to='logo' />
         </Router>
       </Wrapper>
     );
