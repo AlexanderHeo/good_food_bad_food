@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import MobileFrame from './UI/Mobile-Frame';
 
-class LoginSignup extends Component {
+class Logo extends Component {
 	state = {
 	  goodfood: false,
 	  badfood: false,
@@ -52,7 +52,7 @@ class LoginSignup extends Component {
 	}
 }
 
-export default LoginSignup;
+export default Logo;
 
 const Blackout = styled.div`
 	.blackout {

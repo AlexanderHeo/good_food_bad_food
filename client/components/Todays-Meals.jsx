@@ -9,7 +9,6 @@ import TodaysMealItem from './Todays-Meal-Item'
 class TodaysMeals extends Component {
 	state = {
 	  isLoading: true,
-	  list: [],
 	  listLoaded: false,
 	  todaysMeals: [],
 	  breakfast: [],
@@ -70,7 +69,6 @@ class TodaysMeals extends Component {
 
 	  this.setState({
 	    isLoading: false,
-	    list: this.props.list,
 	    listLoaded: true,
 	    todaysMeals: todaysMeals
 	  })
@@ -117,12 +115,12 @@ class TodaysMeals extends Component {
 	    .then(response => response.json())
 	    .then(result => {
 	      const ready = `${mealtime}Ready`
-	      const listCopy = [...this.state.list]
+	      const listCopy = [...this.props.list]
 	      listCopy.unshift(result.rows[0])
+	      this.props.updateList(listCopy)
 	      this.setState({
 	        [mealtime]: result.rows[0],
-	        [ready]: true,
-	        list: listCopy
+	        [ready]: true
 	      })
 	    })
 	}
@@ -145,12 +143,12 @@ class TodaysMeals extends Component {
 	  })
 	    .then(response => response.json())
 	    .then(data => {
-	      const listCopy = [...this.state.list]
+	      const listCopy = [...this.props.list]
 	      for (let i = 0; i < listCopy.length; i++) {
 	      	if (listCopy[i].mealId === mealId) {
 	          listCopy[i].report = report
+	          this.props.updateList(listCopy)
 	          this.setState({
-	            list: listCopy,
 	            resultModalDisplayed: false,
 	            resultsFor: '',
 	            listLoaded: true
