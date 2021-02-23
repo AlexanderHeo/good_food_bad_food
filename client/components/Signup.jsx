@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { ReturnChevron } from './Icons';
 import State from './StateChooser';
 
 class Signup extends React.Component {
@@ -56,7 +58,12 @@ class Signup extends React.Component {
 	render() {
 	  return (
 	    <Container>
-	      <button className="returnButton"></button>
+	      <Link
+	        to='/ls'
+	        className='returnButton'
+	      >
+	        <ReturnChevron />
+	      </Link>
 	      <h1 className='title'>Sign Up</h1>
 	      <form className='form' onSubmit={ this.handleSubmit }>
 	        <fieldset className='fieldset'>
@@ -124,7 +131,6 @@ class Signup extends React.Component {
 	        </fieldset>
 	        <div className='buttonContainer'>
 	          <button className='button'>Sign Up</button>
-	          <button className='button'>Cancel</button>
 	        </div>
 	      </form>
 	    </Container>
@@ -170,6 +176,18 @@ const Container = styled.div`
 	align-items: center;
 	background-color: var(--primary-0);
 
+	.returnButton {
+		width: 50px;
+		height: 50px;
+		border: 4px solid var(--primary-6);
+		border-radius: 50%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		margin: 12px;
+		padding-left: 6px;
+	}
+
 	.title {
 		margin: 36px 0;
 	}
@@ -192,7 +210,7 @@ const Container = styled.div`
 	}
 	.input, .select {
 		width: 60%;
-		outline: 0;
+		outline: none;
 		border-radius: 10px;
 		padding: 6px 12px;
 		margin: 0 12px;
@@ -208,6 +226,7 @@ const Container = styled.div`
 		border-color: -internal-light-dark(rgb(118,118,118),rgb(133,133,133));
 	}
 	.buttonContainer {
+		margin-top: 36px;
 		width: 100%;
 		display: flex;
 		flex-direction: column;
