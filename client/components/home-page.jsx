@@ -57,9 +57,16 @@ class HomePage extends Component {
       .catch(err => console.error(err));
   }
 
-  render() {
+	updateList = list => {
+	  this.setState({
+	    list: list,
+	    listLoaded: true
+	  })
+	}
+
+	render() {
 	  if (this.state.isLoading) return <Loader />;
-    const username = this.props.location.state.username
+	  const username = this.props.location.state.username
 	  return (
 	    <Container>
 
@@ -68,23 +75,26 @@ class HomePage extends Component {
 	      </section>
 	      <section className='todaySection'>
 	        <div className='todayTitle'>Today</div>
-          {
-            this.state.listLoaded
-              ? <TodaysMeals list={ this.state.list } />
-              : <Loader />
-          }
+	        {
+	          this.state.listLoaded
+	            ? <TodaysMeals
+	              list={ this.state.list }
+	              updateList={ this.updateList }
+	            />
+	            : <Loader />
+	        }
 	      </section>
 	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
-          {
-            this.state.listLoaded
-              ? <WeeklyReview list={ this.state.list } />
-              : <Loader />
-          }
+	        {
+	          this.state.listLoaded
+	            ? <WeeklyReview list={ this.state.list } />
+	            : <Loader />
+	        }
 	      </section>
 
-        {
-          this.state.hamburgerClicked &&
+	      {
+	        this.state.hamburgerClicked &&
 						<section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'open'}` : `${'settingsSection'} ${'closed'}` }
 						>
 						  <Settings
@@ -92,17 +102,17 @@ class HomePage extends Component {
 						    handleClick={ this.handleFooterClick }
 						    logout={ this.handleLogOut } />
 						</section>
-        }
+	      }
 
-        <FooterContainer>
+	      <FooterContainer>
         	<Footer
-            clicked={ this.state.hamburgerClicked }
-            handleClick={ this.handleFooterClick }
-          />
-        </FooterContainer>
+	          clicked={ this.state.hamburgerClicked }
+	          handleClick={ this.handleFooterClick }
+	        />
+	      </FooterContainer>
 	    </Container>
 	  );
-  }
+	}
 }
 
 export default HomePage;

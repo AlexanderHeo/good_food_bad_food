@@ -6,6 +6,8 @@ class Login extends React.Component {
   state = {
     username: '',
     password: '',
+    usernameFocused: false,
+    passwordFocused: false,
     isLoggedIn: false,
     errorMessage: '',
     pwErrorMessage: ''
@@ -65,55 +67,76 @@ class Login extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <LoginContainer>
-        <h1 className="title">Log In</h1>
-        <form
-          className="form"
-        >
-          <fieldset className="fieldset">
-            <label className="label">Username</label>
-            <input
-              className="input"
-              type="text"
-              name="username"
-              onChange={ this.handleChange }/>
-          </fieldset>
-          <fieldset className="fieldset">
-            <label className="label">Password</label>
-            <input
-              className="input"
-              type="password"
-              name="password"
-              onChange={ this.handleChange }/>
-          </fieldset>
-          {
-            this.state.isLoggedIn
-              ? <Redirect from='/login' to={{ pathname: 'home', state: { username: this.state.username } }}/>
-              : null
-          }
-          {
-            this.state.errorMessage
-              ? <div className="errorMessage">{ this.state.errorMessage }</div>
-              : this.state.pwErrorMessage
-                ? <div className="errorMessage">{ this.state.pwErrorMessage }</div>
-                : <div className="button-container">
-                  <button
-                    className="button"
-                    onClick={ this.handleButtonClick }>Log In</button>
-                  <Link
-                    className="button"
-                    to="/ls"
-                  >Cancel
-                  </Link>
-                </div>
-          }
+	handleOnFocus = e => {
+	  const focused = `${e.target.name}Focused`
+	  this.setState({
+	    errorMessage: '',
+	    [focused]: true
+	  })
+	}
 
-        </form>
-      </LoginContainer>
-    );
-  }
+	render() {
+	  return (
+	    <LoginContainer>
+	      <h1 className="title">Log In</h1>
+	      <form
+	        className="form"
+	      >
+	        <fieldset className="fieldset">
+	          <label className="label">Username:</label>
+	          <input
+	            className="input"
+	            type="text"
+	            name="username"
+	            required={ this.state.usernameFocused }
+	            value={ this.state.username }
+	            placeholder=''
+	            onChange={ this.handleChange }
+	            onFocus={ this.handleOnFocus } />
+	        </fieldset>
+	        <fieldset className="fieldset">
+	          <label className="label">Password:</label>
+	          <input
+	            className="input"
+	            type="password"
+	            name="password"
+	            required={ this.state.passwordFocused }
+	            value={ this.state.password }
+	            placeholder=''
+	            onChange={ this.handleChange }
+	            onFocus={ this.handleOnFocus } />
+	        </fieldset>
+	        {
+	          this.state.isLoggedIn
+	            ? <Redirect from='/login' to={{ pathname: 'home', state: { username: this.state.username } }}/>
+	            : null
+	        }
+	        {
+	          this.state.errorMessage
+	            ? <div className="errorMessage">{ this.state.errorMessage }</div>
+	            : this.state.pwErrorMessage
+	              ? <div className="errorMessage">{ this.state.pwErrorMessage }</div>
+	              : <div className="button-container">
+	                <button
+	                  className="button"
+	                  onClick={ this.handleButtonClick }>Log In</button>
+	              </div>
+	        }
+
+	      </form>
+	      <div className='linkContainer'>
+	        <Link
+	          to='/reset'
+	          className='link'
+	        >reset password</Link>
+	        <Link
+	          to='/signup'
+	          className='link'
+	        >signup</Link>
+	      </div>
+	    </LoginContainer>
+	  );
+	}
 }
 
 export default Login;
@@ -121,18 +144,29 @@ export default Login;
 const LoginContainer = styled.div`
 	width: 100vw;
 	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.returnButton {
+		width: 50px;
+		height: 50px;
+		border: 4px solid var(--primary-6);
+		border-radius: 50%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		margin: 12px;
+		padding-left: 6px;
+	}
 
 	.title {
 		width: 100%;
-		height: 20%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		text-align: center;
+		margin-top: 55%;
 	}
 
 	.form {
-		width: 100%;
-		height: 80%;
 		padding: 0 20px;
 		text-align: center;
 
@@ -143,26 +177,60 @@ const LoginContainer = styled.div`
 		.fieldset:last-of-type {
 			margin-bottom: 50px;
 		}
+
 		.label, .input {
-			width: 100%;
-			text-align: center;
 			font-size: 1.3rem;
 			font-weight: 700;
 		}
+		.label {
+			width: 30%;
+			text-align: right;
+		}
 		.input {
-			border: 4px solid var(--primary-6);
+			width: 60%;
+			outline: none;
 			border-radius: 16px;
 			padding: 6px 6px;
+			margin: 0 12px;
+			text-align: center;
 			background-color: var(--primary-0);
+			box-shadow: 0 0 0 transparent;
 		}
+		.input:invalid {
+			box-shadow: 0 0 3px 3px var(--warning-4);
+		}
+
 		.button-container {
-			margin-top: 100px;
+			margin-top: 36px;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.button {
+				width: 90%;
+				margin: 10px 0;
+			}
 		}
 		.errorMessage {
+			width: calc(100% - 40px);
 			position: absolute;
 			font-size: 1.5rem;
 			color: var(--warning-4);
 			font-weight: 700;
+		}
+	}
+
+	.linkContainer {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		text-align: center;
+		margin-bottom: 24px;
+		.link {
+			font-size: 0.8rem;
+			text-decoration: underline;
+			margin: 0 36px;
 		}
 	}
 `
