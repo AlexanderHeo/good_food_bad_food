@@ -18,7 +18,7 @@ class HomePage extends Component {
     fetch('/api/isloggedin')
       .then(response => response.json())
       .then(result => {
-        if (result.error) return this.props.history.push('/ls');
+        if (result.error) return this.props.history.push('/logo');
         this.setState({ isLoading: false });
       })
       .catch(err => console.error(err));
@@ -52,7 +52,7 @@ class HomePage extends Component {
     fetch('/api/log-out')
       .then(response => response.json())
       .then(result => {
-        if (result.success) return this.props.history.push('/ls');
+        if (result.success) return this.props.history.push('/logo');
       })
       .catch(err => console.error(err));
   }
