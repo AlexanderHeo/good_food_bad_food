@@ -74,7 +74,7 @@ class Setting extends Component {
 	  return (
 	    <Container>
 	      <Backdrop handleClick={ this.props.handleClick } />
-	      <div className={ this.props.clicked ? `${'setting'} ${'clicked'}` : 'setting'}>
+	      <div className={ this.props.clicked ? `${'setting'} ${'open'}` : `${'setting'} ${'closed'}`}>
 	        { SettingDisplay }
 	      </div>
 	    </Container>
@@ -110,12 +110,26 @@ const Container = styled.div`
 	.title {
 		height: 20%;
 	}
-	.setting.clicked {
+	.setting.open {
 		animation: slideUp 0.3s forwards;
 	}
+	.setting.closed {
+		animation: slideDown 0.3s forwards;
+	}
 	@keyframes slideUp {
+		from {
+			transform: translateY(1000px);
+		}
 		to {
 			transform: translateY(0);
+		}
+	}
+	@keyframes slideDown {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(1000px);
 		}
 	}
 
