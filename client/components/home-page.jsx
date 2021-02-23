@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import Footer from './Footer';
+import Loader from './Loader';
+import Settings from './Settings';
+import TodaysMeals from './Todays-Meals';
+import WeeklyReview from './Weekly-Review';
 
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true
-    };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleLogOut = this.handleLogOut.bind(this);
+class HomePage extends Component {
+  state = {
+    isLoading: true,
+    hamburgerClicked: false,
+    list: [],
+    listLoaded: false
   }
 
   componentDidMount() {
@@ -20,18 +22,33 @@ class Home extends React.Component {
         this.setState({ isLoading: false });
       })
       .catch(err => console.error(err));
+
+    fetch('/api/list')
+	    .then(response => response.json())
+	    .then(result => {
+        this.setState({
+          list: result,
+          listLoaded: true
+        })
+      })
   }
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
   }
 
-  handleClick(event) {
+  handleClick = event => {
     const { history } = this.props;
     history.push(`/${event.target.name}`);
   }
 
-  handleLogOut() {
+	handleFooterClick = () => {
+	  this.setState({
+	    hamburgerClicked: !this.state.hamburgerClicked
+	  })
+	}
+
+  handleLogOut = () => {
     fetch('/api/log-out')
       .then(response => response.json())
       .then(result => {
@@ -40,30 +57,130 @@ class Home extends React.Component {
       .catch(err => console.error(err));
   }
 
-  render() {
-    const status = this.state.isLoading;
-    if (status) return null;
-    return (
-      <div className="container d-flex flex-column">
-        <div className="homeHeader d-flex flex-column mt-2">
-          <div>Good Food</div>
-          <div>Bad Food</div>
-        </div>
-        <div className="openBox mt-3">
-          <form onSubmit={this.handleSubmit}>
-            <div className="d-flex flex-column mx-auto">
-              <button className="fullButton mx-auto mt-2" type="submit" name="enter" onClick={this.handleClick}>Enter A Meal</button>
-              <button className="fullButton mx-auto mt-2" type="submit" name="entereffects" onClick={this.handleClick}>Rate A Meal</button>
-              <button className="fullButton mx-auto mt-2" type="submit" name="list" onClick={this.handleClick}>View Meal Ratings</button>
-              <button className="fullButton mx-auto mt-2" type="submit" name="warning" onClick={this.handleClick}>FDA Warnings</button>
-              <button className="fullButton mx-auto mt-2" type="submit" name="about" onClick={this.handleClick}>About</button>
-              <button className="fullButton mx-auto mt-5 mb-3" type="submit" onClick={this.handleLogOut}>Log Out</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
-  }
+	updateList = list => {
+	  this.setState({
+	    list: list,
+	    listLoaded: true
+	  })
+	}
+
+	render() {
+	  if (this.state.isLoading) return <Loader />;
+	  const username = this.props.location.state.username
+	  return (
+	    <Container>
+
+	      <section className='helloSection'>
+	        <div className='hello'>Hello, { username }!</div>
+	      </section>
+	      <section className='todaySection'>
+	        <div className='todayTitle'>Today</div>
+	        {
+	          this.state.listLoaded
+	            ? <TodaysMeals
+	              list={ this.state.list }
+	              updateList={ this.updateList }
+	            />
+	            : <Loader />
+	        }
+	      </section>
+	      <section className='reviewSection'>
+	        <div className='reviewTitle'>This Week</div>
+	        {
+	          this.state.listLoaded
+	            ? <WeeklyReview list={ this.state.list } />
+	            : <Loader />
+	        }
+	      </section>
+
+	      {
+	        this.state.hamburgerClicked &&
+						<section className={ this.state.hamburgerClicked ? `${'settingsSection'} ${'open'}` : `${'settingsSection'} ${'closed'}` }
+						>
+						  <Settings
+						    clicked={ this.state.hamburgerClicked }
+						    handleClick={ this.handleFooterClick }
+						    logout={ this.handleLogOut } />
+						</section>
+	      }
+
+	      <FooterContainer>
+        	<Footer
+	          clicked={ this.state.hamburgerClicked }
+	          handleClick={ this.handleFooterClick }
+	        />
+	      </FooterContainer>
+	    </Container>
+	  );
+	}
 }
 
-export default Home;
+export default HomePage;
+
+const Container = styled.div`
+	width: 100vw;
+	height: 100vh;
+
+	.helloSection {
+		width: 100%;
+		height: 15%;
+		.hello {
+			font-size: 2rem;
+			padding: 15px 25px;
+		}
+	}
+
+	.todaySection {
+		height: 40%;
+		display: flex;
+		padding: 6px 12px;
+		flex-direction: column;
+		align-items: center;
+		.todayTitle {
+			font-size: 1.1rem;
+			width: 100%;
+			text-align: left;
+		}
+
+	}
+
+	.reviewSection {
+		padding: 36px 12px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		.reviewTitle {
+			font-size: 1.2rem;
+			width: 100%;
+			text-align: left;
+		}
+		.reviewContainer {
+			width: 80%;
+			height: 70%;
+			border: 5px solid red;
+			margin-top: 5px;
+		}
+	}
+
+	.settingsSection {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: calc(100% - 80px);
+		align-items: flex-end;
+	}
+	.settingsSection.open {
+		display: flex;
+	}
+	.settingsSection.closed {
+		display: none;
+	}
+`
+const FooterContainer = styled.div`
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+`
