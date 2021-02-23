@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReturnChevron } from './Icons';
 
 class Login extends React.Component {
   state = {
@@ -79,12 +78,6 @@ class Login extends React.Component {
 	render() {
 	  return (
 	    <LoginContainer>
-	      <Link
-	        to='/ls'
-	        className='returnButton'
-	      >
-	        <ReturnChevron />
-	      </Link>
 	      <h1 className="title">Log In</h1>
 	      <form
 	        className="form"
@@ -131,6 +124,16 @@ class Login extends React.Component {
 	        }
 
 	      </form>
+	      <div className='linkContainer'>
+	        <Link
+	          to='/resetPassword'
+	          className='link'
+	        >reset password</Link>
+	        <Link
+	          to='/signup'
+	          className='link'
+	        >signup</Link>
+	      </div>
 	    </LoginContainer>
 	  );
 	}
@@ -141,6 +144,9 @@ export default Login;
 const LoginContainer = styled.div`
 	width: 100vw;
 	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
 	.returnButton {
 		width: 50px;
@@ -156,15 +162,11 @@ const LoginContainer = styled.div`
 
 	.title {
 		width: 100%;
-		height: 20%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		text-align: center;
+		margin-top: 55%;
 	}
 
 	.form {
-		width: 100%;
-		height: 80%;
 		padding: 0 20px;
 		text-align: center;
 
@@ -204,7 +206,6 @@ const LoginContainer = styled.div`
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-
 			.button {
 				width: 90%;
 				margin: 10px 0;
@@ -216,6 +217,20 @@ const LoginContainer = styled.div`
 			font-size: 1.5rem;
 			color: var(--warning-4);
 			font-weight: 700;
+		}
+	}
+
+	.linkContainer {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		text-align: center;
+		margin-bottom: 24px;
+		.link {
+			font-size: 0.8rem;
+			text-decoration: underline;
+			margin: 0 36px;
 		}
 	}
 `
