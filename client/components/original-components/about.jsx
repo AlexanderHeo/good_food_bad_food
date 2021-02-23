@@ -9,23 +9,23 @@ function About() {
         is for people who need to track their diet due
         to a disease.
       </h5>
-      <h5>There are many diseases that is affected by
-        what you eat. Eating something that does not
+      <h5>There are many diseases that affect what you are
+        able to eat. Eating something that does not
         agree with you can result in anything from
-        minor discomfort, to something more serious.
+        minor discomfort to a hospital visit.
       </h5>
       <h5>
-        You can use GFBF to track what you ate today,
-        then come back and enter how it effected you,
-        whether good or bad. This way you can keep a
-        log of your favorite foods and how it makes you feel.
+        You can use GFBF to track what you eat,
+        then come back and enter how it made you feel.
+        This way you can keep a log of foods you can eat
+        and foods that make you feel bad.
       </h5>
       <h5>
         By logging everything you ate and it&apos;s affect,
-        you will be able to avoid bad affecting foods
-        in the future!
+        you will be able to avoid foods that don&apos;t sit well with
+        you in the future.
       </h5>
-      <div>Developed By: Evan Montgomery, Andrew Zhou, and Alex Heo</div>
+      <div>Developed By: Alex Heo, Andrew Zhou, and Evan Montgomery</div>
       <div className="row listMealsButtons justify-content-around mt-3">
         <Link className="halfButton text-center" to="/home">Home</Link>
       </div>

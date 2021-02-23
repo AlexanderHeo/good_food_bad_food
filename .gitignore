@@ -1,6 +1,7 @@
 .env
 .idea
 .vscode
+.tech
 .DS_Store
 node_modules
 server/sessions/*.json
