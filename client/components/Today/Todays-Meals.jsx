@@ -28,13 +28,11 @@ class TodaysMeals extends Component {
 
 	componentDidMount() {
 
-	  const today = new Date()
-	  const todaysDate = dateFormatter(today)
 	  const todaysMeals = this.props.list.filter(x => {
 	    const eatenAtDate = new Date(x.eatenAt)
 	    const eatenAt = dateFormatter(eatenAtDate)
 
-	    return eatenAt === todaysDate
+	    return eatenAt === this.props.todaysDate
 	  })
 
 	  const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
