@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import State from '../Functions/StateChooser';
 
@@ -10,7 +10,8 @@ class Signup extends React.Component {
     email: '',
     city: '',
     state: '',
-    message: ''
+    message: '',
+    successful: false
   }
 
   handleSubmit = e => {
@@ -35,7 +36,7 @@ class Signup extends React.Component {
       .then(response => response.json())
       .then(result => {
         if (result.success) {
-          this.props.history.push('/home');
+          this.setState({ successful: true })
         } else {
           this.setState({ message: result.error });
         }
@@ -129,6 +130,11 @@ class Signup extends React.Component {
 	      <div className='linkContainer'>
 	      	<Link to='/login' className='link'>login</Link>
 	      </div>
+	      {
+	        this.state.successful
+	          ? <Redirect to={{ pathname: 'home', state: { username: this.state.username } }} />
+	          : null
+	      }
 	    </Container>
 	  );
 	}
