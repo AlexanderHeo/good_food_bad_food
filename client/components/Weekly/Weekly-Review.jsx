@@ -139,11 +139,11 @@ class WeeklyReview extends Component {
 	        <tr className='tableRow'>
 	          <th>{this.state.sundayDisplay}</th>
 	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
+	          <th>{this.state.sundayDisplay + 2}</th>
+	          <th>{this.state.sundayDisplay + 3}</th>
+	          <th>{this.state.sundayDisplay + 4}</th>
+	          <th>{this.state.sundayDisplay + 5}</th>
+	          <th>{this.state.sundayDisplay + 6}</th>
 	        </tr>
 	      </thead>
 	      <tbody className='tableBody'>
@@ -157,7 +157,11 @@ class WeeklyReview extends Component {
 	                const reports = []
 	                x[1].forEach(x => reports.push(x.report))
 	                const total = reports.reduce((a, b) => a + b, 0)
-	                avg = (total / x[1].length)
+	                avg = (total / x[1].length).toFixed(2)
+	                const avgSplit = avg.split('.')
+	                if (avgSplit[1] === '00') {
+	                  avg = avgSplit[0]
+	                }
 	              }
 	              if (isNaN(avg)) { avg = '' }
 	              return <td key={ name }>{ avg }</td>
