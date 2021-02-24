@@ -27,10 +27,12 @@ class WeeklyReview extends Component {
 	    ['thu', '', ''],
 	    ['fri', '', ''],
 	    ['sat', '', '']
-	  ]
+	  ],
+	  sundayDisplay: ''
 	}
 
 	componentDidMount() {
+
 	  const thisWeek = []
 	  const lastDay = false
 	  for (let i = 0; i < this.props.list.length; i++) {
@@ -45,8 +47,10 @@ class WeeklyReview extends Component {
 	      const sundayMonth = sundayDate.getMonth() + 1
 	      const sundayYear = sundayDate.getFullYear()
 	      const sun = `${sundayMonth} ${sundayDates} ${sundayYear}`
-	      const thisSunday = new Date(sun)
 
+	      this.setState({ sundayDisplay: sundayDates })
+
+	      const thisSunday = new Date(sun)
 	      if (eatenDate >= thisSunday) {
 	        thisWeek.push(this.props.list[i])
 	      }
@@ -117,7 +121,6 @@ class WeeklyReview extends Component {
 	      ['sat', sat, satReady]
 	    ]
 	  })
-
 	}
 
 	render() {
@@ -132,6 +135,15 @@ class WeeklyReview extends Component {
 	          <th>Thu</th>
 	          <th>Fri</th>
 	          <th>Sat</th>
+	        </tr>
+	        <tr className='tableRow'>
+	          <th>{this.state.sundayDisplay}</th>
+	          <th>{this.state.sundayDisplay + 1}</th>
+	          <th>{this.state.sundayDisplay + 1}</th>
+	          <th>{this.state.sundayDisplay + 1}</th>
+	          <th>{this.state.sundayDisplay + 1}</th>
+	          <th>{this.state.sundayDisplay + 1}</th>
+	          <th>{this.state.sundayDisplay + 1}</th>
 	        </tr>
 	      </thead>
 	      <tbody className='tableBody'>
@@ -169,8 +181,11 @@ const Table = styled.table`
 	.tableHead {
 		border-bottom: 1px solid var(--primary-6);
 	}
-	.tableHead tr th {
-		padding: 24px 0 12px 0;
+	.tableHead tr:first-of-type th {
+		padding: 24px 0 0 0;
+	}
+	.tableHead tr:last-of-type th {
+		padding: 0 0 12px 0;
 	}
 	.tableBody tr td {
 		padding: 24px 0;
