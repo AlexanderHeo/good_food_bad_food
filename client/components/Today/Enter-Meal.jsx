@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { AddPlus, ReturnChevron } from './Icons'
+import { AddPlus, ReturnChevron } from '../UI/Icons'
 
 class EnterMeal extends Component {
 	state = {
@@ -68,20 +68,6 @@ class EnterMeal extends Component {
 }
 
 export default EnterMeal
-
-// const AddPlus = () => (
-//   <div className='addBar'>
-//     <div className='addBar1'></div>
-//     <div className='addBar2'></div>
-//   </div>
-// )
-
-// const ReturnChevron = () => (
-//   <>
-//     <div className='bar1'></div>
-//     <div className='bar2'></div>
-//   </>
-// )
 
 const Container = styled.div`
 	position: absolute;

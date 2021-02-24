@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import State from './StateChooser';
+import State from '../Functions/StateChooser';
 
 class Signup extends React.Component {
   state = {

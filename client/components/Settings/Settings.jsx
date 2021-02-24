@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Backdrop from './Backdrop'
+import Backdrop from '../UI/Backdrop'
 
 class Setting extends Component {
 	state = {
