@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import dateFormatter from './Functions/Date-Formatter'
 import Settings from './Settings/Settings'
 import TodaysMeals from './Today/Todays-Meals'
 import Footer from './UI/Footer'
@@ -11,7 +12,9 @@ class HomePage extends Component {
     isLoading: true,
     hamburgerClicked: false,
     list: [],
-    listLoaded: false
+    listLoaded: false,
+    todaysDate: '',
+    displayDate: ''
   }
 
   componentDidMount() {
@@ -31,6 +34,17 @@ class HomePage extends Component {
           listLoaded: true
         })
       })
+
+    const today = new Date()
+    const date = today.getDate()
+    const month = today.getMonth() + 1
+
+	  const todaysDate = dateFormatter(today)
+    const displayDate = `${month} / ${date}`
+    this.setState({
+      todaysDate: todaysDate,
+      displayDate: displayDate
+    })
   }
 
   handleSubmit = event => {
@@ -74,12 +88,16 @@ class HomePage extends Component {
 	        <div className='hello'>Hello, { username }!</div>
 	      </section>
 	      <section className='todaySection'>
-	        <div className='todayTitle'>Today</div>
+	        <div className='todayTitleContainer'>
+	          <span className='todayTitle'>Today</span>
+	          <span className='todayDate'>{ this.state.displayDate }</span>
+	        </div>
 	        {
 	          this.state.listLoaded
 	            ? <TodaysMeals
 	              list={ this.state.list }
 	              updateList={ this.updateList }
+	              todaysDate={ this.state.todaysDate }
 	            />
 	            : <Loader />
 	        }
@@ -136,10 +154,12 @@ const Container = styled.div`
 		padding: 6px 12px;
 		flex-direction: column;
 		align-items: center;
-		.todayTitle {
-			font-size: 1.1rem;
+		.todayTitleContainer {
 			width: 100%;
-			text-align: left;
+			padding: 0 12px;
+			display: flex;
+			justify-content: space-between;
+			font-size: 1.1rem;
 		}
 	}
 
