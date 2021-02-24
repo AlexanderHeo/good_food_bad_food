@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Footer from './Footer';
-import Loader from './Loader';
-import Settings from './Settings';
-import TodaysMeals from './Todays-Meals';
-import WeeklyReview from './Weekly-Review';
+import Settings from './Settings/Settings';
+import TodaysMeals from './Today/Todays-Meals';
+import Footer from './UI/Footer';
+import Loader from './UI/Loader';
+import WeeklyReview from './Weekly/Weekly-Review';
 
 class HomePage extends Component {
   state = {

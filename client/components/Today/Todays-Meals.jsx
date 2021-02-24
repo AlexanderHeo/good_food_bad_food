@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import dateFormatter from './Date-Formatter'
+import dateFormatter from '../Functions/Date-Formatter'
+import Loader from '../UI/Loader'
 import EnterMeal from './Enter-Meal'
 import EnterResult from './Enter-Result'
-import Loader from './Loader'
 import TodaysMealItem from './Todays-Meal-Item'
 
 class TodaysMeals extends Component {
