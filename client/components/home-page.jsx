@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import Settings from './Settings/Settings';
-import TodaysMeals from './Today/Todays-Meals';
-import Footer from './UI/Footer';
-import Loader from './UI/Loader';
-import WeeklyReview from './Weekly/Weekly-Review';
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import Settings from './Settings/Settings'
+import TodaysMeals from './Today/Todays-Meals'
+import Footer from './UI/Footer'
+import Loader from './UI/Loader'
+import WeeklyReview from './Weekly/Weekly-Review'
 
 class HomePage extends Component {
   state = {
@@ -18,10 +18,10 @@ class HomePage extends Component {
     fetch('/api/isloggedin')
       .then(response => response.json())
       .then(result => {
-        if (result.error) return this.props.history.push('/ls');
-        this.setState({ isLoading: false });
+        if (result.error) return this.props.history.push('/ls')
+        this.setState({ isLoading: false })
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
 
     fetch('/api/list')
 	    .then(response => response.json())
@@ -34,12 +34,12 @@ class HomePage extends Component {
   }
 
   handleSubmit = event => {
-    event.preventDefault();
+    event.preventDefault()
   }
 
   handleClick = event => {
-    const { history } = this.props;
-    history.push(`/${event.target.name}`);
+    const { history } = this.props
+    history.push(`/${event.target.name}`)
   }
 
 	handleFooterClick = () => {
@@ -52,7 +52,7 @@ class HomePage extends Component {
     fetch('/api/log-out')
       .then(response => response.json())
       .then(result => {
-        if (result.success) return this.props.history.push('/ls');
+        if (result.success) return this.props.history.push('/ls')
       })
       .catch(err => console.error(err));
   }
@@ -104,14 +104,14 @@ class HomePage extends Component {
 						</section>
 	      }
 
-	      <FooterContainer>
+	      <div className='footer'>
         	<Footer
 	          clicked={ this.state.hamburgerClicked }
 	          handleClick={ this.handleFooterClick }
 	        />
-	      </FooterContainer>
+	      </div>
 	    </Container>
-	  );
+	  )
 	}
 }
 
@@ -141,7 +141,6 @@ const Container = styled.div`
 			width: 100%;
 			text-align: left;
 		}
-
 	}
 
 	.reviewSection {
@@ -176,11 +175,11 @@ const Container = styled.div`
 	.settingsSection.closed {
 		display: none;
 	}
-`
-const FooterContainer = styled.div`
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	z-index: 1000;
+	.footer {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		z-index: 1000;
+	}
 `
