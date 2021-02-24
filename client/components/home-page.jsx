@@ -106,7 +106,9 @@ class HomePage extends Component {
 	        <div className='reviewTitle'>This Week</div>
 	        {
 	          this.state.listLoaded
-	            ? <WeeklyReview list={ this.state.list } />
+	            ? <WeeklyReview
+	              list={ this.state.list }
+	            />
 	            : <Loader />
 	        }
 	      </section>
