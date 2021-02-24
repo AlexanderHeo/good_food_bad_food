@@ -116,7 +116,7 @@ class TodaysMeals extends Component {
 	    .then(result => {
 	      const ready = `${mealtime}Ready`
 	      const listCopy = [...this.props.list]
-	      listCopy.unshift(result.rows[0])
+	      listCopy.push(result.rows[0])
 	      this.props.updateList(listCopy)
 	      this.setState({
 	        [mealtime]: result.rows[0],
@@ -216,24 +216,26 @@ class TodaysMeals extends Component {
 	          >Snacks</button>
 	      }
 	    </>
-	  } else if (this.state.enterModalDisplayed) {
-	    TodayDisplay = <EnterMeal
-	      mealtime={ this.state.enteringFor }
-	      return={ this.handleClick }
-	      addFood={ this.addFood }
-	    />
-	  } else if (this.state.resultModalDisplayed) {
-	    TodayDisplay = <EnterResult
-	      mealtime={ this.state.resultFor }
-	      foodItems={ foodItems }
-	      return={ this.handleClick }
-	      addResult={ this.addResult }
-	    />
 	  }
 
 	  return (
 	    <Container>
 	      { TodayDisplay }
+	      <div className={ this.state.enterModalDisplayed ? `${'enterMeal'} ${'open'}` : 'enterMeal'} >
+	        <EnterMeal
+	          mealtime={ this.state.enteringFor }
+	          return={ this.handleClick }
+	          addFood={ this.addFood }
+	        />
+	      </div>
+	      <div className={ this.state.resultModalDisplayed ? `${'enterResult'} ${'open'}` : 'enterResult'} >
+	        <EnterResult
+	          mealtime={ this.state.resultFor }
+	          foodItems={ foodItems }
+	          return={ this.handleClick }
+	          addResult={ this.addResult }
+	        />
+	      </div>
 	    </Container>
 	  )
 	}
@@ -245,6 +247,8 @@ const Container = styled.div`
 	position: relative;
 	width: 100%;
 	height: 100%;
+	overflow: hidden;
+
 	.meal {
 		height: 25%;
 		width: 100%;
@@ -266,5 +270,28 @@ const Container = styled.div`
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.enterMeal, .enterResult {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		transform: translateY(220px) scale(0.5);
+	}
+	.open {
+		animation: slideUp .35s forwards, zoomOut .3s forwards;
+		animation-delay: 0s, .15s;
+	}
+	@keyframes slideUp {
+		to {
+			transform: translateY(0) scale(0.5);
+		}
+	}
+	@keyframes zoomOut {
+		to {
+			transform: scale(1);
+		}
 	}
 `
