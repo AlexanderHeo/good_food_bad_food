@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { DownVote, ReturnChevron, UpVote } from './Icons'
+import { DownVote, ReturnChevron, UpVote } from '../UI/Icons'
+
 class EnterResult extends Component {
 	state = {
 	  nameValue: '',
