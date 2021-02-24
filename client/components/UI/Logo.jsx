@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import MobileFrame from './UI/Mobile-Frame';
+import MobileFrame from './Mobile-Frame';
 
 class Logo extends Component {
 	state = {

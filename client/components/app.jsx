@@ -1,17 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import styled from 'styled-components';
+import HomePage from './Home-Page';
+import Login from './Login-Signup/Login';
 // import About from './about';
 // import Enter from './Enter-a-meal';
 // import EnterEffects from './enter-effects';
 // import FDAWarning from './fdawarning';
-import HomePage from './Home-Page';
-import Login from './Login';
-import Logo from './Logo';
-// import List from './user-meals-status';
-import ResetPassword from './ResetPassword';
+import LoginSignup from './Login-Signup/Login-Signup';
+import Signup from './Login-Signup/Signup';
 // import RateMeal from './rate-meal';
-import Signup from './Signup';
+// import List from './user-meals-status';
 
 class App extends React.Component {
   constructor(props) {
@@ -24,18 +23,17 @@ class App extends React.Component {
       <Wrapper>
 
         <Router>
-          <Route path="/logo" component={Logo}></Route>
+          <Route path="/ls" component={LoginSignup}></Route>
           <Route path="/login" component={Login}></Route>
           <Route path="/signup" component={Signup}></Route>
           <Route path="/home" component={HomePage}></Route>
-          <Route path='/reset' component={ResetPassword} />
           {/* <Route path="/enter" component={Enter}></Route> */}
           {/* <Route path="/entereffects" component={EnterEffects}></Route> */}
           {/* <Route path="/list" component={List}></Route> */}
           {/* <Route path="/warning" component={FDAWarning}></Route> */}
           {/* <Route path="/rate/:mealId" component={RateMeal}></Route> */}
           {/* <Route path="/about" component={About}></Route> */}
-          <Redirect from='/' to='logo' />
+          <Redirect from='/' to='ls' />
         </Router>
       </Wrapper>
     );
