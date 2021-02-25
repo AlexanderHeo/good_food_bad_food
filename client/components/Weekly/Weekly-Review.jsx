@@ -14,7 +14,9 @@ class WeeklyReview extends Component {
 	    ['fri', '', ''],
 	    ['sat', '', '']
 	  ],
-	  sundayDisplay: ''
+	  sundayDisplay: '',
+	  today: '',
+	  highlight: ''
 	}
 
 	componentDidMount() {
@@ -23,6 +25,7 @@ class WeeklyReview extends Component {
 
 	  const todayDate = new Date()
 	  const todayDay = todayDate.getDay()
+	  const todayDateNum = todayDate.getDate()
 	  const sunday = todayDate.setHours(todayDate.getHours() - (todayDay * 24))
 	  const sundayDate = new Date(sunday)
 	  const sundayDates = sundayDate.getDate()
@@ -36,6 +39,22 @@ class WeeklyReview extends Component {
 	    if (eatenDate >= thisSunday) {
 	      thisWeek.push(this.props.list[i])
 	    }
+	  }
+
+	  if (sundayDates === todayDateNum) {
+	    this.setState({ highlight: 'sun' })
+	  } else if (sundayDates + 1 === todayDateNum) {
+	    this.setState({ highlight: 'mon' })
+	  } else if (sundayDates + 2 === todayDateNum) {
+	    this.setState({ highlight: 'tue' })
+	  } else if (sundayDates + 3 === todayDateNum) {
+	    this.setState({ highlight: 'wed' })
+	  } else if (sundayDates + 4 === todayDateNum) {
+	    this.setState({ highlight: 'thu' })
+	  } else if (sundayDates + 5 === todayDateNum) {
+	    this.setState({ highlight: 'fri' })
+	  } else if (sundayDates + 6 === todayDateNum) {
+	    this.setState({ highlight: 'sat' })
 	  }
 
 	  const sun = []
@@ -89,7 +108,6 @@ class WeeklyReview extends Component {
 	  })
 
 	  this.setState({
-	    sundayDisplay: sundayDates,
 	    weeklyReady: true,
 	    thisWeek: [
 	      ['sun', sun, sunReady],
@@ -99,31 +117,58 @@ class WeeklyReview extends Component {
 	      ['thu', thu, thuReady],
 	      ['fri', fri, friReady],
 	      ['sat', sat, satReady]
-	    ]
+	    ],
+	    sundayDisplay: sundayDates
 	  })
 	}
 
 	render() {
+	  let sun, mon, tue, wed, thu, fri, sat
+	  switch (this.state.highlight) {
+	    case 'sun':
+	      sun = 'today'
+	      break
+	    case 'mon':
+	      mon = 'today'
+	      break
+	    case 'tue':
+	      tue = 'today'
+	      break
+	    case 'wed':
+	      wed = 'today'
+	      break
+	    case 'thu':
+	      thu = 'today'
+	      break
+	    case 'fri':
+	      fri = 'today'
+	      break
+	    case 'sat':
+	      sat = 'today'
+	      break
+
+	  }
+
 	  return (
 	    <Table>
 	      <thead className='tableHead'>
 	        <tr className='tableRow'>
-	          <th>Sun</th>
-	          <th>Mon</th>
-	          <th>Tue</th>
-	          <th>Wed</th>
-	          <th>Thu</th>
-	          <th>Fri</th>
-	          <th>Sat</th>
+	          <th className={sun}>Sun</th>
+	          <th className={mon}>Mon</th>
+	          <th className={tue}>Tue</th>
+	          <th className={wed}>Wed</th>
+	          <th className={thu}>Thu</th>
+	          <th className={fri}>Fri</th>
+	          <th className={sat}>Sat</th>
 	        </tr>
 	        <tr className='tableRow'>
-	          <th>{this.state.sundayDisplay}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 2}</th>
-	          <th>{this.state.sundayDisplay + 3}</th>
-	          <th>{this.state.sundayDisplay + 4}</th>
-	          <th>{this.state.sundayDisplay + 5}</th>
-	          <th>{this.state.sundayDisplay + 6}</th>
+	          <th className={sun}>{this.state.sundayDisplay}</th>
+	          <th className={mon}>{this.state.sundayDisplay + 1}</th>
+	          <th className={tue}>{this.state.sundayDisplay + 2}</th>
+	          <th className={wed}>{this.state.sundayDisplay + 3}</th>
+	          <th className={thu}>{this.state.sundayDisplay + 4}</th>
+	          <th className={fri}>{this.state.sundayDisplay + 5}</th>
+	          <th className={sat}>{this.state.sundayDisplay + 6}</th>
 	        </tr>
 	      </thead>
 	      <tbody className='tableBody'>
@@ -178,4 +223,8 @@ const Table = styled.table`
 		width: calc(100vw - 24px / 7)
 	}
 
+	.today {
+		background-color: var(--primary-4);
+		color: var(--primary-0);
+	}
 `
