@@ -11,50 +11,166 @@ class HomePage extends Component {
   state = {
     isLoading: true,
     hamburgerClicked: false,
+    todaysDate: '',
+    displayDate: '',
     list: [],
     listLoaded: false,
-    todaysDate: '',
-    displayDate: ''
+    breakfast: '',
+	  lunch: '',
+	  dinner: '',
+	  snacks: '',
+	  breakfastReady: false,
+	  lunchReady: false,
+	  dinnerReady: false,
+	  snacksReady: false
   }
 
   componentDidMount() {
+
     fetch('/api/isloggedin')
       .then(response => response.json())
       .then(result => {
         if (result.error) return this.props.history.push('/ls')
-        this.setState({ isLoading: false })
+
+        const today = new Date()
+        const date = today.getDate()
+        const month = today.getMonth() + 1
+
+        const todaysDate = dateFormatter(today)
+        const displayDate = `${month} / ${date}`
+        this.setState({
+          todaysDate: todaysDate,
+          displayDate: displayDate
+        })
+
+        fetch('/api/list')
+          .then(response => response.json())
+          .then(result => {
+
+            const todaysMeals = result.filter(x => {
+              const eatenAtDate = new Date(x.eatenAt)
+              const eatenAt = dateFormatter(eatenAtDate)
+
+              return eatenAt === this.state.todaysDate
+            })
+
+            const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
+            const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
+            const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
+            const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
+
+            if (breakfast.length > 0) {
+              this.setState({
+                breakfastReady: true,
+                breakfast: breakfast[0]
+              })
+            }
+            if (lunch.length > 0) {
+              this.setState({
+                lunchReady: true,
+                lunch: lunch[0]
+              })
+            }
+            if (dinner.length > 0) {
+              this.setState({
+                dinnerReady: true,
+                dinner: dinner[0]
+              })
+            }
+            if (snacks.length > 0) {
+              this.setState({
+                snacksReady: true,
+                snacks: snacks[0]
+              })
+            }
+
+            this.setState({
+              isLoading: false,
+              list: result,
+              listLoaded: true,
+              todaysMeals: todaysMeals
+            })
+          })
       })
       .catch(err => console.error(err))
-
-    fetch('/api/list')
-	    .then(response => response.json())
-	    .then(result => {
-        this.setState({
-          list: result,
-          listLoaded: true
-        })
-      })
-
-    const today = new Date()
-    const date = today.getDate()
-    const month = today.getMonth() + 1
-
-	  const todaysDate = dateFormatter(today)
-    const displayDate = `${month} / ${date}`
-    this.setState({
-      todaysDate: todaysDate,
-      displayDate: displayDate
-    })
   }
 
-  handleSubmit = event => {
-    event.preventDefault()
-  }
+	addMeal = (category, parameter) => {
+	  if (category === 'food') {
+	    const foodReady = `${parameter.food.mealtime}Ready`
+	    const data = {
+	      meal: parameter.food.name,
+	      mealtime: parameter.food.mealtime
+	    }
+	    const patchData = {
+	      name: parameter.food.name,
+	      mealId: parameter.food.mealId
+	    }
+	    if (this.state.[foodReady]) {
+	      const init = {
+	        method: 'PATCH',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(patchData)
+	      }
+	      fetch(`/api/enter/${parameter.food.mealId}`, init)
+	        .then(response => response.json())
+	        .then(result => {
+	          const listCopy = [...this.state.list]
+	          const arrOfIds = listCopy.map(x => x.mealId)
+	          const index = arrOfIds.indexOf(parameter.food.mealId)
+	          listCopy[index].name = parameter.value
+	          this.setState({ list: listCopy })
+	        })
+	    } else {
+	      const init = {
+	        method: 'POST',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(data)
+	      }
+	      fetch('/api/enter', init)
+	        .then(response => response.json())
+	        .then(result => {
+	          const listCopy = [...this.state.list]
+	          listCopy.push(result.rows[0])
+	          this.setState({
+	            list: listCopy,
+	            [parameter.mealtime]: result.rows[0],
+	            [foodReady]: true
+	          })
+	        })
+	    }
 
-  handleClick = event => {
-    const { history } = this.props
-    history.push(`/${event.target.name}`)
-  }
+	  } else if (category === 'report') {
+	    const mealId = parameter.food.mealId
+	    const report = parameter.report
+
+	    const mealResult = {
+	      mealId, report
+	    }
+	    const init = {
+	      method: 'PATCH',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify(mealResult)
+	    }
+	    fetch(`/api/rate/${mealId}`, init)
+	      .then(response => response.json())
+	      .then(data => {
+	        const listCopy = [...this.state.list]
+	        for (let i = 0; i < listCopy.length; i++) {
+	          if (listCopy[i].mealId === mealId) {
+	            listCopy[i].report = report
+	            this.setState({ list: listCopy })
+	          }
+	        }
+	      })
+	  }
+	}
 
 	handleFooterClick = () => {
 	  this.setState({
@@ -71,14 +187,7 @@ class HomePage extends Component {
       .catch(err => console.error(err));
   }
 
-	updateList = list => {
-	  this.setState({
-	    list: list,
-	    listLoaded: true
-	  })
-	}
-
-	render() {
+  render() {
 	  if (this.state.isLoading) return <Loader />;
 	  const username = this.props.location.state.username
 	  return (
@@ -92,25 +201,24 @@ class HomePage extends Component {
 	          <span className='todayTitle'>Today</span>
 	          <span className='todayDate'>{ this.state.displayDate }</span>
 	        </div>
-	        {
-	          this.state.listLoaded
-	            ? <TodaysMeals
-	              list={ this.state.list }
-	              updateList={ this.updateList }
-	              todaysDate={ this.state.todaysDate }
-	            />
-	            : <Loader />
-	        }
+	        <TodaysMeals
+            todaysDate={ this.state.todaysDate }
+            breakfastReady={ this.state.breakfastReady }
+            lunchReady={ this.state.lunchReady }
+            dinnerReady={ this.state.dinnerReady }
+            snacksReady={ this.state.snacksReady }
+            breakfast={ this.state.breakfast }
+            lunch={ this.state.lunch }
+            dinner={ this.state.dinner }
+            snacks={ this.state.snacks }
+            addMeal={ this.addMeal }
+          />
 	      </section>
 	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
-	        {
-	          this.state.listLoaded
-	            ? <WeeklyReview
-	              list={ this.state.list }
-	            />
-	            : <Loader />
-	        }
+	        <WeeklyReview
+            list={ this.state.list }
+          />
 	      </section>
 
 	      {
@@ -132,7 +240,7 @@ class HomePage extends Component {
 	      </div>
 	    </Container>
 	  )
-	}
+  }
 }
 
 export default HomePage;

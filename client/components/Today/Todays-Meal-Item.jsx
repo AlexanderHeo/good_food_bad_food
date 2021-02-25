@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const TodaysMealItem = props => {
   return (
     <Container
-      onClick={ () => props.handleClick('edit', props.mealtime)}
+      onClick={ () => props.handleClick('enter', props.mealtime)}
       className="meal">
       <div className='mealName'>
         <span>{ props.mealtime }:</span>
