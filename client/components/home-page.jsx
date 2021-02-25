@@ -54,35 +54,14 @@ class HomePage extends Component {
               return eatenAt === this.state.todaysDate
             })
 
-            const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
-            const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
-            const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
-            const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
-
-            if (breakfast.length > 0) {
+            todaysMeals.forEach(x => {
+              const mealtime = x.mealtime
+              const ready = `${mealtime}Ready`
               this.setState({
-                breakfastReady: true,
-                breakfast: breakfast[0]
+                [ready]: true,
+                [mealtime]: x
               })
-            }
-            if (lunch.length > 0) {
-              this.setState({
-                lunchReady: true,
-                lunch: lunch[0]
-              })
-            }
-            if (dinner.length > 0) {
-              this.setState({
-                dinnerReady: true,
-                dinner: dinner[0]
-              })
-            }
-            if (snacks.length > 0) {
-              this.setState({
-                snacksReady: true,
-                snacks: snacks[0]
-              })
-            }
+            })
 
             this.setState({
               isLoading: false,
