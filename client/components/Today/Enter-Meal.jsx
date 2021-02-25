@@ -38,8 +38,8 @@ class EnterMeal extends Component {
 	      })
 	    } else {
 	      const parameters = {
-	        food: this.state.food,
-	        value: this.state.value
+	        value: this.state.value,
+	        mealtime: this.props.mealtime
 	      }
 	      this.props.addMeal('food', parameters)
 	      this.props.handleClick('return')
