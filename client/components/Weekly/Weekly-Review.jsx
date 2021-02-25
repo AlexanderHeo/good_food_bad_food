@@ -5,20 +5,6 @@ class WeeklyReview extends Component {
 
 	state = {
 	  weeklyReady: false,
-	  sun: '',
-	  mon: '',
-	  tue: '',
-	  wed: '',
-	  thu: '',
-	  fri: '',
-	  sat: '',
-	  sunReady: false,
-	  monReady: false,
-	  tueReady: false,
-	  wedReady: false,
-	  thuReady: false,
-	  friReady: false,
-	  satReady: false,
 	  thisWeek: [
 	    ['sun', '', ''],
 	    ['mon', '', ''],
@@ -34,28 +20,21 @@ class WeeklyReview extends Component {
 	componentDidMount() {
 
 	  const thisWeek = []
-	  const lastDay = false
+
+	  const todayDate = new Date()
+	  const todayDay = todayDate.getDay()
+	  const sunday = todayDate.setHours(todayDate.getHours() - (todayDay * 24))
+	  const sundayDate = new Date(sunday)
+	  const sundayDates = sundayDate.getDate()
+	  const sundayMonth = sundayDate.getMonth() + 1
+	  const sundayYear = sundayDate.getFullYear()
+	  const sundayFullDate = `${sundayMonth} ${sundayDates} ${sundayYear}`
+	  const thisSunday = new Date(sundayFullDate)
+
 	  for (let i = 0; i < this.props.list.length; i++) {
-	    if (!lastDay) {
-	      const eatenDate = new Date(this.props.list[i].eatenAt)
-	      const todayDate = new Date()
-	      const todayDay = todayDate.getDay()
-	      const sunday = todayDate.setHours(todayDate.getHours() - (todayDay * 24))
-
-	      const sundayDate = new Date(sunday)
-	      const sundayDates = sundayDate.getDate()
-	      const sundayMonth = sundayDate.getMonth() + 1
-	      const sundayYear = sundayDate.getFullYear()
-	      const sun = `${sundayMonth} ${sundayDates} ${sundayYear}`
-
-	      this.setState({ sundayDisplay: sundayDates })
-
-	      const thisSunday = new Date(sun)
-	      if (eatenDate >= thisSunday) {
-	        thisWeek.push(this.props.list[i])
-	      }
-	    } else {
-	      break
+	    const eatenDate = new Date(this.props.list[i].eatenAt)
+	    if (eatenDate >= thisSunday) {
+	      thisWeek.push(this.props.list[i])
 	    }
 	  }
 
@@ -110,6 +89,7 @@ class WeeklyReview extends Component {
 	  })
 
 	  this.setState({
+	    sundayDisplay: sundayDates,
 	    weeklyReady: true,
 	    thisWeek: [
 	      ['sun', sun, sunReady],
@@ -139,11 +119,11 @@ class WeeklyReview extends Component {
 	        <tr className='tableRow'>
 	          <th>{this.state.sundayDisplay}</th>
 	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
-	          <th>{this.state.sundayDisplay + 1}</th>
+	          <th>{this.state.sundayDisplay + 2}</th>
+	          <th>{this.state.sundayDisplay + 3}</th>
+	          <th>{this.state.sundayDisplay + 4}</th>
+	          <th>{this.state.sundayDisplay + 5}</th>
+	          <th>{this.state.sundayDisplay + 6}</th>
 	        </tr>
 	      </thead>
 	      <tbody className='tableBody'>
@@ -157,7 +137,11 @@ class WeeklyReview extends Component {
 	                const reports = []
 	                x[1].forEach(x => reports.push(x.report))
 	                const total = reports.reduce((a, b) => a + b, 0)
-	                avg = (total / x[1].length)
+	                avg = (total / x[1].length).toFixed(2)
+	                const avgSplit = avg.split('.')
+	                if (avgSplit[1] === '00') {
+	                  avg = avgSplit[0]
+	                }
 	              }
 	              if (isNaN(avg)) { avg = '' }
 	              return <td key={ name }>{ avg }</td>

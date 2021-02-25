@@ -66,21 +66,21 @@ app.post('/api/log-in', (req, res, next) => {
         .then(result => {
           if (!result) return next(new ClientError('Invalid username / password!', 400));
           req.session.userId = response.rows[0].userId;
-          res.json({ success: 'Log-In succeed!' });
+          res.json({ success: 'Log-In success!' });
         });
     })
     .catch(err => next(err));
+});
+
+app.get('/api/isloggedin', (req, res, next) => {
+  if (!req.session.userId) return res.json({ error: 'not logged in!' });
+  res.json({ success: 'logged in' });
 });
 
 app.get('/api/log-out', (req, res, next) => {
   if (!req.session.userId) return next(new ClientError('Please log-in before log-out!', 400));
   delete req.session.userId;
   res.json({ success: 'Successful log-out' });
-});
-
-app.get('/api/isloggedin', (req, res, next) => {
-  if (!req.session.userId) return res.json({ error: 'not logged in!' });
-  res.json({ success: 'logged in' });
 });
 
 app.post('/api/enter', (req, res, next) => {
@@ -146,6 +146,18 @@ app.post('/api/enter', (req, res, next) => {
       next(error)
     );
 });
+
+app.patch('/api/enter/:mealId', (req, res, next) => {
+  const sql = `
+		UPDATE meals
+		SET name=$1
+		WHERE "mealId"=$2
+		RETURNING *;
+	`
+  const values = [req.body.name, req.body.mealId]
+  db.query(sql, values)
+    .then(result => res.status(200).json(result.rows[0]))
+})
 
 app.get('/api/ratefood', (req, res, next) => {
   // const userId = 1;

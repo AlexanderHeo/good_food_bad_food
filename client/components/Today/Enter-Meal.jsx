@@ -1,39 +1,65 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import RatingSystem from '../Rating/RatingSystem'
 import { AddPlus, ReturnChevron } from '../UI/Icons'
 
 class EnterMeal extends Component {
 	state = {
+	  food: [],
 	  value: '',
-	  emptyInputErrorMessage: ''
+	  errorMessage: '',
+	  ready: false
+	}
+
+	componentDidMount() {
+	  const mealtime = this.props.mealtime
+	  if (this.props.[mealtime]) {
+	    this.setState({
+	      value: this.props.[this.props.mealtime].name,
+	      food: this.props.[mealtime]
+	    })
+	  }
+	  const ready = `${mealtime}Ready`
+	  if (this.props.[ready]) {
+	    this.setState({ ready: true })
+	  }
+
 	}
 
 	handleButtonClick = e => {
 	  e.preventDefault()
-	  if (e.currentTarget.name === 'return') {
-	    this.props.return('return')
-	  } else if (e.currentTarget.name === 'add') {
+	  const name = e.currentTarget.name
+	  if (name === 'return') {
+	    this.props.handleClick('return')
+	  } else if (name === 'add') {
 	    if (!this.state.value) {
 	      this.setState({
-	        emptyInputErrorMessage: 'You need to enter something'
+	        errorMessage: 'You need to enter something'
 	      })
 	    } else {
-	      this.props.addFood(this.state.value, this.props.mealtime)
-	      this.props.return('return')
+	      const parameters = {
+	        food: this.state.food,
+	        value: this.state.value
+	      }
+	      this.props.addMeal('food', parameters)
+	      this.props.handleClick('return')
 	    }
+	  } else if (name === '1' || name === '2' || name === '3' || name === '4' || name === '5') {
+	    const parameters = {
+	      food: this.state.food,
+	      report: name
+	    }
+	    this.props.addMeal('report', parameters)
+	    this.props.handleClick('return')
 	  }
 	}
 
 	handleInputChange = e => {
-	  this.setState({
-	    value: e.target.value
-	  })
+	  this.setState({ value: e.target.value })
 	}
 
 	handleInputFocus = e => {
-	  this.setState({
-	    emptyInputErrorMessage: ''
-	  })
+	  this.setState({ errorMessage: '' })
 	}
 
 	render() {
@@ -58,10 +84,16 @@ class EnterMeal extends Component {
 	          <AddPlus />
 	        </button>
 	      </form>
-	      {
-	        this.state.emptyInputErrorMessage &&
-					<h3 className='errorMessage'>{ this.state.emptyInputErrorMessage }</h3>
-	      }
+
+	      <div className='voteContainer'>
+	        {
+	          this.state.errorMessage
+	          ? <h3 className='errorMessage'>{ this.state.errorMessage }</h3>
+	          : this.state.ready
+	              ? <RatingSystem handleClick={ this.handleButtonClick } />
+	              : null
+	      	}
+	      </div>
 	    </Container>
 	  )
 	}
@@ -100,7 +132,10 @@ const Container = styled.div`
 	.mealtime {
 		width: 100%;
 		text-align: center;
-		margin-bottom: 20px;
+	}
+
+	.form {
+		margin: 20px 0;
 	}
 	.input {
 		font-size: 1.2rem;
@@ -109,9 +144,22 @@ const Container = styled.div`
 		padding: 10px 20px;
 	}
 
+	.voteContainer {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		height: 50px;
+		/* .vote {
+			width: 50px;
+			height: 50px;
+			border: 4px solid var(--primary-6);
+			border-radius: 50%;
+			background-color: var(--primary-0);
+			margin: 0 12px;
+		} */
+	}
+
 	.errorMessage {
-		position: absolute;
-		bottom: 10px;
 		text-align: center;
 		color: var(--warning-5);
 		font-weight: 700;
