@@ -5,11 +5,11 @@ const RatingSystem = props => (
   <Container>
     <div className='arrow'>
       <div className='end leftEnd'>Bad</div>
-      <button name='one' className='selection one' onClick={ props.handleClick }>1</button>
-      <button name='two' className='selection two' onClick={ props.handleClick }>2</button>
-      <button name='three' className='selection three' onClick={ props.handleClick }>3</button>
-      <button name='four' className='selection four' onClick={ props.handleClick }>4</button>
-      <button name='five' className='selection five' onClick={ props.handleClick }>5</button>
+      <button name='1' className='selection one' onClick={ props.handleClick }>1</button>
+      <button name='2' className='selection two' onClick={ props.handleClick }>2</button>
+      <button name='3' className='selection three' onClick={ props.handleClick }>3</button>
+      <button name='4' className='selection four' onClick={ props.handleClick }>4</button>
+      <button name='5' className='selection five' onClick={ props.handleClick }>5</button>
       <div className='end rightend'>Good</div>
     </div>
   </Container>

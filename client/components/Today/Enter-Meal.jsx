@@ -5,8 +5,8 @@ import { AddPlus, ReturnChevron } from '../UI/Icons'
 
 class EnterMeal extends Component {
 	state = {
+	  food: [],
 	  value: '',
-	  vote: '',
 	  errorMessage: '',
 	  ready: false
 	}
@@ -14,7 +14,10 @@ class EnterMeal extends Component {
 	componentDidMount() {
 	  const mealtime = this.props.mealtime
 	  if (this.props.[mealtime]) {
-	    this.setState({ value: this.props.[this.props.mealtime].name })
+	    this.setState({
+	      value: this.props.[this.props.mealtime].name,
+	      food: this.props.[mealtime]
+	    })
 	  }
 	  const ready = `${mealtime}Ready`
 	  if (this.props.[ready]) {
@@ -35,15 +38,19 @@ class EnterMeal extends Component {
 	      })
 	    } else {
 	      const parameters = {
-	        food: this.state.value,
-	        mealtime: this.props.mealtime
+	        food: this.state.food,
+	        value: this.state.value
 	      }
-	      // this.props.addFood(this.state.value, this.props.mealtime)
-	      // this.props.return('return')
 	      this.props.addMeal('food', parameters)
+	      this.props.handleClick('return')
 	    }
-	  } else if (name === 'one' || name === 'two' || name === 'three' || name === 'four' || name === 'five') {
-	    this.props.addMeal('report', name)
+	  } else if (name === '1' || name === '2' || name === '3' || name === '4' || name === '5') {
+	    const parameters = {
+	      food: this.state.food,
+	      report: name
+	    }
+	    this.props.addMeal('report', parameters)
+	    this.props.handleClick('return')
 	  }
 	}
 

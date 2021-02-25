@@ -1,75 +1,15 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import dateFormatter from '../Functions/Date-Formatter'
-import Loader from '../UI/Loader'
 import EnterMeal from './Enter-Meal'
-import EnterResult from './Enter-Result'
 import TodaysMealItem from './Todays-Meal-Item'
 
 class TodaysMeals extends Component {
 	state = {
-	  isLoading: true,
-	  listLoaded: false,
-	  todaysMeals: [],
-	  breakfast: [],
-	  lunch: [],
-	  dinner: [],
-	  snacks: [],
-	  breakfastReady: false,
-	  lunchReady: false,
-	  dinnerReady: false,
-	  snacksReady: false,
 	  enterModalDisplayed: false,
-	  enteringFor: '',
-	  resultModalDisplayed: false,
-	  resultFor: '',
-	  breakfastReaction: ''
+	  enteringFor: ''
 	}
 
 	componentDidMount() {
-
-	  const todaysMeals = this.props.list.filter(x => {
-	    const eatenAtDate = new Date(x.eatenAt)
-	    const eatenAt = dateFormatter(eatenAtDate)
-
-	    return eatenAt === this.props.todaysDate
-	  })
-
-	  const breakfast = todaysMeals.filter(x => x.mealtime === 'breakfast')
-	  const lunch = todaysMeals.filter(x => x.mealtime === 'lunch')
-	  const dinner = todaysMeals.filter(x => x.mealtime === 'dinner')
-	  const snacks = todaysMeals.filter(x => x.mealtime === 'snacks')
-
-	  if (breakfast.length > 0) {
-	    this.setState({
-	      breakfastReady: true,
-	      breakfast: breakfast[0]
-	    })
-	  }
-	  if (lunch.length > 0) {
-	    this.setState({
-	      lunchReady: true,
-	      lunch: lunch[0]
-	    })
-	  }
-	  if (dinner.length > 0) {
-	    this.setState({
-	      dinnerReady: true,
-	      dinner: dinner[0]
-	    })
-	  }
-	  if (snacks.length > 0) {
-	    this.setState({
-	      snacksReady: true,
-	      snacks: snacks[0]
-	    })
-	  }
-
-	  this.setState({
-	    isLoading: false,
-	    listLoaded: true,
-	    todaysMeals: todaysMeals
-	  })
 
 	}
 
@@ -77,23 +17,17 @@ class TodaysMeals extends Component {
 	  if (action === 'enter') {
 	    this.setState({
 	      enterModalDisplayed: true,
-	      enteringFor: parameter,
-	      listLoaded: false
-
-	    })
-	  } else if (action === 'return') {
-	    this.setState({
-	      listLoaded: true,
-	      resultModalDisplayed: false,
-	      resultFor: '',
-	      enterModalDisplayed: false,
-	      enteringFor: ''
+	      enteringFor: parameter
 	    })
 	  } else if (action === 'edit') {
 	    this.setState({
-	      resultModalDisplayed: true,
-	      resultFor: parameter,
-	      listLoaded: false
+	      enterModalDisplayed: true,
+	      enteringFor: parameter
+	    })
+	  } else if (action === 'return') {
+	    this.setState({
+	      enterModalDisplayed: false,
+	      enteringFor: ''
 	    })
 	  }
 	}
@@ -114,7 +48,7 @@ class TodaysMeals extends Component {
 	    .then(result => {
 	      const ready = `${mealtime}Ready`
 	      const listCopy = [...this.props.list]
-	      listCopy.unshift(result.rows[0])
+	      listCopy.push(result.rows[0])
 	      this.props.updateList(listCopy)
 	      this.setState({
 	        [mealtime]: result.rows[0],
@@ -147,8 +81,8 @@ class TodaysMeals extends Component {
 	          listCopy[i].report = report
 	          this.props.updateList(listCopy)
 	          this.setState({
-	            resultModalDisplayed: false,
-	            resultsFor: '',
+	            enterModalDisplayed: false,
+	            enterFor: '',
 	            listLoaded: true
 	          })
 	        }
@@ -157,18 +91,29 @@ class TodaysMeals extends Component {
 	}
 
 	render() {
-	  const resFor = this.state.resultFor
-	  const foodItems = this.state.[resFor]
-
 	  let TodayDisplay
-	  if (this.state.isLoading) {
-	    TodayDisplay = <Loader />
-	  } else if (!this.state.isLoading && this.state.listLoaded) {
-	    TodayDisplay = <>
+	  this.state.enterModalDisplayed
+	    ? TodayDisplay = (
+	      <EnterMeal
+	      mealtime={ this.state.enteringFor }
+	      breakfast={ this.props.breakfast }
+	      lunch={ this.props.lunch }
+	      dinner={ this.props.dinner }
+	      snacks={ this.props.snacks }
+	      breakfastReady={ this.props.breakfastReady }
+	      lunchReady={ this.props.lunchReady }
+	      dinnerReady={ this.props.dinnerReady }
+	      snacksReady={ this.props.snacksReady }
+	      handleClick={ this.handleClick }
+	      addMeal={ this.props.addMeal }
+	    />
+	    )
+	    : TodayDisplay = (
+	      <>
 	      {
-	        this.state.breakfastReady
+	        this.props.breakfastReady
 	          ? <TodaysMealItem
-	            food={ this.state.breakfast }
+	            food={ this.props.breakfast }
 	            mealtime='breakfast'
 	            handleClick={ this.handleClick }
 	          />
@@ -178,9 +123,9 @@ class TodaysMeals extends Component {
 	          >Breakfast</button>
 	      }
 	      {
-	        this.state.lunchReady
+	        this.props.lunchReady
 	          ? <TodaysMealItem
-	            food={ this.state.lunch }
+	            food={ this.props.lunch }
 	            mealtime='lunch'
 	            handleClick={ this.handleClick }
 	          />
@@ -190,9 +135,9 @@ class TodaysMeals extends Component {
 	          >Lunch</button>
 	      }
 	      {
-	        this.state.dinnerReady
+	        this.props.dinnerReady
 	          ? <TodaysMealItem
-	            food={ this.state.dinner }
+	            food={ this.props.dinner }
 	            mealtime='dinner'
 	            handleClick={ this.handleClick }
 	          />
@@ -202,9 +147,9 @@ class TodaysMeals extends Component {
 	          >Dinner</button>
 	      }
 	      {
-	        this.state.snacksReady
+	        this.props.snacksReady
 	          ? <TodaysMealItem
-	            food={ this.state.snacks }
+	            food={ this.props.snacks }
 	            mealtime='snacks'
 	            handleClick={ this.handleClick }
 	          />
@@ -214,20 +159,7 @@ class TodaysMeals extends Component {
 	          >Snacks</button>
 	      }
 	    </>
-	  } else if (this.state.enterModalDisplayed) {
-	    TodayDisplay = <EnterMeal
-	      mealtime={ this.state.enteringFor }
-	      return={ this.handleClick }
-	      addFood={ this.addFood }
-	    />
-	  } else if (this.state.resultModalDisplayed) {
-	    TodayDisplay = <EnterResult
-	      mealtime={ this.state.resultFor }
-	      foodItems={ foodItems }
-	      return={ this.handleClick }
-	      addResult={ this.addResult }
-	    />
-	  }
+	    )
 
 	  return (
 	    <Container>
