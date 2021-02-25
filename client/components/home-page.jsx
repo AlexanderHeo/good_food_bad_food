@@ -5,7 +5,7 @@ import Settings from './Settings/Settings'
 import TodaysMeals from './Today/Todays-Meals'
 import Footer from './UI/Footer'
 import Loader from './UI/Loader'
-// import WeeklyReview from './Weekly/Weekly-Review'
+import WeeklyReview from './Weekly/Weekly-Review'
 
 class HomePage extends Component {
   state = {
@@ -214,10 +214,12 @@ class HomePage extends Component {
             addMeal={ this.addMeal }
           />
 	      </section>
-	      {/* <section className='reviewSection'>
+	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
-	        <WeeklyReview />
-	      </section> */}
+	        <WeeklyReview
+            list={ this.state.list }
+          />
+	      </section>
 
 	      {
 	        this.state.hamburgerClicked &&
