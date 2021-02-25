@@ -70,22 +70,20 @@ class HomePage extends Component {
               todaysMeals: todaysMeals
             })
           })
+          .catch(err => console.error(err))
       })
       .catch(err => console.error(err))
   }
 
 	addMeal = (category, parameter) => {
 	  if (category === 'food') {
-	    const foodReady = `${parameter.food.mealtime}Ready`
-	    const data = {
-	      meal: parameter.food.name,
-	      mealtime: parameter.food.mealtime
-	    }
-	    const patchData = {
-	      name: parameter.food.name,
-	      mealId: parameter.food.mealId
-	    }
+	    const foodReady = `${parameter.mealtime}Ready`
+
 	    if (this.state.[foodReady]) {
+	      const patchData = {
+	        name: parameter.food.name,
+	        mealId: parameter.food.mealId
+	      }
 	      const init = {
 	        method: 'PATCH',
 	        headers: {
@@ -103,6 +101,10 @@ class HomePage extends Component {
 	          this.setState({ list: listCopy })
 	        })
 	    } else {
+	      const data = {
+	        meal: parameter.value,
+	        mealtime: parameter.mealtime
+	      }
 	      const init = {
 	        method: 'POST',
 	        headers: {
