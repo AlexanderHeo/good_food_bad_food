@@ -100,14 +100,17 @@ app.post('/api/enter', (req, res, next) => {
 			insert into "mealtime" ("mealId", "mealtime")
 			values (
 				(select "mealId" from "add_to_meals"), $3)
-		)
-    select *
-    from "add_to_meals"
+			)
+			select *
+			from "add_to_meals"
   `;
   const params = [meal, userId, mealtime];
   db.query(sql, params)
     .then(result => {
-      res.status(200).json(result)
+      const postedMeal = result.rows[0]
+      postedMeal.mealtime = mealtime
+      postedMeal.report = null
+      res.status(200).json(postedMeal)
       // const addedMeal = result.rows[0];
       // return axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${addedMeal.name}`)
       //   .then(response => {
@@ -232,7 +235,6 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
 });
 
 app.get('/api/list', (req, res, next) => {
-  // const userId = 1;
   const { userId } = req.session;
 
   const condition = new RegExp('^\\d+$');
