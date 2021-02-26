@@ -43,7 +43,6 @@ class HomePage extends Component {
               isLoading: false,
               list: result,
               listLoaded: true
-              // todaysMeals: todaysMeals
             })
           })
           .catch(err => console.error(err))
@@ -90,11 +89,12 @@ class HomePage extends Component {
 	      fetch('/api/enter', init)
 	        .then(response => response.json())
 	        .then(result => {
+	          const posted = result.rows[0]
+	          posted.mealtime = parameter.mealtime
 	          const listCopy = [...this.state.list]
 	          listCopy.push(result.rows[0])
 	          this.setState({
-	            list: listCopy,
-	            [parameter.mealtime]: result.rows[0]
+	            list: listCopy
 	          })
 	        })
 	    }
