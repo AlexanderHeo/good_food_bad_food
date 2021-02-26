@@ -23,7 +23,6 @@ class EnterMeal extends Component {
 	  if (this.props.[ready]) {
 	    this.setState({ ready: true })
 	  }
-
 	}
 
 	handleButtonClick = e => {
