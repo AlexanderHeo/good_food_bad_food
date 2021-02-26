@@ -26,6 +26,19 @@ class TodaysMeals extends Component {
 	  if (prevProps.list !== this.props.list) {
 	    this.separateMealtime()
 	  }
+	  if (prevProps.todaysDate !== this.props.todaysDate) {
+	    this.setState({
+	      breakfast: '',
+	      lunch: '',
+	      dinner: '',
+	      snacks: '',
+	      breakfastReady: false,
+	      lunchReady: false,
+	      dinnerReady: false,
+	      snacksReady: false
+	    })
+	    this.separateMealtime()
+	  }
 	}
 
 	separateMealtime = () => {
@@ -35,7 +48,6 @@ class TodaysMeals extends Component {
 
 	    return eatenAt === this.props.todaysDate
 	  })
-
 	  todaysMeals.forEach(x => {
 	    const mealtime = x.mealtime
 	    const ready = `${mealtime}Ready`
