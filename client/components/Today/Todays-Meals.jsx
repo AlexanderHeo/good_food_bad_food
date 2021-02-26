@@ -1,16 +1,39 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import dateFormatter from '../Functions/Date-Formatter'
 import EnterMeal from './Enter-Meal'
 import TodaysMealItem from './Todays-Meal-Item'
 
 class TodaysMeals extends Component {
 	state = {
 	  enterModalDisplayed: false,
-	  enteringFor: ''
+	  enteringFor: '',
+	  breakfast: '',
+	  lunch: '',
+	  dinner: '',
+	  snacks: '',
+	  breakfastReady: false,
+	  lunchReady: false,
+	  dinnerReady: false,
+	  snacksReady: false
 	}
 
 	componentDidMount() {
+	  const todaysMeals = this.props.list.filter(x => {
+	    const eatenAtDate = new Date(x.eatenAt)
+	    const eatenAt = dateFormatter(eatenAtDate)
 
+	    return eatenAt === this.props.todaysDate
+	  })
+
+	  todaysMeals.forEach(x => {
+	    const mealtime = x.mealtime
+	    const ready = `${mealtime}Ready`
+	    this.setState({
+	      [ready]: true,
+	      [mealtime]: x
+	    })
+	  })
 	}
 
 	handleClick = (action, parameter) => {
@@ -32,78 +55,20 @@ class TodaysMeals extends Component {
 	  }
 	}
 
-	addFood = (food, mealtime) => {
-	  const data = {
-	    meal: food,
-	    mealtime
-	  }
-	  fetch('/api/enter', {
-	    method: 'POST',
-	    headers: {
-	      'Content-Type': 'application/json'
-	    },
-	    body: JSON.stringify(data)
-	  })
-	    .then(response => response.json())
-	    .then(result => {
-	      const ready = `${mealtime}Ready`
-	      const listCopy = [...this.props.list]
-	      listCopy.push(result.rows[0])
-	      this.props.updateList(listCopy)
-	      this.setState({
-	        [mealtime]: result.rows[0],
-	        [ready]: true
-	      })
-	    })
-	}
-
-	addResult = (food, result) => {
-	  const mealId = food.mealId
-	  let report
-	  if (result === 'upVote') report = 3
-	  else if (result === 'downVote') report = 1
-
-	  const mealResult = {
-	    mealId, report
-	  }
-	  fetch(`/api/rate/${mealId}`, {
-	    method: 'PATCH',
-	    headers: {
-	      'Content-Type': 'application/json'
-	    },
-	    body: JSON.stringify(mealResult)
-	  })
-	    .then(response => response.json())
-	    .then(data => {
-	      const listCopy = [...this.props.list]
-	      for (let i = 0; i < listCopy.length; i++) {
-	      	if (listCopy[i].mealId === mealId) {
-	          listCopy[i].report = report
-	          this.props.updateList(listCopy)
-	          this.setState({
-	            enterModalDisplayed: false,
-	            enterFor: '',
-	            listLoaded: true
-	          })
-	        }
-	      }
-	    })
-	}
-
 	render() {
 	  let TodayDisplay
 	  this.state.enterModalDisplayed
 	    ? TodayDisplay = (
 	      <EnterMeal
 	      mealtime={ this.state.enteringFor }
-	      breakfast={ this.props.breakfast }
-	      lunch={ this.props.lunch }
-	      dinner={ this.props.dinner }
-	      snacks={ this.props.snacks }
-	      breakfastReady={ this.props.breakfastReady }
-	      lunchReady={ this.props.lunchReady }
-	      dinnerReady={ this.props.dinnerReady }
-	      snacksReady={ this.props.snacksReady }
+	      breakfast={ this.state.breakfast }
+	      lunch={ this.state.lunch }
+	      dinner={ this.state.dinner }
+	      snacks={ this.state.snacks }
+	      breakfastReady={ this.state.breakfastReady }
+	      lunchReady={ this.state.lunchReady }
+	      dinnerReady={ this.state.dinnerReady }
+	      snacksReady={ this.state.snacksReady }
 	      handleClick={ this.handleClick }
 	      addMeal={ this.props.addMeal }
 	    />
@@ -111,9 +76,9 @@ class TodaysMeals extends Component {
 	    : TodayDisplay = (
 	      <>
 	      {
-	        this.props.breakfastReady
+	        this.state.breakfastReady
 	          ? <TodaysMealItem
-	            food={ this.props.breakfast }
+	            food={ this.state.breakfast }
 	            mealtime='breakfast'
 	            handleClick={ this.handleClick }
 	          />
@@ -123,9 +88,9 @@ class TodaysMeals extends Component {
 	          >Breakfast</button>
 	      }
 	      {
-	        this.props.lunchReady
+	        this.state.lunchReady
 	          ? <TodaysMealItem
-	            food={ this.props.lunch }
+	            food={ this.state.lunch }
 	            mealtime='lunch'
 	            handleClick={ this.handleClick }
 	          />
@@ -135,9 +100,9 @@ class TodaysMeals extends Component {
 	          >Lunch</button>
 	      }
 	      {
-	        this.props.dinnerReady
+	        this.state.dinnerReady
 	          ? <TodaysMealItem
-	            food={ this.props.dinner }
+	            food={ this.state.dinner }
 	            mealtime='dinner'
 	            handleClick={ this.handleClick }
 	          />
@@ -147,9 +112,9 @@ class TodaysMeals extends Component {
 	          >Dinner</button>
 	      }
 	      {
-	        this.props.snacksReady
+	        this.state.snacksReady
 	          ? <TodaysMealItem
-	            food={ this.props.snacks }
+	            food={ this.state.snacks }
 	            mealtime='snacks'
 	            handleClick={ this.handleClick }
 	          />

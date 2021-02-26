@@ -14,15 +14,7 @@ class HomePage extends Component {
     todaysDate: '',
     displayDate: '',
     list: [],
-    listLoaded: false,
-    breakfast: '',
-	  lunch: '',
-	  dinner: '',
-	  snacks: '',
-	  breakfastReady: false,
-	  lunchReady: false,
-	  dinnerReady: false,
-	  snacksReady: false
+    listLoaded: false
   }
 
   componentDidMount() {
@@ -47,27 +39,11 @@ class HomePage extends Component {
           .then(response => response.json())
           .then(result => {
 
-            const todaysMeals = result.filter(x => {
-              const eatenAtDate = new Date(x.eatenAt)
-              const eatenAt = dateFormatter(eatenAtDate)
-
-              return eatenAt === this.state.todaysDate
-            })
-
-            todaysMeals.forEach(x => {
-              const mealtime = x.mealtime
-              const ready = `${mealtime}Ready`
-              this.setState({
-                [ready]: true,
-                [mealtime]: x
-              })
-            })
-
             this.setState({
               isLoading: false,
               list: result,
-              listLoaded: true,
-              todaysMeals: todaysMeals
+              listLoaded: true
+              // todaysMeals: todaysMeals
             })
           })
           .catch(err => console.error(err))
@@ -77,9 +53,8 @@ class HomePage extends Component {
 
 	addMeal = (category, parameter) => {
 	  if (category === 'food') {
-	    const foodReady = `${parameter.mealtime}Ready`
-
-	    if (this.state.[foodReady]) {
+	    const ready = parameter.ready
+	    if (ready) {
 	      const patchData = {
 	        name: parameter.food.name,
 	        mealId: parameter.food.mealId
@@ -97,12 +72,12 @@ class HomePage extends Component {
 	          const listCopy = [...this.state.list]
 	          const arrOfIds = listCopy.map(x => x.mealId)
 	          const index = arrOfIds.indexOf(parameter.food.mealId)
-	          listCopy[index].name = parameter.value
+	          listCopy[index].name = parameter.food.name
 	          this.setState({ list: listCopy })
 	        })
 	    } else {
 	      const data = {
-	        meal: parameter.value,
+	        meal: parameter.food.name,
 	        mealtime: parameter.mealtime
 	      }
 	      const init = {
@@ -119,15 +94,14 @@ class HomePage extends Component {
 	          listCopy.push(result.rows[0])
 	          this.setState({
 	            list: listCopy,
-	            [parameter.mealtime]: result.rows[0],
-	            [foodReady]: true
+	            [parameter.mealtime]: result.rows[0]
 	          })
 	        })
 	    }
 
 	  } else if (category === 'report') {
 	    const mealId = parameter.food.mealId
-	    const report = parameter.report
+	    const report = parseInt(parameter.report)
 
 	    const mealResult = {
 	      mealId, report
@@ -183,16 +157,9 @@ class HomePage extends Component {
 	          <span className='todayDate'>{ this.state.displayDate }</span>
 	        </div>
 	        <TodaysMeals
-            todaysDate={ this.state.todaysDate }
-            breakfastReady={ this.state.breakfastReady }
-            lunchReady={ this.state.lunchReady }
-            dinnerReady={ this.state.dinnerReady }
-            snacksReady={ this.state.snacksReady }
-            breakfast={ this.state.breakfast }
-            lunch={ this.state.lunch }
-            dinner={ this.state.dinner }
-            snacks={ this.state.snacks }
+            list={ this.state.list }
             addMeal={ this.addMeal }
+            todaysDate={ this.state.todaysDate }
           />
 	      </section>
 	      <section className='reviewSection'>
