@@ -89,10 +89,9 @@ class HomePage extends Component {
 	      fetch('/api/enter', init)
 	        .then(response => response.json())
 	        .then(result => {
-	          const posted = result.rows[0]
-	          posted.mealtime = parameter.mealtime
+	          result.mealtime = parameter.mealtime
 	          const listCopy = [...this.state.list]
-	          listCopy.push(result.rows[0])
+	          listCopy.push(result)
 	          this.setState({
 	            list: listCopy
 	          })

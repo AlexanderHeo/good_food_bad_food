@@ -5,6 +5,13 @@ class WeeklyReview extends Component {
 
 	state = {
 	  weeklyReady: false,
+	  sunReady: false,
+	  monReady: false,
+	  tueReady: false,
+	  wedReady: false,
+	  thuReady: false,
+	  friReady: false,
+	  satReady: false,
 	  thisWeek: [
 	    ['sun', '', ''],
 	    ['mon', '', ''],
@@ -14,13 +21,25 @@ class WeeklyReview extends Component {
 	    ['fri', '', ''],
 	    ['sat', '', '']
 	  ],
-	  sundayDisplay: '',
-	  today: '',
+	  sundaysDate: '',
 	  highlight: ''
 	}
 
 	componentDidMount() {
+	  this.doTheThing()
+	}
 
+	componentDidUpdate(prevProps, prevState) {
+	  // console.log('prevProps.list:', prevProps.list)
+	  // console.log('this.props.list:', this.props.list)
+	  // console.log(prevProps.list !== this.props.list)
+	  if (prevProps.list !== this.props.list) {
+	    // console.log('weekly componentDidUpdate')
+	    this.doTheThing()
+	  }
+	}
+
+	doTheThing = () => {
 	  const thisWeek = []
 
 	  const todayDate = new Date()
@@ -65,44 +84,36 @@ class WeeklyReview extends Component {
 	  const fri = []
 	  const sat = []
 
-	  let sunReady = 'false'
-	  let monReady = 'false'
-	  let tueReady = 'false'
-	  let wedReady = 'false'
-	  let thuReady = 'false'
-	  let friReady = 'false'
-	  let satReady = 'false'
-
 	  thisWeek.forEach(x => {
 	    const dayNum = (new Date(x.eatenAt)).getDay()
 	    switch (dayNum) {
 	      case 0:
 	        sun.push(x)
-	        sunReady = true
+	        this.setState({ sunReady: true })
 	        break
 	      case 1:
 	        mon.push(x)
-	        monReady = true
+	        this.setState({ monReady: true })
 	        break
 	      case 2:
 	        tue.push(x)
-	        tueReady = true
+	        this.setState({ tueReady: true })
 	        break
 	      case 3:
 	        wed.push(x)
-	        wedReady = true
+	        this.setState({ wedReady: true })
 	        break
 	      case 4:
 	        thu.push(x)
-	        thuReady = true
+	        this.setState({ thuReady: true })
 	        break
 	      case 5:
 	        fri.push(x)
-	        friReady = true
+	        this.setState({ friReady: true })
 	        break
 	      case 6:
 	        sat.push(x)
-	        satReady = true
+	        this.setState({ satReady: true })
 	        break
 	    }
 	  })
@@ -110,15 +121,15 @@ class WeeklyReview extends Component {
 	  this.setState({
 	    weeklyReady: true,
 	    thisWeek: [
-	      ['sun', sun, sunReady],
-	      ['mon', mon, monReady],
-	      ['tue', tue, tueReady],
-	      ['wed', wed, wedReady],
-	      ['thu', thu, thuReady],
-	      ['fri', fri, friReady],
-	      ['sat', sat, satReady]
+	      ['sun', sun],
+	      ['mon', mon],
+	      ['tue', tue],
+	      ['wed', wed],
+	      ['thu', thu],
+	      ['fri', fri],
+	      ['sat', sat]
 	    ],
-	    sundayDisplay: sundayDates
+	    sundaysDate: sundayDates
 	  })
 	}
 
@@ -162,13 +173,13 @@ class WeeklyReview extends Component {
 	          <th className={sat}>Sat</th>
 	        </tr>
 	        <tr className='tableRow'>
-	          <th className={sun}>{this.state.sundayDisplay}</th>
-	          <th className={mon}>{this.state.sundayDisplay + 1}</th>
-	          <th className={tue}>{this.state.sundayDisplay + 2}</th>
-	          <th className={wed}>{this.state.sundayDisplay + 3}</th>
-	          <th className={thu}>{this.state.sundayDisplay + 4}</th>
-	          <th className={fri}>{this.state.sundayDisplay + 5}</th>
-	          <th className={sat}>{this.state.sundayDisplay + 6}</th>
+	          <th className={sun}>{this.state.sundaysDate}</th>
+	          <th className={mon}>{this.state.sundaysDate + 1}</th>
+	          <th className={tue}>{this.state.sundaysDate + 2}</th>
+	          <th className={wed}>{this.state.sundaysDate + 3}</th>
+	          <th className={thu}>{this.state.sundaysDate + 4}</th>
+	          <th className={fri}>{this.state.sundaysDate + 5}</th>
+	          <th className={sat}>{this.state.sundaysDate + 6}</th>
 	        </tr>
 	      </thead>
 	      <tbody className='tableBody'>
@@ -178,15 +189,15 @@ class WeeklyReview extends Component {
 	            this.state.thisWeek.map((x, index) => {
 	              const name = x[0]
 	              let avg = 0
-	              if (x[2]) {
+	              const ready = `${name}Ready`
+	              if (ready) {
 	                const reports = []
-	                x[1].forEach(x => reports.push(x.report))
+	                x[1].forEach(x => {
+	                  if (x.report) reports.push(x.report)
+	                })
 	                const total = reports.reduce((a, b) => a + b, 0)
-	                avg = (total / x[1].length).toFixed(2)
+	                avg = (total / reports.length).toFixed(2)
 	                const avgSplit = avg.split('.')
-	                // console.log('thisWeek:', this.state.thisWeek)
-	                // console.log('x:', x)
-	                // console.log('length:', x[1].length, 'total:', total, 'avg:', avg)
 	                if (avgSplit[1] === '00') {
 	                  avg = avgSplit[0]
 	                }
