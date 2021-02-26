@@ -50,6 +50,14 @@ class HomePage extends Component {
       .catch(err => console.error(err))
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.todaysDate !== this.state.todaysDate) {
+      const dateSplit = this.state.todaysDate.split('-')
+      const displayDate = `${dateSplit[1]} / ${dateSplit[2]}`
+      this.setState({ displayDate: displayDate })
+    }
+  }
+
 	addMeal = (category, parameter) => {
 	  if (category === 'food') {
 	    const ready = parameter.ready
@@ -126,6 +134,10 @@ class HomePage extends Component {
 	  }
 	}
 
+	handleWeeklyClick = date => {
+	  this.setState({ todaysDate: date })
+	}
+
 	handleFooterClick = () => {
 	  this.setState({
 	    hamburgerClicked: !this.state.hamburgerClicked
@@ -165,6 +177,7 @@ class HomePage extends Component {
 	        <div className='reviewTitle'>This Week</div>
 	        <WeeklyReview
             list={ this.state.list }
+            handleClick={ this.handleWeeklyClick }
           />
 	      </section>
 
