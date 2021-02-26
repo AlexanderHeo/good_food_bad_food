@@ -37,9 +37,14 @@ class EnterMeal extends Component {
 	        errorMessage: 'You need to enter something'
 	      })
 	    } else {
+	      const foodCopy = Object.assign({}, this.state.food)
+	      foodCopy.name = this.state.value
+	      const mealReady = `${this.state.food.mealtime}Ready`
+
 	      const parameters = {
-	        food: this.state.food,
-	        value: this.state.value
+	        food: foodCopy,
+	        ready: this.props[mealReady],
+	        mealtime: this.props.mealtime
 	      }
 	      this.props.addMeal('food', parameters)
 	      this.props.handleClick('return')
