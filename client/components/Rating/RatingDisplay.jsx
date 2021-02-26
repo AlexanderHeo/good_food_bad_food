@@ -35,7 +35,7 @@ class RatingDisplay extends Component {
 	      rating = <div className="rating five">5</div>
 	      break
 	    default:
-	      rating = <div>loading...</div>
+	      rating = null
 	  }
 	  return (
 	    <Container>

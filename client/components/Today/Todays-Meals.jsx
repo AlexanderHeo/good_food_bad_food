@@ -19,6 +19,16 @@ class TodaysMeals extends Component {
 	}
 
 	componentDidMount() {
+	  this.separateMealtime()
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevProps.list !== this.props.list) {
+	    this.separateMealtime()
+	  }
+	}
+
+	separateMealtime = () => {
 	  const todaysMeals = this.props.list.filter(x => {
 	    const eatenAtDate = new Date(x.eatenAt)
 	    const eatenAt = dateFormatter(eatenAtDate)
