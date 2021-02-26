@@ -160,10 +160,9 @@ app.patch('/api/enter/:mealId', (req, res, next) => {
 })
 
 app.get('/api/ratefood', (req, res, next) => {
-  // const userId = 1;
   const userId = req.session.userId;
   const SQL = `
-      SELECT m."mealId", m."name", m."eatenAt", mp."report", mp."image"
+      SELECT m."mealId", m."name", m."eatenAt", mp."report"
       FROM "meals" as m
       LEFT JOIN "mealReports" as mp ON m."mealId" = mp."mealId"
       WHERE m."userId" = ${userId}

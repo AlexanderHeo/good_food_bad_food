@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import RatingDisplay from '../Rating/RatingDisplay'
 
 const TodaysMealItem = props => {
   return (
@@ -13,7 +14,8 @@ const TodaysMealItem = props => {
         <span>{ props.food.name }</span>
       </div>
       <div className='mealRating'>
-        <span>{ props.food.report }</span>
+        <RatingDisplay rating={ props.food.report } />
+        {/* <span>{ props.food.report }</span> */}
       </div>
     </Container>
   )

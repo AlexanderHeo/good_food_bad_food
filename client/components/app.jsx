@@ -14,7 +14,7 @@ const App = () => {
         <Route path="/login" component={Login}></Route>
         <Route path="/signup" component={Signup}></Route>
         <Route path="/home" component={HomePage}></Route>
-        <Redirect from='/' to='ls' />
+        <Redirect from='/' to='login' />
       </Router>
     </Container>
   )

@@ -177,13 +177,16 @@ class WeeklyReview extends Component {
 	            this.state.weeklyReady &&
 	            this.state.thisWeek.map((x, index) => {
 	              const name = x[0]
-	              let avg
+	              let avg = 0
 	              if (x[2]) {
 	                const reports = []
 	                x[1].forEach(x => reports.push(x.report))
 	                const total = reports.reduce((a, b) => a + b, 0)
 	                avg = (total / x[1].length).toFixed(2)
 	                const avgSplit = avg.split('.')
+	                // console.log('thisWeek:', this.state.thisWeek)
+	                // console.log('x:', x)
+	                // console.log('length:', x[1].length, 'total:', total, 'avg:', avg)
 	                if (avgSplit[1] === '00') {
 	                  avg = avgSplit[0]
 	                }
