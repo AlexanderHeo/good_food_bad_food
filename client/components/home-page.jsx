@@ -15,7 +15,8 @@ class HomePage extends Component {
     todaysDay: '',
     displayDate: '',
     list: [],
-    listLoaded: false
+    listLoaded: false,
+	  inFuture: false
   }
 
   componentDidMount() {
@@ -60,7 +61,14 @@ class HomePage extends Component {
       this.setState({ displayDate: displayDate })
     }
     if (prevState.todaysDay !== this.state.todaysDay) {
-      this.setState({ todaysDay: this.state.todaysDay })
+      if (new Date(this.state.todaysDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
+        this.setState({ inFuture: true })
+      } else {
+        this.setState({ inFuture: false })
+      }
+      this.setState({
+        todaysDay: this.state.todaysDay
+      })
     }
   }
 
