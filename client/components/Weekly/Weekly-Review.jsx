@@ -22,6 +22,8 @@ class WeeklyReview extends Component {
 	    ['sat', '', '']
 	  ],
 	  sundaysDate: '',
+	  month: '',
+	  year: '',
 	  highlight: ''
 	}
 
@@ -30,11 +32,7 @@ class WeeklyReview extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-	  // console.log('prevProps.list:', prevProps.list)
-	  // console.log('this.props.list:', this.props.list)
-	  // console.log(prevProps.list !== this.props.list)
 	  if (prevProps.list !== this.props.list) {
-	    // console.log('weekly componentDidUpdate')
 	    this.doTheThing()
 	  }
 	}
@@ -44,7 +42,16 @@ class WeeklyReview extends Component {
 
 	  const todayDate = new Date()
 	  const todayDay = todayDate.getDay()
-	  const todayDateNum = todayDate.getDate()
+	  let todayDateNum = todayDate.getDate()
+	  if (todayDateNum.toString().length === 1) {
+	    todayDateNum = `0${todayDateNum}`
+	  }
+	  let todayMonth = todayDate.getMonth()
+	  if (todayMonth.toString().length === 1) {
+	    todayMonth = `0${todayMonth + 1}`
+	  }
+	  const todayYear = todayDate.getFullYear()
+
 	  const sunday = todayDate.setHours(todayDate.getHours() - (todayDay * 24))
 	  const sundayDate = new Date(sunday)
 	  const sundayDates = sundayDate.getDate()
@@ -129,8 +136,15 @@ class WeeklyReview extends Component {
 	      ['fri', fri],
 	      ['sat', sat]
 	    ],
-	    sundaysDate: sundayDates
+	    sundaysDate: sundayDates,
+	    month: todayMonth,
+	    year: todayYear
 	  })
+	}
+
+	handleClick = (date, day) => {
+	  this.setState({ highlight: day.toLowerCase() })
+	  this.props.handleClick(date, day)
 	}
 
 	render() {
@@ -160,54 +174,66 @@ class WeeklyReview extends Component {
 
 	  }
 
+	  const weekDates = []
+	  if (this.state.weeklyReady) {
+	    for (let i = 0; i < 7; i++) {
+	      weekDates.push(`${this.state.year}-${this.state.month}-${parseInt(this.state.sundaysDate) + i}`)
+	    }
+	  }
 	  return (
 	    <Table>
-	      <thead className='tableHead'>
-	        <tr className='tableRow'>
-	          <th className={sun}>Sun</th>
-	          <th className={mon}>Mon</th>
-	          <th className={tue}>Tue</th>
-	          <th className={wed}>Wed</th>
-	          <th className={thu}>Thu</th>
-	          <th className={fri}>Fri</th>
-	          <th className={sat}>Sat</th>
-	        </tr>
-	        <tr className='tableRow'>
-	          <th className={sun}>{this.state.sundaysDate}</th>
-	          <th className={mon}>{this.state.sundaysDate + 1}</th>
-	          <th className={tue}>{this.state.sundaysDate + 2}</th>
-	          <th className={wed}>{this.state.sundaysDate + 3}</th>
-	          <th className={thu}>{this.state.sundaysDate + 4}</th>
-	          <th className={fri}>{this.state.sundaysDate + 5}</th>
-	          <th className={sat}>{this.state.sundaysDate + 6}</th>
-	        </tr>
-	      </thead>
-	      <tbody className='tableBody'>
-	        <tr className='tableRow'>
-	          {
-	            this.state.weeklyReady &&
-	            this.state.thisWeek.map((x, index) => {
-	              const name = x[0]
-	              let avg = 0
-	              const ready = `${name}Ready`
-	              if (ready) {
-	                const reports = []
-	                x[1].forEach(x => {
-	                  if (x.report) reports.push(x.report)
-	                })
-	                const total = reports.reduce((a, b) => a + b, 0)
-	                avg = (total / reports.length).toFixed(2)
-	                const avgSplit = avg.split('.')
-	                if (avgSplit[1] === '00') {
-	                  avg = avgSplit[0]
-	                }
-	              }
-	              if (isNaN(avg)) { avg = '' }
-	              return <td key={ name }>{ avg }</td>
-	            })
-	          }
-	        </tr>
-	      </tbody>
+	      {
+	        this.state.weeklyReady &&
+					<>
+					  <thead className='tableHead'>
+					    <tr className='tableRow'>
+					      <th className={sun} onClick={ () => this.handleClick(weekDates[0], 'Sun') }>Sun</th>
+					      <th className={mon} onClick={ () => this.handleClick(weekDates[1], 'Mon') }>Mon</th>
+					      <th className={tue} onClick={ () => this.handleClick(weekDates[2], 'Tue') }>Tue</th>
+					      <th className={wed} onClick={ () => this.handleClick(weekDates[3], 'Wed') }>Wed</th>
+					      <th className={thu} onClick={ () => this.handleClick(weekDates[4], 'Thu') }>Thu</th>
+					      <th className={fri} onClick={ () => this.handleClick(weekDates[5], 'Fri') }>Fri</th>
+					      <th className={sat} onClick={ () => this.handleClick(weekDates[6], 'Sat') }>Sat</th>
+					    </tr>
+					    <tr className='tableRow'>
+					      <th className={sun} onClick={ () => this.handleClick(weekDates[0], 'Sun') }>{this.state.sundaysDate}</th>
+					      <th className={mon} onClick={ () => this.handleClick(weekDates[1], 'Mon') }>{this.state.sundaysDate + 1}</th>
+					      <th className={tue} onClick={ () => this.handleClick(weekDates[2], 'Tue') }>{this.state.sundaysDate + 2}</th>
+					      <th className={wed} onClick={ () => this.handleClick(weekDates[3], 'Wed') }>{this.state.sundaysDate + 3}</th>
+					      <th className={thu} onClick={ () => this.handleClick(weekDates[4], 'Thu') }>{this.state.sundaysDate + 4}</th>
+					      <th className={fri} onClick={ () => this.handleClick(weekDates[5], 'Fri') }>{this.state.sundaysDate + 5}</th>
+					      <th className={sat} onClick={ () => this.handleClick(weekDates[6], 'Sat') }>{this.state.sundaysDate + 6}</th>
+					    </tr>
+					  </thead>
+					  <tbody className='tableBody'>
+					    <tr className='tableRow'>
+					      {
+					        this.state.thisWeek.map((x, index) => {
+					          const name = x[0]
+					          let avg = 0
+					          const ready = `${name}Ready`
+					          if (ready) {
+					            const reports = []
+					            x[1].forEach(x => {
+					              if (x.report) reports.push(x.report)
+					            })
+					            const total = reports.reduce((a, b) => a + b, 0)
+					            avg = (total / reports.length).toFixed(2)
+					            const avgSplit = avg.split('.')
+					            if (avgSplit[1] === '00') {
+					              avg = avgSplit[0]
+					            }
+					          }
+					          if (isNaN(avg)) { avg = '' }
+					          const weekDays = [sun, mon, tue, wed, thu, fri, sat]
+					          const weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+					          return <td className={ weekDays[index] } onClick={ () => this.handleClick(weekDates[index], weekNames[index]) } key={ name }>{ avg }</td>
+					        })
+					      }
+					    </tr>
+					  </tbody>
+					</>
+	      }
 	    </Table>
 	  )
 	}

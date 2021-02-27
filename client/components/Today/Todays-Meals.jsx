@@ -26,6 +26,19 @@ class TodaysMeals extends Component {
 	  if (prevProps.list !== this.props.list) {
 	    this.separateMealtime()
 	  }
+	  if (prevProps.todaysDate !== this.props.todaysDate) {
+	    this.setState({
+	      breakfast: '',
+	      lunch: '',
+	      dinner: '',
+	      snacks: '',
+	      breakfastReady: false,
+	      lunchReady: false,
+	      dinnerReady: false,
+	      snacksReady: false
+	    })
+	    this.separateMealtime()
+	  }
 	}
 
 	separateMealtime = () => {
@@ -35,7 +48,6 @@ class TodaysMeals extends Component {
 
 	    return eatenAt === this.props.todaysDate
 	  })
-
 	  todaysMeals.forEach(x => {
 	    const mealtime = x.mealtime
 	    const ready = `${mealtime}Ready`
@@ -70,18 +82,19 @@ class TodaysMeals extends Component {
 	  this.state.enterModalDisplayed
 	    ? TodayDisplay = (
 	      <EnterMeal
-	      mealtime={ this.state.enteringFor }
-	      breakfast={ this.state.breakfast }
-	      lunch={ this.state.lunch }
-	      dinner={ this.state.dinner }
-	      snacks={ this.state.snacks }
-	      breakfastReady={ this.state.breakfastReady }
-	      lunchReady={ this.state.lunchReady }
-	      dinnerReady={ this.state.dinnerReady }
-	      snacksReady={ this.state.snacksReady }
-	      handleClick={ this.handleClick }
-	      addMeal={ this.props.addMeal }
-	    />
+	        mealtime={ this.state.enteringFor }
+	        breakfast={ this.state.breakfast }
+	        lunch={ this.state.lunch }
+	        dinner={ this.state.dinner }
+	        snacks={ this.state.snacks }
+	        breakfastReady={ this.state.breakfastReady }
+	        lunchReady={ this.state.lunchReady }
+	        dinnerReady={ this.state.dinnerReady }
+	        snacksReady={ this.state.snacksReady }
+	        handleClick={ this.handleClick }
+	        addMeal={ this.props.addMeal }
+	        todaysDate={ this.props.todaysDate }
+	    	/>
 	    )
 	    : TodayDisplay = (
 	      <>
