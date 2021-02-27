@@ -64,7 +64,8 @@ class HomePage extends Component {
 	    if (ready) {
 	      const patchData = {
 	        name: parameter.food.name,
-	        mealId: parameter.food.mealId
+	        mealId: parameter.food.mealId,
+	        enterDate: parameter.enterDate
 	      }
 	      const init = {
 	        method: 'PATCH',
@@ -85,7 +86,8 @@ class HomePage extends Component {
 	    } else {
 	      const data = {
 	        meal: parameter.food.name,
-	        mealtime: parameter.mealtime
+	        mealtime: parameter.mealtime,
+	        enterDate: this.state.todaysDate
 	      }
 	      const init = {
 	        method: 'POST',

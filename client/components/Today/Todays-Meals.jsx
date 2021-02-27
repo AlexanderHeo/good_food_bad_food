@@ -82,18 +82,19 @@ class TodaysMeals extends Component {
 	  this.state.enterModalDisplayed
 	    ? TodayDisplay = (
 	      <EnterMeal
-	      mealtime={ this.state.enteringFor }
-	      breakfast={ this.state.breakfast }
-	      lunch={ this.state.lunch }
-	      dinner={ this.state.dinner }
-	      snacks={ this.state.snacks }
-	      breakfastReady={ this.state.breakfastReady }
-	      lunchReady={ this.state.lunchReady }
-	      dinnerReady={ this.state.dinnerReady }
-	      snacksReady={ this.state.snacksReady }
-	      handleClick={ this.handleClick }
-	      addMeal={ this.props.addMeal }
-	    />
+	        mealtime={ this.state.enteringFor }
+	        breakfast={ this.state.breakfast }
+	        lunch={ this.state.lunch }
+	        dinner={ this.state.dinner }
+	        snacks={ this.state.snacks }
+	        breakfastReady={ this.state.breakfastReady }
+	        lunchReady={ this.state.lunchReady }
+	        dinnerReady={ this.state.dinnerReady }
+	        snacksReady={ this.state.snacksReady }
+	        handleClick={ this.handleClick }
+	        addMeal={ this.props.addMeal }
+	        todaysDate={ this.props.todaysDate }
+	    	/>
 	    )
 	    : TodayDisplay = (
 	      <>

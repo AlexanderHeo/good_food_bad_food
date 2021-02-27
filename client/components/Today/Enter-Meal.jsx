@@ -43,7 +43,8 @@ class EnterMeal extends Component {
 	      const parameters = {
 	        food: foodCopy,
 	        ready: this.props[mealReady],
-	        mealtime: this.props.mealtime
+	        mealtime: this.props.mealtime,
+	        enterDate: this.props.todaysDate
 	      }
 	      this.props.addMeal('food', parameters)
 	      this.props.handleClick('return')
