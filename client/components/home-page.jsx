@@ -12,9 +12,11 @@ class HomePage extends Component {
     isLoading: true,
     hamburgerClicked: false,
     todaysDate: '',
+    todaysDay: '',
     displayDate: '',
     list: [],
-    listLoaded: false
+    listLoaded: false,
+	  inFuture: false
   }
 
   componentDidMount() {
@@ -26,10 +28,12 @@ class HomePage extends Component {
 
         const today = new Date()
         const date = today.getDate()
+        const dayNum = today.getDay()
         const month = today.getMonth() + 1
 
         const todaysDate = dateFormatter(today)
         const displayDate = `${month} / ${date}`
+        this.getTodaysDay(dayNum)
         this.setState({
           todaysDate: todaysDate,
           displayDate: displayDate
@@ -50,13 +54,58 @@ class HomePage extends Component {
       .catch(err => console.error(err))
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.todaysDate !== this.state.todaysDate) {
+      const dateSplit = this.state.todaysDate.split('-')
+      const displayDate = `${dateSplit[1]} / ${dateSplit[2]}`
+      this.setState({ displayDate: displayDate })
+    }
+    if (prevState.todaysDay !== this.state.todaysDay) {
+      if (new Date(this.state.todaysDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
+        this.setState({ inFuture: true })
+      } else {
+        this.setState({ inFuture: false })
+      }
+      this.setState({
+        todaysDay: this.state.todaysDay
+      })
+    }
+  }
+
+	getTodaysDay = dayNum => {
+	  switch (dayNum) {
+	    case 0:
+	      this.setState({ todaysDay: 'Sun' })
+	      break
+	    case 1:
+	      this.setState({ todaysDay: 'Mon' })
+	      break
+	    case 2:
+	      this.setState({ todaysDay: 'Tue' })
+	      break
+	    case 3:
+	      this.setState({ todaysDay: 'Wed' })
+	      break
+	    case 4:
+	      this.setState({ todaysDay: 'Thu' })
+	      break
+	    case 5:
+	      this.setState({ todaysDay: 'Fri' })
+	      break
+	    case 6:
+	      this.setState({ todaysDay: 'Sat' })
+	      break
+	  }
+	}
+
 	addMeal = (category, parameter) => {
 	  if (category === 'food') {
 	    const ready = parameter.ready
 	    if (ready) {
 	      const patchData = {
 	        name: parameter.food.name,
-	        mealId: parameter.food.mealId
+	        mealId: parameter.food.mealId,
+	        enterDate: parameter.enterDate
 	      }
 	      const init = {
 	        method: 'PATCH',
@@ -77,7 +126,8 @@ class HomePage extends Component {
 	    } else {
 	      const data = {
 	        meal: parameter.food.name,
-	        mealtime: parameter.mealtime
+	        mealtime: parameter.mealtime,
+	        enterDate: this.state.todaysDate
 	      }
 	      const init = {
 	        method: 'POST',
@@ -126,6 +176,13 @@ class HomePage extends Component {
 	  }
 	}
 
+	handleWeeklyClick = (date, day) => {
+	  this.setState({
+	    todaysDate: date,
+	    todaysDay: day
+	  })
+	}
+
 	handleFooterClick = () => {
 	  this.setState({
 	    hamburgerClicked: !this.state.hamburgerClicked
@@ -152,7 +209,7 @@ class HomePage extends Component {
 	      </section>
 	      <section className='todaySection'>
 	        <div className='todayTitleContainer'>
-	          <span className='todayTitle'>Today</span>
+	          <span className='todayTitle'>{ this.state.todaysDay }</span>
 	          <span className='todayDate'>{ this.state.displayDate }</span>
 	        </div>
 	        <TodaysMeals
@@ -165,6 +222,7 @@ class HomePage extends Component {
 	        <div className='reviewTitle'>This Week</div>
 	        <WeeklyReview
             list={ this.state.list }
+            handleClick={ this.handleWeeklyClick }
           />
 	      </section>
 
