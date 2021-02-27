@@ -1,22 +1,30 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import dateFormatter from './Functions/Date-Formatter'
+// import WeeklyReview from './Weekly/Weekly-Review'
+import { dateFormatter, sundayFormatter } from './Date/date'
 import Settings from './Settings/Settings'
-import TodaysMeals from './Today/Todays-Meals'
+// import TodaysMeals from './Today/Todays-Meals'
 import Footer from './UI/Footer'
 import Loader from './UI/Loader'
-import WeeklyReview from './Weekly/Weekly-Review'
 
 class HomePage extends Component {
   state = {
-    isLoading: true,
-    hamburgerClicked: false,
-    todaysDate: '',
-    todaysDay: '',
-    displayDate: '',
-    list: [],
-    listLoaded: false,
-	  inFuture: false
+    isLoggedIn: false,
+    // list: [],
+    // listLoaded: false,
+    // todayDisplay: {},
+    // weekDisplay: [],
+    todayDate: {
+      date: '',
+      day: '',
+      display: ''
+    },
+    sundayDate: {
+      date: '',
+      day: '',
+      display: ''
+    },
+    hamburgerClicked: false
   }
 
   componentDidMount() {
@@ -25,163 +33,139 @@ class HomePage extends Component {
       .then(response => response.json())
       .then(result => {
         if (result.error) return this.props.history.push('/ls')
+        this.setState({ isLoggedIn: true })
 
-        const today = new Date()
-        const date = today.getDate()
-        const dayNum = today.getDay()
-        const month = today.getMonth() + 1
+        if (this.state.isLoggedIn) {
+          this.setDate()
+        }
 
-        const todaysDate = dateFormatter(today)
-        const displayDate = `${month} / ${date}`
-        this.getTodaysDay(dayNum)
-        this.setState({
-          todaysDate: todaysDate,
-          displayDate: displayDate
-        })
+        // fetch('/api/list')
+        //   .then(response => response.json())
+        //   .then(result => {
 
-        fetch('/api/list')
-          .then(response => response.json())
-          .then(result => {
-
-            this.setState({
-              isLoading: false,
-              list: result,
-              listLoaded: true
-            })
-          })
-          .catch(err => console.error(err))
+        //     this.setState({
+        //       isLoading: false,
+        //       list: result,
+        //       listLoaded: true
+        //     })
+        //   })
+        //   .catch(err => console.error(err))
       })
       .catch(err => console.error(err))
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.todaysDate !== this.state.todaysDate) {
-      const dateSplit = this.state.todaysDate.split('-')
-      const displayDate = `${dateSplit[1]} / ${dateSplit[2]}`
-      this.setState({ displayDate: displayDate })
-    }
-    if (prevState.todaysDay !== this.state.todaysDay) {
-      if (new Date(this.state.todaysDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
-        this.setState({ inFuture: true })
-      } else {
-        this.setState({ inFuture: false })
-      }
-      this.setState({
-        todaysDay: this.state.todaysDay
-      })
-    }
-  }
-
-	getTodaysDay = dayNum => {
-	  switch (dayNum) {
-	    case 0:
-	      this.setState({ todaysDay: 'Sun' })
-	      break
-	    case 1:
-	      this.setState({ todaysDay: 'Mon' })
-	      break
-	    case 2:
-	      this.setState({ todaysDay: 'Tue' })
-	      break
-	    case 3:
-	      this.setState({ todaysDay: 'Wed' })
-	      break
-	    case 4:
-	      this.setState({ todaysDay: 'Thu' })
-	      break
-	    case 5:
-	      this.setState({ todaysDay: 'Fri' })
-	      break
-	    case 6:
-	      this.setState({ todaysDay: 'Sat' })
-	      break
-	  }
-	}
-
-	addMeal = (category, parameter) => {
-	  if (category === 'food') {
-	    const ready = parameter.ready
-	    if (ready) {
-	      const patchData = {
-	        name: parameter.food.name,
-	        mealId: parameter.food.mealId,
-	        enterDate: parameter.enterDate
-	      }
-	      const init = {
-	        method: 'PATCH',
-	        headers: {
-	          'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify(patchData)
-	      }
-	      fetch(`/api/enter/${parameter.food.mealId}`, init)
-	        .then(response => response.json())
-	        .then(result => {
-	          const listCopy = [...this.state.list]
-	          const arrOfIds = listCopy.map(x => x.mealId)
-	          const index = arrOfIds.indexOf(parameter.food.mealId)
-	          listCopy[index].name = parameter.food.name
-	          this.setState({ list: listCopy })
-	        })
-	    } else {
-	      const data = {
-	        meal: parameter.food.name,
-	        mealtime: parameter.mealtime,
-	        enterDate: this.state.todaysDate
-	      }
-	      const init = {
-	        method: 'POST',
-	        headers: {
-	          'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify(data)
-	      }
-	      fetch('/api/enter', init)
-	        .then(response => response.json())
-	        .then(result => {
-	          result.mealtime = parameter.mealtime
-	          const listCopy = [...this.state.list]
-	          listCopy.push(result)
-	          this.setState({
-	            list: listCopy
-	          })
-	        })
-	    }
-
-	  } else if (category === 'report') {
-	    const mealId = parameter.food.mealId
-	    const report = parseInt(parameter.report)
-
-	    const mealResult = {
-	      mealId, report
-	    }
-	    const init = {
-	      method: 'PATCH',
-	      headers: {
-	        'Content-Type': 'application/json'
-	      },
-	      body: JSON.stringify(mealResult)
-	    }
-	    fetch(`/api/rate/${mealId}`, init)
-	      .then(response => response.json())
-	      .then(data => {
-	        const listCopy = [...this.state.list]
-	        for (let i = 0; i < listCopy.length; i++) {
-	          if (listCopy[i].mealId === mealId) {
-	            listCopy[i].report = report
-	            this.setState({ list: listCopy })
-	          }
-	        }
-	      })
-	  }
-	}
-
-	handleWeeklyClick = (date, day) => {
+	setDate = () => {
+	  const newDate = new Date()
+	  const todayDate = dateFormatter(newDate)
+	  const sundayDate = sundayFormatter(newDate)
 	  this.setState({
-	    todaysDate: date,
-	    todaysDay: day
+	    todayDate: todayDate,
+	    sundayDate: sundayDate
 	  })
 	}
+
+	// componentDidUpdate(prevProps, prevState) {
+	//   if (prevState.todaysDate !== this.state.todaysDate) {
+	//     const dateSplit = this.state.todaysDate.split('-')
+	//     const displayDate = `${dateSplit[1]} / ${dateSplit[2]}`
+	//     this.setState({ displayDate: displayDate })
+	//   }
+	//   if (prevState.todaysDay !== this.state.todaysDay) {
+	//     if (new Date(this.state.todaysDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
+	//       this.setState({ inFuture: true })
+	//     } else {
+	//       this.setState({ inFuture: false })
+	//     }
+	//     this.setState({
+	//       todaysDay: this.state.todaysDay
+	//     })
+	//   }
+	// }
+
+	// addMeal = (category, parameter) => {
+	//   if (category === 'food') {
+	//     const ready = parameter.ready
+	//     if (ready) {
+	//       const patchData = {
+	//         name: parameter.food.name,
+	//         mealId: parameter.food.mealId,
+	//         enterDate: parameter.enterDate
+	//       }
+	//       const init = {
+	//         method: 'PATCH',
+	//         headers: {
+	//           'Content-Type': 'application/json'
+	//         },
+	//         body: JSON.stringify(patchData)
+	//       }
+	//       fetch(`/api/enter/${parameter.food.mealId}`, init)
+	//         .then(response => response.json())
+	//         .then(result => {
+	//           const listCopy = [...this.state.list]
+	//           const arrOfIds = listCopy.map(x => x.mealId)
+	//           const index = arrOfIds.indexOf(parameter.food.mealId)
+	//           listCopy[index].name = parameter.food.name
+	//           this.setState({ list: listCopy })
+	//         })
+	//     } else {
+	//       const data = {
+	//         meal: parameter.food.name,
+	//         mealtime: parameter.mealtime,
+	//         enterDate: this.state.todaysDate
+	//       }
+	//       const init = {
+	//         method: 'POST',
+	//         headers: {
+	//           'Content-Type': 'application/json'
+	//         },
+	//         body: JSON.stringify(data)
+	//       }
+	//       fetch('/api/enter', init)
+	//         .then(response => response.json())
+	//         .then(result => {
+	//           result.mealtime = parameter.mealtime
+	//           const listCopy = [...this.state.list]
+	//           listCopy.push(result)
+	//           this.setState({
+	//             list: listCopy
+	//           })
+	//         })
+	//     }
+
+	//   } else if (category === 'report') {
+	//     const mealId = parameter.food.mealId
+	//     const report = parseInt(parameter.report)
+
+	//     const mealResult = {
+	//       mealId, report
+	//     }
+	//     const init = {
+	//       method: 'PATCH',
+	//       headers: {
+	//         'Content-Type': 'application/json'
+	//       },
+	//       body: JSON.stringify(mealResult)
+	//     }
+	//     fetch(`/api/rate/${mealId}`, init)
+	//       .then(response => response.json())
+	//       .then(data => {
+	//         const listCopy = [...this.state.list]
+	//         for (let i = 0; i < listCopy.length; i++) {
+	//           if (listCopy[i].mealId === mealId) {
+	//             listCopy[i].report = report
+	//             this.setState({ list: listCopy })
+	//           }
+	//         }
+	//       })
+	//   }
+	// }
+
+	// handleWeeklyClick = (date, day) => {
+	//   this.setState({
+	//     todaysDate: date,
+	//     todaysDay: day
+	//   })
+	// }
 
 	handleFooterClick = () => {
 	  this.setState({
@@ -203,27 +187,26 @@ class HomePage extends Component {
 	  const username = this.props.location.state.username
 	  return (
 	    <Container>
-
 	      <section className='helloSection'>
 	        <div className='hello'>Hello, { username }!</div>
 	      </section>
 	      <section className='todaySection'>
 	        <div className='todayTitleContainer'>
-	          <span className='todayTitle'>{ this.state.todaysDay }</span>
-	          <span className='todayDate'>{ this.state.displayDate }</span>
+	          <span style={{ textTransform: 'capitalize' }} className='todayTitle'>{ this.state.todayDate.day }</span>
+	          <span className='todayDate'>{ this.state.todayDate.display }</span>
 	        </div>
-	        <TodaysMeals
+	        {/* <TodaysMeals
             list={ this.state.list }
             addMeal={ this.addMeal }
             todaysDate={ this.state.todaysDate }
-          />
+          /> */}
 	      </section>
 	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
-	        <WeeklyReview
+	        {/* <WeeklyReview
             list={ this.state.list }
             handleClick={ this.handleWeeklyClick }
-          />
+          /> */}
 	      </section>
 
 	      {
@@ -261,6 +244,10 @@ const Container = styled.div`
 			font-size: 2rem;
 			padding: 15px 25px;
 		}
+	}
+
+	.todaySection, .reviewSection {
+		border: 1px solid dodgerblue;
 	}
 
 	.todaySection {
