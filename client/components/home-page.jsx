@@ -12,6 +12,7 @@ class HomePage extends Component {
     isLoading: true,
     hamburgerClicked: false,
     todaysDate: '',
+    todaysDay: '',
     displayDate: '',
     list: [],
     listLoaded: false
@@ -26,10 +27,12 @@ class HomePage extends Component {
 
         const today = new Date()
         const date = today.getDate()
+        const dayNum = today.getDay()
         const month = today.getMonth() + 1
 
         const todaysDate = dateFormatter(today)
         const displayDate = `${month} / ${date}`
+        this.getTodaysDay(dayNum)
         this.setState({
           todaysDate: todaysDate,
           displayDate: displayDate
@@ -56,7 +59,36 @@ class HomePage extends Component {
       const displayDate = `${dateSplit[1]} / ${dateSplit[2]}`
       this.setState({ displayDate: displayDate })
     }
+    if (prevState.todaysDay !== this.state.todaysDay) {
+      this.setState({ todaysDay: this.state.todaysDay })
+    }
   }
+
+	getTodaysDay = dayNum => {
+	  switch (dayNum) {
+	    case 0:
+	      this.setState({ todaysDay: 'Sun' })
+	      break
+	    case 1:
+	      this.setState({ todaysDay: 'Mon' })
+	      break
+	    case 2:
+	      this.setState({ todaysDay: 'Tue' })
+	      break
+	    case 3:
+	      this.setState({ todaysDay: 'Wed' })
+	      break
+	    case 4:
+	      this.setState({ todaysDay: 'Thu' })
+	      break
+	    case 5:
+	      this.setState({ todaysDay: 'Fri' })
+	      break
+	    case 6:
+	      this.setState({ todaysDay: 'Sat' })
+	      break
+	  }
+	}
 
 	addMeal = (category, parameter) => {
 	  if (category === 'food') {
@@ -136,8 +168,11 @@ class HomePage extends Component {
 	  }
 	}
 
-	handleWeeklyClick = date => {
-	  this.setState({ todaysDate: date })
+	handleWeeklyClick = (date, day) => {
+	  this.setState({
+	    todaysDate: date,
+	    todaysDay: day
+	  })
 	}
 
 	handleFooterClick = () => {
@@ -166,7 +201,7 @@ class HomePage extends Component {
 	      </section>
 	      <section className='todaySection'>
 	        <div className='todayTitleContainer'>
-	          <span className='todayTitle'>Today</span>
+	          <span className='todayTitle'>{ this.state.todaysDay }</span>
 	          <span className='todayDate'>{ this.state.displayDate }</span>
 	        </div>
 	        <TodaysMeals
