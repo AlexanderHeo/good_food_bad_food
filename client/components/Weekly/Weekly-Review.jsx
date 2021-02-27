@@ -225,7 +225,8 @@ class WeeklyReview extends Component {
 					            }
 					          }
 					          if (isNaN(avg)) { avg = '' }
-					          return <td onClick={ () => this.handleClick(weekDates[index])} key={ name }>{ avg }</td>
+					          const weekDays = [sun, mon, tue, wed, thu, fri, sat]
+					          return <td className={ weekDays[index] } onClick={ () => this.handleClick(weekDates[index])} key={ name }>{ avg }</td>
 					        })
 					      }
 					    </tr>
