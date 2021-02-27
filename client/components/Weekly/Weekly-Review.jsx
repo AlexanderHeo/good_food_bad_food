@@ -264,7 +264,17 @@ const Table = styled.table`
 	}
 
 	.today {
-		background-color: var(--primary-4);
-		color: var(--primary-0);
+		animation: colorFlip 0.4s forwards;
+	}
+
+	@keyframes colorFlip {
+		from {
+			background-color: var(--primary-0);
+			color: var(--primary-6);
+		}
+		to {
+			background-color: var(--primary-4);
+			color: var(--primary-0);
+		}
 	}
 `
