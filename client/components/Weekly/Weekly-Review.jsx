@@ -142,8 +142,8 @@ class WeeklyReview extends Component {
 	  })
 	}
 
-	handleClick = date => {
-	  this.props.handleClick(date)
+	handleClick = (date, day) => {
+	  this.props.handleClick(date, day)
 	}
 
 	render() {
@@ -186,22 +186,22 @@ class WeeklyReview extends Component {
 					<>
 					  <thead className='tableHead'>
 					    <tr className='tableRow'>
-					      <th className={sun} onClick={ () => this.handleClick(weekDates[0]) }>Sun</th>
-					      <th className={mon} onClick={ () => this.handleClick(weekDates[1]) }>Mon</th>
-					      <th className={tue} onClick={ () => this.handleClick(weekDates[2]) }>Tue</th>
-					      <th className={wed} onClick={ () => this.handleClick(weekDates[3]) }>Wed</th>
-					      <th className={thu} onClick={ () => this.handleClick(weekDates[4]) }>Thu</th>
-					      <th className={fri} onClick={ () => this.handleClick(weekDates[5]) }>Fri</th>
-					      <th className={sat} onClick={ () => this.handleClick(weekDates[6]) }>Sat</th>
+					      <th className={sun} onClick={ () => this.handleClick(weekDates[0], 'Sun') }>Sun</th>
+					      <th className={mon} onClick={ () => this.handleClick(weekDates[1], 'Mon') }>Mon</th>
+					      <th className={tue} onClick={ () => this.handleClick(weekDates[2], 'Tue') }>Tue</th>
+					      <th className={wed} onClick={ () => this.handleClick(weekDates[3], 'Wed') }>Wed</th>
+					      <th className={thu} onClick={ () => this.handleClick(weekDates[4], 'Thu') }>Thu</th>
+					      <th className={fri} onClick={ () => this.handleClick(weekDates[5], 'Fri') }>Fri</th>
+					      <th className={sat} onClick={ () => this.handleClick(weekDates[6], 'Sat') }>Sat</th>
 					    </tr>
 					    <tr className='tableRow'>
-					      <th className={sun} onClick={ () => this.handleClick(weekDates[0]) }>{this.state.sundaysDate}</th>
-					      <th className={mon} onClick={ () => this.handleClick(weekDates[1]) }>{this.state.sundaysDate + 1}</th>
-					      <th className={tue} onClick={ () => this.handleClick(weekDates[2]) }>{this.state.sundaysDate + 2}</th>
-					      <th className={wed} onClick={ () => this.handleClick(weekDates[3]) }>{this.state.sundaysDate + 3}</th>
-					      <th className={thu} onClick={ () => this.handleClick(weekDates[4]) }>{this.state.sundaysDate + 4}</th>
-					      <th className={fri} onClick={ () => this.handleClick(weekDates[5]) }>{this.state.sundaysDate + 5}</th>
-					      <th className={sat} onClick={ () => this.handleClick(weekDates[6]) }>{this.state.sundaysDate + 6}</th>
+					      <th className={sun} onClick={ () => this.handleClick(weekDates[0], 'Sun') }>{this.state.sundaysDate}</th>
+					      <th className={mon} onClick={ () => this.handleClick(weekDates[1], 'Mon') }>{this.state.sundaysDate + 1}</th>
+					      <th className={tue} onClick={ () => this.handleClick(weekDates[2], 'Tue') }>{this.state.sundaysDate + 2}</th>
+					      <th className={wed} onClick={ () => this.handleClick(weekDates[3], 'Wed') }>{this.state.sundaysDate + 3}</th>
+					      <th className={thu} onClick={ () => this.handleClick(weekDates[4], 'Thu') }>{this.state.sundaysDate + 4}</th>
+					      <th className={fri} onClick={ () => this.handleClick(weekDates[5], 'Fri') }>{this.state.sundaysDate + 5}</th>
+					      <th className={sat} onClick={ () => this.handleClick(weekDates[6], 'Sat') }>{this.state.sundaysDate + 6}</th>
 					    </tr>
 					  </thead>
 					  <tbody className='tableBody'>
