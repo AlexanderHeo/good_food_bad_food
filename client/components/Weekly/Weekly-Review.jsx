@@ -143,6 +143,7 @@ class WeeklyReview extends Component {
 	}
 
 	handleClick = (date, day) => {
+	  this.setState({ highlight: day.toLowerCase() })
 	  this.props.handleClick(date, day)
 	}
 
