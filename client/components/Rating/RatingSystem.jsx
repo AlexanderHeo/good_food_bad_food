@@ -1,19 +1,58 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 
-const RatingSystem = props => (
-  <Container>
-    <div className='arrow'>
-      <div className='end leftEnd'>Bad</div>
-      <button name='1' className='selection one' onClick={ props.handleClick }>1</button>
-      <button name='2' className='selection two' onClick={ props.handleClick }>2</button>
-      <button name='3' className='selection three' onClick={ props.handleClick }>3</button>
-      <button name='4' className='selection four' onClick={ props.handleClick }>4</button>
-      <button name='5' className='selection five' onClick={ props.handleClick }>5</button>
-      <div className='end rightend'>Good</div>
-    </div>
-  </Container>
-)
+class RatingSystem extends Component {
+	state = {
+	  highlight: ''
+	}
+
+	handleClick = e => {
+	  this.props.handleClick(e)
+	  this.setState({ highlight: e.target.name })
+	}
+
+	render() {
+
+	  let one = 'selection'
+	  let two = 'selection'
+	  let three = 'selection'
+	  let four = 'selection'
+	  let five = 'selection'
+	  switch (this.state.highlight) {
+	    case '1':
+	      one = 'chosen selection'
+	      break
+	    case '2':
+	      two = 'chosen selection'
+	      break
+	    case '3':
+	      three = 'chosen selection'
+	      break
+	    case '4':
+	      four = 'chosen selection'
+	      break
+	    case '5':
+	      five = 'chosen selection'
+	      break
+	    default:
+	      break
+	  }
+
+	  return (
+	    <Container>
+	      <div className='arrow'>
+	        <div className='end leftEnd'>Bad</div>
+	        <button name='1' className={ one } onClick={ this.handleClick }>1</button>
+	        <button name='2' className={ two } onClick={ this.handleClick }>2</button>
+	        <button name='3' className={ three } onClick={ this.handleClick }>3</button>
+	        <button name='4' className={ four } onClick={ this.handleClick }>4</button>
+	        <button name='5' className={ five } onClick={ this.handleClick }>5</button>
+	        <div className='end rightend'>Good</div>
+	      </div>
+	    </Container>
+	  )
+	}
+}
 
 export default RatingSystem
 
@@ -24,6 +63,7 @@ const Container = styled.div`
 
 	.arrow {
 		width: 80%;
+		height: 50px;
 		display: flex;
 		.end, .selection {
 			width: calc(100% / 7);
@@ -48,7 +88,10 @@ const Container = styled.div`
 			border-top-right-radius: 12px;
 			border-bottom-right-radius: 12px;
 		}
+		.chosen {
+			background-color: var(--primary-6);
+			color: var(--primary-0);
+		}
 	}
-
 
 `
