@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-// import WeeklyReview from './Weekly/Weekly-Review'
 import { dateFormatter, sundayFormatter } from './Functions/date'
-import { todayDisplay } from './Functions/mealSetter'
+import { todayDisplay, weekDisplay } from './Functions/mealSetter'
 import Settings from './Settings/Settings'
 import TodaysMeals from './Today/Todays-Meals'
 import Footer from './UI/Footer'
+import WeeklyReview from './Weekly/Weekly-Review'
 
 class HomePage extends Component {
   state = {
@@ -15,7 +15,8 @@ class HomePage extends Component {
     listLoaded: false,
     todayDisplay: {},
     todayDisplaySet: false,
-    // weekDisplay: [],
+    weekDisplay: [],
+    weekDisplaySet: false,
     todayDate: {
       date: '',
       day: '',
@@ -69,9 +70,12 @@ class HomePage extends Component {
 
 	setMeals = () => {
 	  const todayDisplayState = todayDisplay(this.state.list, this.state.todayDate)
+	  const weekDisplayState = weekDisplay(this.state.list, this.state.sundayDate)
 	  this.setState({
 	    todayDisplay: todayDisplayState,
-	    todayDisplaySet: true
+	    todayDisplaySet: true,
+	    weekDisplay: weekDisplayState,
+	    weekDisplaySet: true
 	  })
 	}
 
@@ -229,10 +233,13 @@ class HomePage extends Component {
 	      </section>
 	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
-	        {/* <WeeklyReview
-            list={ this.state.list }
-            handleClick={ this.handleWeeklyClick }
-          /> */}
+	        {
+            this.state.weekDisplaySet &&
+						<WeeklyReview
+						  list={ this.state.list }
+						  handleClick={ this.handleWeeklyClick }
+						/>
+          }
 	      </section>
 
 	      {
