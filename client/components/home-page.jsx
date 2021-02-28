@@ -1,18 +1,20 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 // import WeeklyReview from './Weekly/Weekly-Review'
-import { dateFormatter, sundayFormatter } from './Date/date'
+import { dateFormatter, sundayFormatter } from './Functions/date'
+import { todayDisplay } from './Functions/mealSetter'
 import Settings from './Settings/Settings'
-// import TodaysMeals from './Today/Todays-Meals'
+import TodaysMeals from './Today/Todays-Meals'
 import Footer from './UI/Footer'
-import Loader from './UI/Loader'
 
 class HomePage extends Component {
   state = {
     isLoggedIn: false,
-    // list: [],
-    // listLoaded: false,
-    // todayDisplay: {},
+    isLoading: true,
+    list: [],
+    listLoaded: false,
+    todayDisplay: {},
+    todayDisplaySet: false,
     // weekDisplay: [],
     todayDate: {
       date: '',
@@ -24,6 +26,7 @@ class HomePage extends Component {
       day: '',
       display: ''
     },
+    dateSet: false,
     hamburgerClicked: false
   }
 
@@ -37,19 +40,18 @@ class HomePage extends Component {
 
         if (this.state.isLoggedIn) {
           this.setDate()
+          fetch('/api/list')
+            .then(response => response.json())
+            .then(result => {
+
+              this.setState({
+                list: result,
+                listLoaded: true
+              })
+            })
+            .catch(err => console.error(err))
+          if (this.state.listLoaded && this.state.dateSet) this.setMeals()
         }
-
-        // fetch('/api/list')
-        //   .then(response => response.json())
-        //   .then(result => {
-
-        //     this.setState({
-        //       isLoading: false,
-        //       list: result,
-        //       listLoaded: true
-        //     })
-        //   })
-        //   .catch(err => console.error(err))
       })
       .catch(err => console.error(err))
   }
@@ -60,8 +62,24 @@ class HomePage extends Component {
 	  const sundayDate = sundayFormatter(newDate)
 	  this.setState({
 	    todayDate: todayDate,
-	    sundayDate: sundayDate
+	    sundayDate: sundayDate,
+	    dateSet: true
 	  })
+	}
+
+	setMeals = () => {
+	  const todayDisplayState = todayDisplay(this.state.list, this.state.todayDate)
+	  this.setState({
+	    todayDisplay: todayDisplayState,
+	    todayDisplaySet: true
+	  })
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevState.list !== this.state.list) {
+	    this.setState({ isLoading: true })
+	    this.setMeals()
+	  }
 	}
 
 	// componentDidUpdate(prevProps, prevState) {
@@ -183,7 +201,9 @@ class HomePage extends Component {
   }
 
   render() {
-	  if (this.state.isLoading) return <Loader />;
+	  // if (this.state.isLoading) return <Loading><Loader /></Loading>
+    // const loading = <Loading><Loader /></Loading>
+    const dateLoading = <span className='todayTitleContainer'>date loading...</span>
 	  const username = this.props.location.state.username
 	  return (
 	    <Container>
@@ -191,15 +211,21 @@ class HomePage extends Component {
 	        <div className='hello'>Hello, { username }!</div>
 	      </section>
 	      <section className='todaySection'>
-	        <div className='todayTitleContainer'>
-	          <span style={{ textTransform: 'capitalize' }} className='todayTitle'>{ this.state.todayDate.day }</span>
-	          <span className='todayDate'>{ this.state.todayDate.display }</span>
-	        </div>
-	        {/* <TodaysMeals
-            list={ this.state.list }
-            addMeal={ this.addMeal }
-            todaysDate={ this.state.todaysDate }
-          /> */}
+          {
+            this.state.dateSet
+              ? <div className='todayTitleContainer'>
+                <span style={{ textTransform: 'capitalize' }} className='todayTitle'>{ this.state.todayDate.day }</span>
+                <span className='todayDate'>{ this.state.todayDate.display }</span>
+          	</div>
+              : dateLoading
+          }
+          {
+            this.state.todayDisplaySet &&
+						<TodaysMeals
+						  todayDisplay={ this.state.todayDisplay }
+						  todayDate={ this.state.todayDate }
+						/>
+          }
 	      </section>
 	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
@@ -305,3 +331,10 @@ const Container = styled.div`
 		z-index: 1000;
 	}
 `
+// const Loading = styled.div`
+// 	width: 100vw;
+// 	height: 100vh;
+// 	display: flex;
+// 	justify-content: center;
+// 	align-items: center;
+// `
