@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import dateFormatter from '../Functions/Date-Formatter'
 import EnterMeal from './Enter-Meal'
 import TodaysMealItem from './Todays-Meal-Item'
 
@@ -19,41 +18,22 @@ class TodaysMeals extends Component {
 	}
 
 	componentDidMount() {
-	  this.separateMealtime()
+	  this.separateMealTime()
+
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-	  if (prevProps.list !== this.props.list) {
-	    this.separateMealtime()
-	  }
-	  if (prevProps.todaysDate !== this.props.todaysDate) {
-	    this.setState({
-	      breakfast: '',
-	      lunch: '',
-	      dinner: '',
-	      snacks: '',
-	      breakfastReady: false,
-	      lunchReady: false,
-	      dinnerReady: false,
-	      snacksReady: false
-	    })
-	    this.separateMealtime()
+	  if (prevProps.todayDisplay !== this.props.todayDisplay) {
+	    this.separateMealTime()
 	  }
 	}
 
-	separateMealtime = () => {
-	  const todaysMeals = this.props.list.filter(x => {
-	    const eatenAtDate = new Date(x.eatenAt)
-	    const eatenAt = dateFormatter(eatenAtDate)
-
-	    return eatenAt === this.props.todaysDate
-	  })
-	  todaysMeals.forEach(x => {
-	    const mealtime = x.mealtime
-	    const ready = `${mealtime}Ready`
+	separateMealTime = () => {
+	  this.props.todayDisplay.map(x => {
+	    const ready = `${x.mealtime}Ready`
 	    this.setState({
-	      [ready]: true,
-	      [mealtime]: x
+	      [x.mealtime]: x,
+	      [ready]: true
 	    })
 	  })
 	}
