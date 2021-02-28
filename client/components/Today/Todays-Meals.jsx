@@ -19,7 +19,6 @@ class TodaysMeals extends Component {
 
 	componentDidMount() {
 	  this.separateMealTime()
-
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -40,11 +39,6 @@ class TodaysMeals extends Component {
 
 	handleClick = (action, parameter) => {
 	  if (action === 'enter') {
-	    this.setState({
-	      enterModalDisplayed: true,
-	      enteringFor: parameter
-	    })
-	  } else if (action === 'edit') {
 	    this.setState({
 	      enterModalDisplayed: true,
 	      enteringFor: parameter
