@@ -1,22 +1,34 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import dateFormatter from './Functions/Date-Formatter'
+import { dateFormatter, sundayFormatter } from './Functions/date'
+import { todayDisplay, weekDisplay } from './Functions/mealSetter'
 import Settings from './Settings/Settings'
 import TodaysMeals from './Today/Todays-Meals'
 import Footer from './UI/Footer'
-import Loader from './UI/Loader'
 import WeeklyReview from './Weekly/Weekly-Review'
 
 class HomePage extends Component {
   state = {
+    isLoggedIn: false,
     isLoading: true,
-    hamburgerClicked: false,
-    todaysDate: '',
-    todaysDay: '',
-    displayDate: '',
     list: [],
     listLoaded: false,
-	  inFuture: false
+    todayDisplay: {},
+    todayDisplaySet: false,
+    weekDisplay: [],
+    weekDisplaySet: false,
+    todayDate: {
+      date: '',
+      day: '',
+      display: ''
+    },
+    sundayDate: {
+      date: '',
+      day: '',
+      display: ''
+    },
+    dateSet: false,
+    hamburgerClicked: false
   }
 
   componentDidMount() {
@@ -25,78 +37,72 @@ class HomePage extends Component {
       .then(response => response.json())
       .then(result => {
         if (result.error) return this.props.history.push('/ls')
+        this.setState({ isLoggedIn: true })
 
-        const today = new Date()
-        const date = today.getDate()
-        const dayNum = today.getDay()
-        const month = today.getMonth() + 1
+        if (this.state.isLoggedIn) {
+          this.setDate()
+          fetch('/api/list')
+            .then(response => response.json())
+            .then(result => {
 
-        const todaysDate = dateFormatter(today)
-        const displayDate = `${month} / ${date}`
-        this.getTodaysDay(dayNum)
-        this.setState({
-          todaysDate: todaysDate,
-          displayDate: displayDate
-        })
-
-        fetch('/api/list')
-          .then(response => response.json())
-          .then(result => {
-
-            this.setState({
-              isLoading: false,
-              list: result,
-              listLoaded: true
+              this.setState({
+                list: result,
+                listLoaded: true
+              })
             })
-          })
-          .catch(err => console.error(err))
+            .catch(err => console.error(err))
+          if (this.state.listLoaded && this.state.dateSet) this.setMeals()
+        }
       })
       .catch(err => console.error(err))
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.todaysDate !== this.state.todaysDate) {
-      const dateSplit = this.state.todaysDate.split('-')
-      const displayDate = `${dateSplit[1]} / ${dateSplit[2]}`
-      this.setState({ displayDate: displayDate })
-    }
-    if (prevState.todaysDay !== this.state.todaysDay) {
-      if (new Date(this.state.todaysDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
-        this.setState({ inFuture: true })
-      } else {
-        this.setState({ inFuture: false })
-      }
-      this.setState({
-        todaysDay: this.state.todaysDay
-      })
-    }
-  }
+	setDate = () => {
+	  const newDate = new Date()
+	  const todayDate = dateFormatter(newDate)
+	  const sundayDate = sundayFormatter(newDate)
+	  this.setState({
+	    todayDate: todayDate,
+	    sundayDate: sundayDate,
+	    dateSet: true
+	  })
+	}
 
-	getTodaysDay = dayNum => {
-	  switch (dayNum) {
-	    case 0:
-	      this.setState({ todaysDay: 'Sun' })
-	      break
-	    case 1:
-	      this.setState({ todaysDay: 'Mon' })
-	      break
-	    case 2:
-	      this.setState({ todaysDay: 'Tue' })
-	      break
-	    case 3:
-	      this.setState({ todaysDay: 'Wed' })
-	      break
-	    case 4:
-	      this.setState({ todaysDay: 'Thu' })
-	      break
-	    case 5:
-	      this.setState({ todaysDay: 'Fri' })
-	      break
-	    case 6:
-	      this.setState({ todaysDay: 'Sat' })
-	      break
+	setMeals = () => {
+	  const todayDisplayState = todayDisplay(this.state.list, this.state.todayDate)
+	  const weekDisplayState = weekDisplay(this.state.list, this.state.sundayDate)
+	  this.setState({
+	    todayDisplay: todayDisplayState,
+	    todayDisplaySet: true,
+	    weekDisplay: weekDisplayState,
+	    weekDisplaySet: true
+	  })
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevState.list !== this.state.list) {
+	    this.setState({ isLoading: true })
+	    this.setMeals()
 	  }
 	}
+
+	// componentDidUpdate(prevProps, prevState) {
+	//   if (prevState.todaysDate !== this.state.todaysDate) {
+	//     const dateSplit = this.state.todaysDate.split('-')
+	//     const displayDate = `${dateSplit[1]} / ${dateSplit[2]}`
+	//     this.setState({ displayDate: displayDate })
+	//   }
+	//   if (prevState.todaysDay !== this.state.todaysDay) {
+	//     if (new Date(this.state.todaysDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)) {
+	//       this.setState({ inFuture: true })
+	//     } else {
+	//       this.setState({ inFuture: false })
+	//     }
+	//     this.setState({
+	//       todaysDay: this.state.todaysDay
+	//     })
+	//   }
+	// }
 
 	addMeal = (category, parameter) => {
 	  if (category === 'food') {
@@ -147,11 +153,9 @@ class HomePage extends Component {
 	          })
 	        })
 	    }
-
-	  } else if (category === 'report') {
+	  } else if (category === 'rating') {
 	    const mealId = parameter.food.mealId
 	    const report = parseInt(parameter.report)
-
 	    const mealResult = {
 	      mealId, report
 	    }
@@ -173,15 +177,41 @@ class HomePage extends Component {
 	          }
 	        }
 	      })
+	  } else if (category === 'patchName') {
+	    // *********************** //
+	    // *********************** //
+	    // *********************** //
+	    const name = parameter.food.name
+	    const mealId = parameter.food.mealId
+	    const mealToPatch = {
+	      mealId, name
+	    }
+	    const init = {
+	      method: 'PATCH',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify(mealToPatch)
+	    }
+	    fetch(`/api/list/${mealId}`, init)
+	      .then(response => response.json())
+	      .then(data => {
+	        const listCopy = [...this.state.list]
+	        const index = listCopy.filter((x, index) => {
+	          if (x.mealId === mealId) return index
+	        })
+	        listCopy.splice(index, 1, data)
+	        this.setState({ list: listCopy })
+	      })
 	  }
 	}
 
-	handleWeeklyClick = (date, day) => {
-	  this.setState({
-	    todaysDate: date,
-	    todaysDay: day
-	  })
-	}
+	// handleWeeklyClick = (date, day) => {
+	//   this.setState({
+	//     todaysDate: date,
+	//     todaysDay: day
+	//   })
+	// }
 
 	handleFooterClick = () => {
 	  this.setState({
@@ -199,31 +229,42 @@ class HomePage extends Component {
   }
 
   render() {
-	  if (this.state.isLoading) return <Loader />;
+	  // if (this.state.isLoading) return <Loading><Loader /></Loading>
+    // const loading = <Loading><Loader /></Loading>
+    const dateLoading = <span className='todayTitleContainer'>date loading...</span>
 	  const username = this.props.location.state.username
 	  return (
 	    <Container>
-
 	      <section className='helloSection'>
 	        <div className='hello'>Hello, { username }!</div>
 	      </section>
 	      <section className='todaySection'>
-	        <div className='todayTitleContainer'>
-	          <span className='todayTitle'>{ this.state.todaysDay }</span>
-	          <span className='todayDate'>{ this.state.displayDate }</span>
-	        </div>
-	        <TodaysMeals
-            list={ this.state.list }
-            addMeal={ this.addMeal }
-            todaysDate={ this.state.todaysDate }
-          />
+          {
+            this.state.dateSet
+              ? <div className='todayTitleContainer'>
+                <span style={{ textTransform: 'capitalize' }} className='todayTitle'>{ this.state.todayDate.day }</span>
+                <span className='todayDate'>{ this.state.todayDate.display }</span>
+          	</div>
+              : dateLoading
+          }
+          {
+            this.state.todayDisplaySet &&
+						<TodaysMeals
+						  todayDisplay={ this.state.todayDisplay }
+						  todayDate={ this.state.todayDate }
+						  addMeal={ this.addMeal }
+						/>
+          }
 	      </section>
 	      <section className='reviewSection'>
 	        <div className='reviewTitle'>This Week</div>
-	        <WeeklyReview
-            list={ this.state.list }
-            handleClick={ this.handleWeeklyClick }
-          />
+	        {
+            this.state.weekDisplaySet &&
+						<WeeklyReview
+						  list={ this.state.list }
+						  handleClick={ this.handleWeeklyClick }
+						/>
+          }
 	      </section>
 
 	      {
@@ -261,6 +302,10 @@ const Container = styled.div`
 			font-size: 2rem;
 			padding: 15px 25px;
 		}
+	}
+
+	.todaySection, .reviewSection {
+		border: 1px solid dodgerblue;
 	}
 
 	.todaySection {
@@ -318,3 +363,10 @@ const Container = styled.div`
 		z-index: 1000;
 	}
 `
+// const Loading = styled.div`
+// 	width: 100vw;
+// 	height: 100vh;
+// 	display: flex;
+// 	justify-content: center;
+// 	align-items: center;
+// `

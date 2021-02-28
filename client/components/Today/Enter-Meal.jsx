@@ -7,22 +7,36 @@ class EnterMeal extends Component {
 	state = {
 	  food: [],
 	  value: '',
+	  rating: '',
 	  errorMessage: '',
-	  ready: false
+	  ready: false,
+	  editName: false
 	}
 
 	componentDidMount() {
+
 	  const mealtime = this.props.mealtime
-	  if (this.props.[mealtime]) {
+	  const ready = `${mealtime}Ready`
+	  if (this.props[ready]) {
 	    this.setState({
-	      value: this.props.[this.props.mealtime].name,
-	      food: this.props.[mealtime]
+	      value: this.props[this.props.mealtime].name,
+	      food: this.props[mealtime]
 	    })
 	  }
-	  const ready = `${mealtime}Ready`
-	  if (this.props.[ready]) {
-	    this.setState({ ready: true })
-	  }
+
+	  // const mealtime = this.props.mealtime
+	  // if (this.props.[mealtime]) {
+	  //   console.log('first if')
+	  //   this.setState({
+	  //     value: this.props.[this.props.mealtime].name,
+	  //     food: this.props.[mealtime]
+	  //   })
+	  // }
+	  // const ready = `${mealtime}Ready`
+	  // if (this.props.[ready]) {
+	  //   console.log('second if')
+	  //   this.setState({ ready: true })
+	  // }
 	}
 
 	handleButtonClick = e => {
@@ -50,12 +64,28 @@ class EnterMeal extends Component {
 	      this.props.handleClick('return')
 	    }
 	  } else if (name === '1' || name === '2' || name === '3' || name === '4' || name === '5') {
-	    const parameters = {
-	      food: this.state.food,
-	      report: name
+	    this.setState({ rating: name })
+	  } else if (name === 'rating') {
+	    if (!this.state.rating) {
+	      this.setState({ errorMessage: 'Please pick a rating.' })
+	    } else {
+	      if (this.state.editName) {
+	        const nameParameters = {
+
+	        }
+	        this.props.addMeal('patchName', nameParameters)
+	      }
+	      const parameters = {
+	        food: this.state.food,
+	        report: this.state.rating
+	      }
+	      this.props.addMeal('rating', parameters)
+	      this.props.handleClick('return')
 	    }
-	    this.props.addMeal('report', parameters)
-	    this.props.handleClick('return')
+	  } else if (name === 'editName') {
+	    this.setState({
+	      editName: true
+	    })
 	  }
 	}
 
@@ -76,26 +106,73 @@ class EnterMeal extends Component {
 	      <h2 className='mealtime'>{ this.props.mealtime }</h2>
 	      <form className='form'>
 	        <label></label>
-	        <input
-	          type='text'
-	          placeholder='What did you eat?'
-	          className='input'
-	          value={ this.state.value }
-	          onChange={ this.handleInputChange }
-	          onFocus={ e => {
-	            this.handleInputFocus()
-	          }}/>
-	        <button name='add' className='addButton' onClick={ this.handleButtonClick }>
-	          <AddPlus />
-	        </button>
+	        {
+	          this.props[`${this.props.mealtime}Ready`]
+	            ? <div className='nameContainer'>
+
+	              {
+	                this.state.editName
+	                  ? <input
+	                    type='text'
+	                    placeholder='What did you eat?'
+	                    className='input'
+	                    value={ this.state.value }
+	                    onChange={ this.handleInputChange }
+	                    onFocus={ this.handleInputFocus }
+	                    style={{ width: '100%' }}
+	                  />
+	                  : <>
+	                    <span className='nameDisplay'>
+	                      {this.props.[this.props.mealtime].name}
+	                    </span>
+	                    <span>
+	                      <button
+	                        className='iconContainer'
+	                        name='editName'
+	                        onClick={ this.handleButtonClick }
+	                      >
+	                        <span className="iconify" data-icon="clarity:note-edit-line" data-inline="false"></span>
+	                      </button>
+	                    </span>
+	                  </>
+	              }
+
+	            </div>
+	            : <>
+	              <input
+	                type='text'
+	                placeholder='What did you eat?'
+	                className='input'
+	                value={ this.state.value }
+	                onChange={ this.handleInputChange }
+	                onFocus={ this.handleInputFocus }
+	              />
+	              <button
+	                name='add'
+	                className='addButton'
+	                onClick={ this.handleButtonClick }
+	              >
+	                <AddPlus />
+	              </button>
+	            </>
+	        }
 	      </form>
 
 	      <div className='voteContainer'>
 	        {
 	          this.state.errorMessage
 	          ? <h3 className='errorMessage'>{ this.state.errorMessage }</h3>
-	          : this.state.ready
-	              ? <RatingSystem handleClick={ this.handleButtonClick } />
+	          : this.props[`${this.props.mealtime}Ready`]
+	              ? <>
+	                <RatingSystem handleClick={ this.handleButtonClick } />
+	                <button
+	                  name='rating'
+	                  className='addButton resultAdd'
+	                  onClick={ this.handleButtonClick }
+	                >
+	                  <AddPlus />
+	                </button>
+	              </>
 	              : null
 	      	}
 	      </div>
@@ -133,6 +210,10 @@ const Container = styled.div`
 	.addButton {
 		margin: 0 6px;
 	}
+	.resultAdd {
+		margin-top: 12px;
+		position: relative;
+	}
 
 	.mealtime {
 		width: 100%;
@@ -141,6 +222,28 @@ const Container = styled.div`
 
 	.form {
 		margin: 20px 0;
+	}
+	svg[data-icon="clarity:note-edit-line"] {
+		font-size: 30px;
+		color: var(--primary-6);
+	}
+	.nameContainer {
+		display: flex;
+		align-items: center;
+	}
+	.nameDisplay {
+		font-size: 2rem;
+	}
+	.iconContainer {
+		width: 50px;
+		height: 50px;
+		border: 4px solid var(--primary-6);
+		border-radius: 50%;
+		background-color: var(--primary-0);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-left: 10px;
 	}
 	.input {
 		font-size: 1.2rem;
@@ -151,9 +254,10 @@ const Container = styled.div`
 
 	.voteContainer {
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		width: 100%;
-		height: 50px;
 		/* .vote {
 			width: 50px;
 			height: 50px;
