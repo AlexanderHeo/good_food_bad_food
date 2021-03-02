@@ -37,54 +37,55 @@ class EnterMeal extends Component {
 	handleButtonClick = e => {
 	  e.preventDefault()
 	  const name = e.currentTarget.name
-	  if (name === 'return') {
+	  if (name === 'return') { // return back to Today screen
 	    this.props.handleClick('return')
+	    // rating is clicked
 	  } else if (name === '1' || name === '2' || name === '3' || name === '4' || name === '5') {
 	    this.setState({
 	      rating: name,
 	      errorMessage: ''
 	    })
-	  } else if (name === 'editName') {
+	  } else if (name === 'editName') { // edited name
 	    this.setState({ editName: true })
-	  } else if (name === 'add') {
-	    if (!this.state.value) { // if no input
+	  } else if (name === 'add') { // clicked plus button
+	    if (!this.state.value) { // if input invalid
 	      this.setState({ errorMessage: 'You need to enter something' })
-	    } else { // input valid
-	      if (!this.props[`${this.props.mealtime}Ready`]) { // adding name
+	    } else { // if input valid
+	      if (!this.props[`${this.props.mealtime}Ready`]) { // adding new name
 	        const parameters = {
 	          meal: this.state.value,
 	          mealtime: this.props.mealtime,
+	          isToday: this.state.isToday,
 	          enterDate: this.props.dateDisplay
 	        }
 	        this.props.addMeal('food', parameters)
 	        this.props.handleClick('return')
 	      } else { // patching name
-	        if (!this.state.rating) { // check for rating
+	        if (!this.state.rating) { // if rating invalid
 	          this.setState({ errorMessage: 'You need to enter a rating' })
-	        } else { // rating good
-	          if (this.state.previousValue !== this.state.value) { // name edited
+	        } else { // if rating valid
+	          // name edited and add rating
+	          if (this.state.previousValue !== this.state.value) {
 	            const foodCopy = Object.assign({}, this.state.food)
 	            foodCopy.name = this.state.value
 	            foodCopy.report = this.state.rating
-	            const parameters = {
+	            const namePatchData = {
 	              food: foodCopy,
-	              mealtime: this.props.mealtime,
-	              enterDate: this.props.dateDisplay
+	              mealtime: this.props.mealtime
 	            }
-	            const ratingParameters = {
+	            const ratingData = {
 	              food: foodCopy,
-	              rating: this.state.rating,
-	              enterDate: this.props.dateDisplay
+	              rating: this.state.rating
 	            }
-	            this.props.addMeal('foodPatch', parameters)
-	            this.props.addMeal('rating', ratingParameters)
+	            this.props.addMeal('foodPatch', namePatchData)
+	            this.props.addMeal('rating', ratingData)
 	            this.props.handleClick('return')
-	          } else if (this.state.previousValue === this.state.value) { // name not edited
+	            // name not edited add rating
+	          } else if (this.state.previousValue === this.state.value) {
 	            const foodCopy = Object.assign({}, this.state.food)
 	            foodCopy.report = this.state.rating
 	            const parameters = {
-	              food: foodCopy,
-	              enterDate: this.props.dateDisplay
+	              food: foodCopy
 	            }
 	            this.props.addMeal('rating', parameters)
 	            this.props.handleClick('return')

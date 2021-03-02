@@ -53,7 +53,6 @@ class WeeklyReview extends Component {
 	    const e = new Date(x.eatenAt)
 	    if (week > e && e >= sunday) return x
 	  })
-
 	  const displayDay = this.props.dateDisplay.day
 	  switch (displayDay) {
 	    case 'Sunday':
@@ -62,7 +61,7 @@ class WeeklyReview extends Component {
 	    case 'Monday':
 	      this.setState({ highlight: displayDay })
 	      break
-	    case 'Tueday':
+	    case 'Tuesday':
 	      this.setState({ highlight: displayDay })
 	      break
 	    case 'Wednesday':

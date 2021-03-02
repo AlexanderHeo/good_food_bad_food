@@ -136,77 +136,69 @@ class HomePage extends Component {
   }
 
 	addMeal = (category, parameter) => {
-	  if (this.state.isToday) {
 
-	    if (category === 'food') {
-	      const patchData = {
-	        meal: parameter.meal,
-	        mealtime: parameter.mealtime,
-	        isToday: this.state.isToday,
-	        enterDate: parameter.enterDate
-	      }
-	      const init = {
-	        method: 'POST',
-	        headers: {
-	          'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify(patchData)
-	      }
-	      fetch('/api/enter', init)
-	        .then(response => response.json())
-	        .then(data => {
-	          const listCopy = [...this.state.list]
-	          listCopy.push(data)
-	          this.setState({ list: listCopy })
-	        })
-	    } else if (category === 'rating') {
-	      const { mealId, report } = parameter.food
-	      const reportData = { report: parseInt(report), mealId }
-	      const init = {
-	        method: 'PATCH',
-	        headers: {
-	          'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify(reportData)
-	      }
-	      fetch(`/api/rate/${mealId}`, init)
-	        .then(response => response.json())
-	        .then(data => {
-	          const listCopy = [...this.state.list]
-	          for (let i = 0; i < listCopy.length; i++) {
-	            if (listCopy[i].mealId === mealId) {
-	              listCopy[i].report = parseInt(report)
-	              this.setState({ list: listCopy })
-	            }
-	          }
-	        })
-	        .catch(error => console.error(error))
-	    } else if (category === 'foodPatch') {
-	      // do the foodPatch thing...
-	      const { mealId, name } = parameter.food
-	      // console.log(mealId, name)
-	      const patchData = {
-	        name, mealId
-	      }
-	      const init = {
-	        method: 'PATCH',
-	        headers: {
-	          'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify(patchData)
-	      }
-	      fetch(`/api/enter/${mealId}`, init)
-	        .then(response => response.json())
-	        .then(data => {
-	          const listCopy = [...this.state.list]
-	          const arrOfIds = listCopy.map(x => x.mealId)
-	          const index = arrOfIds.indexOf(mealId)
-	          listCopy[index].name = name
-	          this.setState({ list: listCopy })
-	        })
+	  if (category === 'food') {
+	    const postData = {
+	      meal: parameter.meal,
+	      mealtime: parameter.mealtime,
+	      isToday: this.state.isToday,
+	      enterDate: parameter.enterDate
 	    }
-	  } else {
-	    // console.log('It is not today!')
+	    const init = {
+	      method: 'POST',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify(postData)
+	    }
+	    fetch('/api/enter', init)
+	      .then(response => response.json())
+	      .then(data => {
+	        const listCopy = [...this.state.list]
+	        listCopy.push(data)
+	        this.setState({ list: listCopy })
+	      })
+	  } else if (category === 'rating') {
+	    const { mealId, report } = parameter.food
+	    const reportData = { report: parseInt(report), mealId }
+	    const init = {
+	      method: 'PATCH',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify(reportData)
+	    }
+	    fetch(`/api/rate/${mealId}`, init)
+	      .then(response => response.json())
+	      .then(data => {
+	        const listCopy = [...this.state.list]
+	        for (let i = 0; i < listCopy.length; i++) {
+	          if (listCopy[i].mealId === mealId) {
+	            listCopy[i].report = parseInt(report)
+	            this.setState({ list: listCopy })
+	          }
+	        }
+	      })
+	      .catch(error => console.error(error))
+	  } else if (category === 'foodPatch') {
+	    const { mealId, name } = parameter.food
+	    const patchData = { name, mealId }
+	    const init = {
+	      method: 'PATCH',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify(patchData)
+	    }
+	    fetch(`/api/enter/${mealId}`, init)
+	      .then(response => response.json())
+	      .then(data => {
+	        const listCopy = [...this.state.list]
+	        const arrOfIds = listCopy.map(x => x.mealId)
+	        const index = arrOfIds.indexOf(mealId)
+	        listCopy[index].name = name
+	        this.setState({ list: listCopy })
+	      })
 	  }
 	}
 
@@ -221,7 +213,14 @@ class HomePage extends Component {
 	        {
 	          this.state.dateSet
 	            ? <div className='todayTitleContainer'>
-	              <span style={{ textTransform: 'capitalize' }} className='todayTitle'>{ this.state.dateDisplay.day }</span>
+	              {
+	                this.state.isToday
+	                  ? <span className='todayTitle'>Today</span>
+	                  : <span
+	                    style={{ textTransform: 'capitalize' }}
+	                    className='todayTitle'
+	                  >{ this.state.dateDisplay.day }</span>
+	              }
 	              <span className='todayDate'>{ this.state.dateDisplay.display }</span>
           	</div>
 	            : <span className='todayTitleContainer'>date loading...</span>
