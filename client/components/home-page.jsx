@@ -15,7 +15,8 @@ class HomePage extends Component {
 	  dateSet: false,
 	  previousWeek: false,
 	  list: [],
-	  listLoaded: false
+	  listLoaded: false,
+	  isToday: ''
 	}
 
 	async componentDidMount() {
@@ -25,15 +26,17 @@ class HomePage extends Component {
 	  if (json.error) return this.props.history.push('/ls')
 	  if (this._isMounted) {
 	    this.setTime()
-	    this.setState({
-	      isLoggedIn: true
-	    })
+	    this.setState({ isLoggedIn: true })
 	  }
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 	  if (prevState.isLoggedIn !== this.state.isLoggedIn) {
 	    this.getList()
+	  }
+	  if (prevState.dateDisplay !== this.state.dateDisplay) {
+	    const isToday = this.state.dateToday.fullDate === this.state.dateDisplay.fullDate
+	    this.setState({ isToday: isToday })
 	  }
 	}
 
@@ -56,7 +59,7 @@ class HomePage extends Component {
 	  const displaySundayState = sundayFormatter(newDate)
 
 	  this.setState({
-	    dateToday: newDate,
+	    dateToday: displayDateState,
 	    dateDisplay: displayDateState,
 	    dateSunday: displaySundayState,
 	    dateSet: true,
@@ -111,7 +114,6 @@ class HomePage extends Component {
 	    const todaysSunday = sundayFormatter(this.state.dateToday)
 	    if (nextSundayState.fullDate === todaysSunday.fullDate) {
 	      this.setTime()
-	      this.setState({ })
 	    } else {
 	      this.setState({
 	        dateDisplay: nextSundayState,
@@ -134,14 +136,13 @@ class HomePage extends Component {
       .catch(err => console.error(err));
   }
 
-	addMeal = (category, parameter, isToday) => {
+	addMeal = (category, parameter) => {
 	  if (category === 'food') {
-	    // console.log('food:')
-	    // console.log(parameter.meal, parameter.mealtime, isToday)
+	    // console.log('food:', parameter, this.state.isToday)
 	  } else if (category === 'foodPatch') {
-	    // console.log('foodPatch:', parameter, isToday)
+	    // console.log('foodPatch:', parameter, this.state.isToday)
 	  } else if (category === 'rating') {
-	    // console.log('rating:', parameter, isToday)
+	    // console.log('rating:', parameter, this.state.isToday)
 	  }
 	}
 
