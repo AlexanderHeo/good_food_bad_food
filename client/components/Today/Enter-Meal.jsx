@@ -52,7 +52,7 @@ class EnterMeal extends Component {
 	      if (!this.props[`${this.props.mealtime}Ready`]) { // adding name
 	        const parameters = {
 	          meal: this.state.value,
-	          ready: true,
+	          // ready: true,
 	          mealtime: this.props.mealtime,
 	          enterDate: this.props.dateDisplay
 	        }
@@ -65,19 +65,29 @@ class EnterMeal extends Component {
 	          if (this.state.previousValue !== this.state.value) { // name edited
 	            const foodCopy = Object.assign({}, this.state.food)
 	            foodCopy.name = this.state.value
-	            const mealReady = `${this.state.food.mealtime}Ready`
+	            // const mealReady = `${this.state.food.mealtime}Ready`
 
 	            const parameters = {
 	              food: foodCopy,
-	              ready: this.props[mealReady],
+	              // ready: this.props[mealReady],
 	              mealtime: this.props.mealtime,
-	              enterDate: this.props.todaysDate
+	              enterDate: this.props.dateDisplay
+	            }
+	            const ratingParameters = {
+	              food: this.state.food,
+	              rating: this.state.rating,
+	              enterDate: this.props.dateDisplay
 	            }
 	            this.props.addMeal('foodPatch', parameters)
-	            this.props.addMeal('rating', this.state.rating)
+	            this.props.addMeal('rating', ratingParameters)
 	            this.props.handleClick('return')
 	          } else if (this.state.previousValue === this.state.value) { // name not edited
-	            this.props.addMeal('rating', this.state.rating)
+	            const parameters = {
+	              food: this.state.food,
+	              rating: this.state.rating,
+	              enterDate: this.props.dateDisplay
+	            }
+	            this.props.addMeal('rating', parameters)
 	            this.props.handleClick('return')
 	          }
 	        }
