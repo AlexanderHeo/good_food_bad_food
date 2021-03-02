@@ -83,6 +83,31 @@ app.get('/api/log-out', (req, res, next) => {
   res.json({ success: 'Successful log-out' });
 });
 
+app.get('/api/list', (req, res, next) => {
+  const { userId } = req.session;
+
+  const condition = new RegExp('^\\d+$');
+  if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404));
+  const sql = `
+  select "m"."name",
+  "m"."eatenAt",
+	"m"."mealId",
+	"t"."mealtime",
+  "r"."report"
+  from "meals" as "m"
+	left join "mealtime" as "t" using ("mealId")
+  left join "mealReports" as "r" using ("mealId")
+  where "m"."userId" = $1
+  order by "eatenAt" desc;
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows)
+    })
+    .catch(err => next(err));
+});
+
 app.post('/api/enter', (req, res, next) => {
   const userId = req.session.userId;
   const { meal, mealtime } = req.body;
@@ -230,31 +255,6 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
   db.query(SQL)
     .then(result => {
       res.json(result.rows);
-    })
-    .catch(err => next(err));
-});
-
-app.get('/api/list', (req, res, next) => {
-  const { userId } = req.session;
-
-  const condition = new RegExp('^\\d+$');
-  if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404));
-  const sql = `
-  select "m"."name",
-  "m"."eatenAt",
-	"m"."mealId",
-	"t"."mealtime",
-  "r"."report"
-  from "meals" as "m"
-	left join "mealtime" as "t" using ("mealId")
-  left join "mealReports" as "r" using ("mealId")
-  where "m"."userId" = $1
-  order by "eatenAt" desc;
-  `;
-  const params = [userId];
-  db.query(sql, params)
-    .then(result => {
-      res.json(result.rows)
     })
     .catch(err => next(err));
 });

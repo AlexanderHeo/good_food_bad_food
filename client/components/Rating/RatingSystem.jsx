@@ -62,7 +62,7 @@ const Container = styled.div`
 	justify-content: center;
 
 	.arrow {
-		width: 80%;
+		width: 100%;
 		height: 50px;
 		display: flex;
 		.end, .selection {
@@ -71,22 +71,19 @@ const Container = styled.div`
 			justify-content: center;
 			align-items: center;
 			background-color: var(--primary-0);
-
-			border-left: 4px solid var(--primary-6);
-			border-top: 4px solid var(--primary-6);
-			border-bottom: 4px solid var(--primary-6);
-			border-collapse: collapse;
-		}
-		.end:last-of-type {
-			border-right: 4px solid var(--primary-6);
+			border: none;
 		}
 		.end:first-of-type {
 			border-top-left-radius: 12px;
 			border-bottom-left-radius: 12px;
 		}
 		.end:last-of-type {
+			border-left: 1px solid var(--primary-6);
 			border-top-right-radius: 12px;
 			border-bottom-right-radius: 12px;
+		}
+		.selection {
+			border-left: 1px solid var(--primary-6);
 		}
 		.chosen {
 			background-color: var(--primary-6);
