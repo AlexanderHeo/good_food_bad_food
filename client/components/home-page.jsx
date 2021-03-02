@@ -137,21 +137,55 @@ class HomePage extends Component {
 
 	addMeal = (category, parameter) => {
 	  if (this.state.isToday) {
+
 	    if (category === 'food') {
-	      // console.log(category, parameter, 'isToday:', this.state.isToday)
-	    } else if (category === 'foodPatch') {
-	      // console.log(category, parameter, 'isToday:', this.state.isToday)
+	      const patchData = {
+	        meal: parameter.meal,
+	        mealtime: parameter.mealtime,
+	        isToday: this.state.isToday,
+	        enterDate: parameter.enterDate
+	      }
+	      const init = {
+	        method: 'POST',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(patchData)
+	      }
+	      fetch('/api/enter', init)
+	        .then(response => response.json())
+	        .then(data => {
+	          const listCopy = [...this.state.list]
+	          listCopy.push(data)
+	          this.setState({ list: listCopy })
+	        })
 	    } else if (category === 'rating') {
-	      // console.log(category, parameter, 'isToday:', this.state.isToday)
+	      const { mealId, report } = parameter.food
+	      const reportData = { report: parseInt(report), mealId }
+	      const init = {
+	        method: 'PATCH',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(reportData)
+	      }
+	      fetch(`/api/rate/${mealId}`, init)
+	        .then(response => response.json())
+	        .then(data => {
+	          const listCopy = [...this.state.list]
+	          for (let i = 0; i < listCopy.length; i++) {
+	            if (listCopy[i].mealId === mealId) {
+	              listCopy[i].report = parseInt(report)
+	              this.setState({ list: listCopy })
+	            }
+	          }
+	        })
+	        .catch(error => console.error(error))
+	    } else if (category === 'foodPatch') {
+	      // do the foodPatch thing...
 	    }
 	  } else {
-	    if (category === 'food') {
-	      // console.log(category, parameter, 'isToday:', this.state.isToday)
-	    } else if (category === 'foodPatch') {
-	      // console.log(category, parameter, 'isToday:', this.state.isToday)
-	    } else if (category === 'rating') {
-	      // console.log(category, parameter, 'isToday:', this.state.isToday)
-	    }
+	    // console.log('It is not today!')
 	  }
 	}
 
