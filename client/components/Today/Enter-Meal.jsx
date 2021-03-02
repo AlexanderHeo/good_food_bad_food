@@ -16,8 +16,6 @@ class EnterMeal extends Component {
 	componentDidMount() {
 	  const mealtime = this.props.mealtime
 	  const ready = `${mealtime}Ready`
-	  // console.log(this.props)
-	  this.checkIsItToday()
 	  if (this.props[ready]) {
 	    this.setState({
 	      previousValue: this.props[this.props.mealtime].name,
@@ -30,13 +28,8 @@ class EnterMeal extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-	  // console.log('cDU')
 	  if (prevState.editName !== this.state.editName) {
 	  	this.nameInput.focus()
-	  }
-	  if (prevProps.dateDisplay !== this.props.dateDisplay) {
-	    // console.log('new dateDisplay data')
-	    this.checkIsItToday()
 	  }
 	}
 
@@ -53,7 +46,6 @@ class EnterMeal extends Component {
 	  } else if (name === 'editName') {
 	    this.setState({ editName: true })
 	  } else if (name === 'add') {
-	    this.checkIsItToday()
 	    if (!this.state.value) { // if no input
 	      this.setState({ errorMessage: 'You need to enter something' })
 	    } else { // input valid
@@ -62,10 +54,9 @@ class EnterMeal extends Component {
 	          meal: this.state.value,
 	          ready: true,
 	          mealtime: this.props.mealtime,
-	          enterDate: this.props.todaysDate
+	          enterDate: this.props.dateDisplay
 	        }
-	        this.props.addMeal('food', parameters, this.state.isToday)
-	        // console.log('POST new meal', this.state.isToday)
+	        this.props.addMeal('food', parameters)
 	        this.props.handleClick('return')
 	      } else { // patching name
 	        if (!this.state.rating) { // check for rating
@@ -82,12 +73,11 @@ class EnterMeal extends Component {
 	              mealtime: this.props.mealtime,
 	              enterDate: this.props.todaysDate
 	            }
-	            this.props.addMeal('foodPatch', parameters, this.state.isToday)
-	            this.props.addMeal('rating', this.state.rating, this.state.isToday)
-	            // console.log('name edited - adding result', this.state.isToday)
+	            this.props.addMeal('foodPatch', parameters)
+	            this.props.addMeal('rating', this.state.rating)
 	            this.props.handleClick('return')
 	          } else if (this.state.previousValue === this.state.value) { // name not edited
-	            this.props.addMeal('rating', this.state.rating, this.state.isToday)
+	            this.props.addMeal('rating', this.state.rating)
 	            this.props.handleClick('return')
 	          }
 	        }
@@ -105,16 +95,7 @@ class EnterMeal extends Component {
 	  this.setState({ errorMessage: '' })
 	}
 
-	checkIsItToday = () => {
-	  // console.log(new Date(this.props.todaysDate).toTimeString())
-	  // console.log(new Date(this.props.dateDisplay.timestamp).toTimeString())
-	  // console.log(this.props.todaysDate === this.props.dateDisplay.timestamp)
-	  const isToday = this.props.todaysDate === this.props.dateDisplay.timestamp
-	  this.setState({ isToday: isToday })
-	}
-
 	render() {
-	  // console.log('today:', this.state.isToday)
 	  return (
 	    <Container>
 	      <div className='enterHeader'>
