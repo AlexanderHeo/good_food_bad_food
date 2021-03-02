@@ -4,7 +4,7 @@ import RatingSystem from '../Rating/RatingSystem'
 
 class EnterMeal extends Component {
 	state = {
-	  food: [],
+	  food: {},
 	  value: '',
 	  rating: '',
 	  errorMessage: '',
@@ -20,7 +20,8 @@ class EnterMeal extends Component {
 	    this.setState({
 	      previousValue: this.props[this.props.mealtime].name,
 	      value: this.props[this.props.mealtime].name,
-	      food: this.props[mealtime]
+	      food: this.props[mealtime],
+	      rating: this.props[this.props.mealtime].report
 	    })
 	  } else if (!this.props[ready]) {
 	    this.nameInput.focus()
@@ -65,7 +66,6 @@ class EnterMeal extends Component {
 	            const foodCopy = Object.assign({}, this.state.food)
 	            foodCopy.name = this.state.value
 	            foodCopy.report = this.state.rating
-
 	            const parameters = {
 	              food: foodCopy,
 	              mealtime: this.props.mealtime,
@@ -80,9 +80,10 @@ class EnterMeal extends Component {
 	            this.props.addMeal('rating', ratingParameters)
 	            this.props.handleClick('return')
 	          } else if (this.state.previousValue === this.state.value) { // name not edited
+	            const foodCopy = Object.assign({}, this.state.food)
+	            foodCopy.report = this.state.rating
 	            const parameters = {
-	              food: this.state.food,
-	              rating: this.state.rating,
+	              food: foodCopy,
 	              enterDate: this.props.dateDisplay
 	            }
 	            this.props.addMeal('rating', parameters)
@@ -154,7 +155,10 @@ class EnterMeal extends Component {
 	      <div className='voteContainer'>
 	        {
 	          this.props[`${this.props.mealtime}Ready`] &&
-						<RatingSystem handleClick={ this.handleButtonClick } />
+						<RatingSystem
+						  handleClick={ this.handleButtonClick }
+						  rating={ this.state.rating }
+						/>
 	        }
 	        {
 	          this.state.errorMessage
