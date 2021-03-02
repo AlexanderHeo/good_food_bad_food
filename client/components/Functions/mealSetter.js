@@ -1,4 +1,4 @@
-export const todayDisplay = (list, todayDate) => {
+export const displayFormatter = (list, todayDate) => {
   todayDate.timestamp.setHours(0, 0, 0, 0)
   const today = list.filter(x => {
     const t = new Date(x.eatenAt)
