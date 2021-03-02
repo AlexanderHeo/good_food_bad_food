@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import RatingSystem from '../Rating/RatingSystem'
-import { AddPlus, ReturnChevron } from '../UI/Icons'
 
 class EnterMeal extends Component {
 	state = {
@@ -10,33 +9,35 @@ class EnterMeal extends Component {
 	  rating: '',
 	  errorMessage: '',
 	  ready: false,
-	  editName: false
+	  editName: false,
+	  isToday: ''
 	}
 
 	componentDidMount() {
-
 	  const mealtime = this.props.mealtime
 	  const ready = `${mealtime}Ready`
+	  // console.log(this.props)
+	  this.checkIsItToday()
 	  if (this.props[ready]) {
 	    this.setState({
+	      previousValue: this.props[this.props.mealtime].name,
 	      value: this.props[this.props.mealtime].name,
 	      food: this.props[mealtime]
 	    })
+	  } else if (!this.props[ready]) {
+	    this.nameInput.focus()
 	  }
+	}
 
-	  // const mealtime = this.props.mealtime
-	  // if (this.props.[mealtime]) {
-	  //   console.log('first if')
-	  //   this.setState({
-	  //     value: this.props.[this.props.mealtime].name,
-	  //     food: this.props.[mealtime]
-	  //   })
-	  // }
-	  // const ready = `${mealtime}Ready`
-	  // if (this.props.[ready]) {
-	  //   console.log('second if')
-	  //   this.setState({ ready: true })
-	  // }
+	componentDidUpdate(prevProps, prevState) {
+	  // console.log('cDU')
+	  if (prevState.editName !== this.state.editName) {
+	  	this.nameInput.focus()
+	  }
+	  if (prevProps.dateDisplay !== this.props.dateDisplay) {
+	    // console.log('new dateDisplay data')
+	    this.checkIsItToday()
+	  }
 	}
 
 	handleButtonClick = e => {
@@ -44,48 +45,55 @@ class EnterMeal extends Component {
 	  const name = e.currentTarget.name
 	  if (name === 'return') {
 	    this.props.handleClick('return')
-	  } else if (name === 'add') {
-	    if (!this.state.value) {
-	      this.setState({
-	        errorMessage: 'You need to enter something'
-	      })
-	    } else {
-	      const foodCopy = Object.assign({}, this.state.food)
-	      foodCopy.name = this.state.value
-	      const mealReady = `${this.state.food.mealtime}Ready`
-
-	      const parameters = {
-	        food: foodCopy,
-	        ready: this.props[mealReady],
-	        mealtime: this.props.mealtime,
-	        enterDate: this.props.todaysDate
-	      }
-	      this.props.addMeal('food', parameters)
-	      this.props.handleClick('return')
-	    }
 	  } else if (name === '1' || name === '2' || name === '3' || name === '4' || name === '5') {
-	    this.setState({ rating: name })
-	  } else if (name === 'rating') {
-	    if (!this.state.rating) {
-	      this.setState({ errorMessage: 'Please pick a rating.' })
-	    } else {
-	      if (this.state.editName) {
-	        const nameParameters = {
-
-	        }
-	        this.props.addMeal('patchName', nameParameters)
-	      }
-	      const parameters = {
-	        food: this.state.food,
-	        report: this.state.rating
-	      }
-	      this.props.addMeal('rating', parameters)
-	      this.props.handleClick('return')
-	    }
-	  } else if (name === 'editName') {
 	    this.setState({
-	      editName: true
+	      rating: name,
+	      errorMessage: ''
 	    })
+	  } else if (name === 'editName') {
+	    this.setState({ editName: true })
+	  } else if (name === 'add') {
+	    this.checkIsItToday()
+	    if (!this.state.value) { // if no input
+	      this.setState({ errorMessage: 'You need to enter something' })
+	    } else { // input valid
+	      if (!this.props[`${this.props.mealtime}Ready`]) { // adding name
+	        const parameters = {
+	          meal: this.state.value,
+	          ready: true,
+	          mealtime: this.props.mealtime,
+	          enterDate: this.props.todaysDate
+	        }
+	        this.props.addMeal('food', parameters, this.state.isToday)
+	        // console.log('POST new meal', this.state.isToday)
+	        this.props.handleClick('return')
+	      } else { // patching name
+	        if (!this.state.rating) { // check for rating
+	          this.setState({ errorMessage: 'You need to enter a rating' })
+	        } else { // rating good
+	          if (this.state.previousValue !== this.state.value) { // name edited
+	            const foodCopy = Object.assign({}, this.state.food)
+	            foodCopy.name = this.state.value
+	            const mealReady = `${this.state.food.mealtime}Ready`
+
+	            const parameters = {
+	              food: foodCopy,
+	              ready: this.props[mealReady],
+	              mealtime: this.props.mealtime,
+	              enterDate: this.props.todaysDate
+	            }
+	            this.props.addMeal('foodPatch', parameters, this.state.isToday)
+	            this.props.addMeal('rating', this.state.rating, this.state.isToday)
+	            // console.log('name edited - adding result', this.state.isToday)
+	            this.props.handleClick('return')
+	          } else if (this.state.previousValue === this.state.value) { // name not edited
+	            this.props.addMeal('rating', this.state.rating, this.state.isToday)
+	            this.props.handleClick('return')
+	          }
+	        }
+	      }
+
+	    }
 	  }
 	}
 
@@ -97,84 +105,79 @@ class EnterMeal extends Component {
 	  this.setState({ errorMessage: '' })
 	}
 
+	checkIsItToday = () => {
+	  // console.log(new Date(this.props.todaysDate).toTimeString())
+	  // console.log(new Date(this.props.dateDisplay.timestamp).toTimeString())
+	  // console.log(this.props.todaysDate === this.props.dateDisplay.timestamp)
+	  const isToday = this.props.todaysDate === this.props.dateDisplay.timestamp
+	  this.setState({ isToday: isToday })
+	}
+
 	render() {
+	  // console.log('today:', this.state.isToday)
 	  return (
 	    <Container>
-	      <button name='return' className='returnButton' onClick={ this.handleButtonClick }>
-	        <ReturnChevron />
-	      </button>
-	      <h2 className='mealtime'>{ this.props.mealtime }</h2>
+	      <div className='enterHeader'>
+	        <button name='return' className='returnButton' onClick={ this.handleButtonClick }>
+	          <span className="iconify" data-icon="akar-icons:chevron-left" data-inline="false"></span>
+	        </button>
+	        <span>
+	          <h2 className='mealtime'>{ this.props.mealtime }</h2>
+	        </span>
+	      </div>
 	      <form className='form'>
 	        <label></label>
 	        {
 	          this.props[`${this.props.mealtime}Ready`]
-	            ? <div className='nameContainer'>
-
-	              {
-	                this.state.editName
-	                  ? <input
-	                    type='text'
-	                    placeholder='What did you eat?'
-	                    className='input'
-	                    value={ this.state.value }
-	                    onChange={ this.handleInputChange }
-	                    onFocus={ this.handleInputFocus }
-	                    style={{ width: '100%' }}
-	                  />
-	                  : <>
-	                    <span className='nameDisplay'>
-	                      {this.props.[this.props.mealtime].name}
-	                    </span>
-	                    <span>
-	                      <button
-	                        className='iconContainer'
-	                        name='editName'
-	                        onClick={ this.handleButtonClick }
-	                      >
-	                        <span className="iconify" data-icon="clarity:note-edit-line" data-inline="false"></span>
-	                      </button>
-	                    </span>
-	                  </>
-	              }
-
-	            </div>
-	            : <>
-	              <input
+	            ? this.state.editName
+	              ? <input
 	                type='text'
 	                placeholder='What did you eat?'
 	                className='input'
 	                value={ this.state.value }
 	                onChange={ this.handleInputChange }
 	                onFocus={ this.handleInputFocus }
+	                ref={ input => { this.nameInput = input } }
 	              />
-	              <button
-	                name='add'
-	                className='addButton'
-	                onClick={ this.handleButtonClick }
-	              >
-	                <AddPlus />
-	              </button>
-	            </>
-	        }
-	      </form>
-
-	      <div className='voteContainer'>
-	        {
-	          this.state.errorMessage
-	          ? <h3 className='errorMessage'>{ this.state.errorMessage }</h3>
-	          : this.props[`${this.props.mealtime}Ready`]
-	              ? <>
-	                <RatingSystem handleClick={ this.handleButtonClick } />
+	              : <div className='nameContainer'>
+	                <span className='nameDisplay'>
+	                  {this.props.[this.props.mealtime].name}
+	                </span>
 	                <button
-	                  name='rating'
-	                  className='addButton resultAdd'
+	                  className='iconContainer'
+	                  name='editName'
 	                  onClick={ this.handleButtonClick }
 	                >
-	                  <AddPlus />
+	                  <span className="iconify" data-icon="clarity:note-edit-line" data-inline="false"></span>
 	                </button>
-	              </>
-	              : null
-	      	}
+	            	</div>
+	            : <input
+	                type='text'
+	                placeholder='What did you eat?'
+	                className='input'
+	                value={ this.state.value }
+	                onChange={ this.handleInputChange }
+	                onFocus={ this.handleInputFocus }
+	                ref={ input => { this.nameInput = input } }
+	              />
+	        }
+	      </form>
+	      <div className='voteContainer'>
+	        {
+	          this.props[`${this.props.mealtime}Ready`] &&
+						<RatingSystem handleClick={ this.handleButtonClick } />
+	        }
+	        {
+	          this.state.errorMessage
+	            ? <span className='errorMessage'>{ this.state.errorMessage }</span>
+	            : <button
+	              name='add'
+	              className='addButton'
+	              onClick={ this.handleButtonClick }
+	            >
+	              <span className="iconify" data-icon="akar-icons:plus" data-inline="false"></span>
+	            </button>
+	        }
 	      </div>
 	    </Container>
 	  )
@@ -184,72 +187,80 @@ class EnterMeal extends Component {
 export default EnterMeal
 
 const Container = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
 	height: 100%;
 	background-color: var(--primary-2);
+	border-radius: 12px;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
+	padding: 12px 24px;
 
 	.returnButton, .addButton {
-		position: absolute;
-		width: 50px;
-		height: 50px;
-		border: 4px solid var(--primary-6);
-		border-radius: 50%;
+		width: 70px;
+		height: 40px;
+		border: none;
+		border-radius: 12px;
 	}
 	.returnButton {
+		position: absolute;
 		top: 0;
 		left: 0;
-		margin: 12px;
+		margin: 12px 0 0 24px;
 	}
 	.addButton {
-		margin: 0 6px;
-	}
-	.resultAdd {
-		margin-top: 12px;
 		position: relative;
+		margin-top: 12px;
 	}
-
-	.mealtime {
-		width: 100%;
-		text-align: center;
-	}
-
-	.form {
-		margin: 20px 0;
-	}
-	svg[data-icon="clarity:note-edit-line"] {
+	svg[data-icon="clarity:note-edit-line"],
+	svg[data-icon="akar-icons:plus"],
+	svg[data-icon="akar-icons:chevron-left"] {
 		font-size: 30px;
 		color: var(--primary-6);
 	}
-	.nameContainer {
+
+	.form {
+		width: 100%;
+		height: 40%;
 		display: flex;
 		align-items: center;
+
+		.input {
+			font-size: 1.2rem;
+			width: 100%;
+			outline: none;
+			border: 2px solid transparent;
+			border-radius: 12px;
+			padding: 8px 24px;
+		}
+		.input:invalid {
+			border: 2px solid var(--warning-4);
+		}
+		.nameContainer {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: var(--primary-0);
+			border-radius: 12px;
+			padding: 3px 0;
+			.nameDisplay {
+				font-size: 2rem;
+			}
+		}
 	}
-	.nameDisplay {
-		font-size: 2rem;
-	}
+
 	.iconContainer {
-		width: 50px;
-		height: 50px;
-		border: 4px solid var(--primary-6);
-		border-radius: 50%;
+		width: 40px;
+		height: 40px;
+		border: none;
+		border-radius: 12px;
 		background-color: var(--primary-0);
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		position: absolute;
+		right: 30px;
 		margin-left: 10px;
-	}
-	.input {
-		font-size: 1.2rem;
-		width: 80%;
-		border-radius: 20px;
-		padding: 10px 20px;
 	}
 
 	.voteContainer {
@@ -258,19 +269,12 @@ const Container = styled.div`
 		justify-content: center;
 		align-items: center;
 		width: 100%;
-		/* .vote {
-			width: 50px;
-			height: 50px;
-			border: 4px solid var(--primary-6);
-			border-radius: 50%;
-			background-color: var(--primary-0);
-			margin: 0 12px;
-		} */
 	}
 
 	.errorMessage {
 		text-align: center;
 		color: var(--warning-5);
+		font-size: 1.3rem;
 		font-weight: 700;
 	}
 `

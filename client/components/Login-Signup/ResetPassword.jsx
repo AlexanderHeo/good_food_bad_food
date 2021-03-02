@@ -9,7 +9,7 @@ const ResetPassword = props => (
       <p>Please email the webmaster and he will manually change your password for you, for now.</p>
       <p>Come back real soon for a real Reset Password feature</p>
     </div>
-    <Link to='/logo' className='link'>Return</Link>
+    <Link to='/login' className='link'>Return</Link>
   </Container>
 )
 
