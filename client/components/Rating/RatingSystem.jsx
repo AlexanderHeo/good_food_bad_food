@@ -6,13 +6,24 @@ class RatingSystem extends Component {
 	  highlight: ''
 	}
 
+	componentDidMount() {
+	  if (this.props.rating) {
+	    this.setState({ highlight: (this.props.rating).toString() })
+	  }
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevProps.rating !== this.props.rating && this.props.rating) {
+	    this.setState({ highlight: (this.props.rating).toString() })
+	  }
+	}
+
 	handleClick = e => {
 	  this.props.handleClick(e)
 	  this.setState({ highlight: e.target.name })
 	}
 
 	render() {
-
 	  let one = 'selection'
 	  let two = 'selection'
 	  let three = 'selection'
