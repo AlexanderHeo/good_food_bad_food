@@ -15,7 +15,6 @@ const TodaysMealItem = props => {
       </div>
       <div className='mealRating'>
         <RatingDisplay rating={ props.food.report } />
-        {/* <span>{ props.food.report }</span> */}
       </div>
     </Container>
   )

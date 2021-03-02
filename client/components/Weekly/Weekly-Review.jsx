@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 class WeeklyReview extends Component {
-
 	state = {
 	  weeklyReady: false,
 	  sunReady: false,
@@ -135,9 +134,6 @@ class WeeklyReview extends Component {
 	      ['fri', fri],
 	      ['sat', sat]
 	    ]
-	    // sundaysDate: sundayDates,
-	    // month: todayMonth,
-	    // year: todayYear
 	  })
 	}
 
