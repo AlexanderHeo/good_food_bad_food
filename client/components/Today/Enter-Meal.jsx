@@ -52,7 +52,6 @@ class EnterMeal extends Component {
 	      if (!this.props[`${this.props.mealtime}Ready`]) { // adding name
 	        const parameters = {
 	          meal: this.state.value,
-	          // ready: true,
 	          mealtime: this.props.mealtime,
 	          enterDate: this.props.dateDisplay
 	        }
@@ -65,16 +64,15 @@ class EnterMeal extends Component {
 	          if (this.state.previousValue !== this.state.value) { // name edited
 	            const foodCopy = Object.assign({}, this.state.food)
 	            foodCopy.name = this.state.value
-	            // const mealReady = `${this.state.food.mealtime}Ready`
+	            foodCopy.report = this.state.rating
 
 	            const parameters = {
 	              food: foodCopy,
-	              // ready: this.props[mealReady],
 	              mealtime: this.props.mealtime,
 	              enterDate: this.props.dateDisplay
 	            }
 	            const ratingParameters = {
-	              food: this.state.food,
+	              food: foodCopy,
 	              rating: this.state.rating,
 	              enterDate: this.props.dateDisplay
 	            }
