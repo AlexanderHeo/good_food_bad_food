@@ -109,9 +109,8 @@ class HomePage extends Component {
 	    const next = sunday.setHours(
 	      sunday.getHours() + (24 * 7)
 	    )
-	    const nextSunday = new Date(next)
-	    const nextSundayState = sundayFormatter(nextSunday)
-	    const todaysSunday = sundayFormatter(this.state.dateToday)
+	    const nextSundayState = sundayFormatter(new Date(next))
+	    const todaysSunday = sundayFormatter(new Date(this.state.dateToday.timestamp))
 	    if (nextSundayState.fullDate === todaysSunday.fullDate) {
 	      this.setTime()
 	    } else {
@@ -137,12 +136,22 @@ class HomePage extends Component {
   }
 
 	addMeal = (category, parameter) => {
-	  if (category === 'food') {
-	    // console.log('food:', parameter, this.state.isToday)
-	  } else if (category === 'foodPatch') {
-	    // console.log('foodPatch:', parameter, this.state.isToday)
-	  } else if (category === 'rating') {
-	    // console.log('rating:', parameter, this.state.isToday)
+	  if (this.state.isToday) {
+	    if (category === 'food') {
+	      // console.log(category, parameter, 'isToday:', this.state.isToday)
+	    } else if (category === 'foodPatch') {
+	      // console.log(category, parameter, 'isToday:', this.state.isToday)
+	    } else if (category === 'rating') {
+	      // console.log(category, parameter, 'isToday:', this.state.isToday)
+	    }
+	  } else {
+	    if (category === 'food') {
+	      // console.log(category, parameter, 'isToday:', this.state.isToday)
+	    } else if (category === 'foodPatch') {
+	      // console.log(category, parameter, 'isToday:', this.state.isToday)
+	    } else if (category === 'rating') {
+	      // console.log(category, parameter, 'isToday:', this.state.isToday)
+	    }
 	  }
 	}
 
