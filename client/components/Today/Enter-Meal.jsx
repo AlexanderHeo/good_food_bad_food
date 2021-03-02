@@ -4,7 +4,7 @@ import RatingSystem from '../Rating/RatingSystem'
 
 class EnterMeal extends Component {
 	state = {
-	  food: [],
+	  food: {},
 	  value: '',
 	  rating: '',
 	  errorMessage: '',
@@ -16,13 +16,12 @@ class EnterMeal extends Component {
 	componentDidMount() {
 	  const mealtime = this.props.mealtime
 	  const ready = `${mealtime}Ready`
-	  // console.log(this.props)
-	  this.checkIsItToday()
 	  if (this.props[ready]) {
 	    this.setState({
 	      previousValue: this.props[this.props.mealtime].name,
 	      value: this.props[this.props.mealtime].name,
-	      food: this.props[mealtime]
+	      food: this.props[mealtime],
+	      rating: this.props[this.props.mealtime].report
 	    })
 	  } else if (!this.props[ready]) {
 	    this.nameInput.focus()
@@ -30,13 +29,8 @@ class EnterMeal extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-	  // console.log('cDU')
 	  if (prevState.editName !== this.state.editName) {
 	  	this.nameInput.focus()
-	  }
-	  if (prevProps.dateDisplay !== this.props.dateDisplay) {
-	    // console.log('new dateDisplay data')
-	    this.checkIsItToday()
 	  }
 	}
 
@@ -53,19 +47,16 @@ class EnterMeal extends Component {
 	  } else if (name === 'editName') {
 	    this.setState({ editName: true })
 	  } else if (name === 'add') {
-	    this.checkIsItToday()
 	    if (!this.state.value) { // if no input
 	      this.setState({ errorMessage: 'You need to enter something' })
 	    } else { // input valid
 	      if (!this.props[`${this.props.mealtime}Ready`]) { // adding name
 	        const parameters = {
 	          meal: this.state.value,
-	          ready: true,
 	          mealtime: this.props.mealtime,
-	          enterDate: this.props.todaysDate
+	          enterDate: this.props.dateDisplay
 	        }
-	        this.props.addMeal('food', parameters, this.state.isToday)
-	        // console.log('POST new meal', this.state.isToday)
+	        this.props.addMeal('food', parameters)
 	        this.props.handleClick('return')
 	      } else { // patching name
 	        if (!this.state.rating) { // check for rating
@@ -74,20 +65,28 @@ class EnterMeal extends Component {
 	          if (this.state.previousValue !== this.state.value) { // name edited
 	            const foodCopy = Object.assign({}, this.state.food)
 	            foodCopy.name = this.state.value
-	            const mealReady = `${this.state.food.mealtime}Ready`
-
+	            foodCopy.report = this.state.rating
 	            const parameters = {
 	              food: foodCopy,
-	              ready: this.props[mealReady],
 	              mealtime: this.props.mealtime,
-	              enterDate: this.props.todaysDate
+	              enterDate: this.props.dateDisplay
 	            }
-	            this.props.addMeal('foodPatch', parameters, this.state.isToday)
-	            this.props.addMeal('rating', this.state.rating, this.state.isToday)
-	            // console.log('name edited - adding result', this.state.isToday)
+	            const ratingParameters = {
+	              food: foodCopy,
+	              rating: this.state.rating,
+	              enterDate: this.props.dateDisplay
+	            }
+	            this.props.addMeal('foodPatch', parameters)
+	            this.props.addMeal('rating', ratingParameters)
 	            this.props.handleClick('return')
 	          } else if (this.state.previousValue === this.state.value) { // name not edited
-	            this.props.addMeal('rating', this.state.rating, this.state.isToday)
+	            const foodCopy = Object.assign({}, this.state.food)
+	            foodCopy.report = this.state.rating
+	            const parameters = {
+	              food: foodCopy,
+	              enterDate: this.props.dateDisplay
+	            }
+	            this.props.addMeal('rating', parameters)
 	            this.props.handleClick('return')
 	          }
 	        }
@@ -105,16 +104,7 @@ class EnterMeal extends Component {
 	  this.setState({ errorMessage: '' })
 	}
 
-	checkIsItToday = () => {
-	  // console.log(new Date(this.props.todaysDate).toTimeString())
-	  // console.log(new Date(this.props.dateDisplay.timestamp).toTimeString())
-	  // console.log(this.props.todaysDate === this.props.dateDisplay.timestamp)
-	  const isToday = this.props.todaysDate === this.props.dateDisplay.timestamp
-	  this.setState({ isToday: isToday })
-	}
-
 	render() {
-	  // console.log('today:', this.state.isToday)
 	  return (
 	    <Container>
 	      <div className='enterHeader'>
@@ -165,7 +155,10 @@ class EnterMeal extends Component {
 	      <div className='voteContainer'>
 	        {
 	          this.props[`${this.props.mealtime}Ready`] &&
-						<RatingSystem handleClick={ this.handleButtonClick } />
+						<RatingSystem
+						  handleClick={ this.handleButtonClick }
+						  rating={ this.state.rating }
+						/>
 	        }
 	        {
 	          this.state.errorMessage

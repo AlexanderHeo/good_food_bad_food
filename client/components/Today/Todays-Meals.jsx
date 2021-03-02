@@ -25,6 +25,9 @@ class TodaysMeals extends Component {
     if (prevProps.dateDisplay !== this.props.dateDisplay) {
       this.separateMealTime()
     }
+    if (prevProps.list !== this.props.list) {
+      this.separateMealTime()
+    }
   }
 
   separateMealTime = () => {
