@@ -13,13 +13,13 @@ class WeeklyReview extends Component {
 	  friReady: false,
 	  satReady: false,
 	  thisWeek: [
-	    ['sun', '', ''],
-	    ['mon', '', ''],
-	    ['tue', '', ''],
-	    ['wed', '', ''],
-	    ['thu', '', ''],
-	    ['fri', '', ''],
-	    ['sat', '', '']
+	    ['sun', ''],
+	    ['mon', ''],
+	    ['tue', ''],
+	    ['wed', ''],
+	    ['thu', ''],
+	    ['fri', ''],
+	    ['sat', '']
 	  ],
 	  sundaysDate: '',
 	  month: '',
@@ -35,52 +35,51 @@ class WeeklyReview extends Component {
 	  if (prevProps.list !== this.props.list) {
 	    this.doTheThing()
 	  }
+	  if (prevProps.dateDisplay !== this.props.dateDisplay) {
+	    this.doTheThing()
+	  }
+	  if (prevProps.dateSunday !== this.props.dateSunday) {
+	    this.doTheThing()
+	  }
 	}
 
 	doTheThing = () => {
-	  const thisWeek = []
+	  const sunday = new Date(this.props.dateSunday.timestamp)
+	  const sundayCopy = new Date(this.props.dateSunday.timestamp)
+	  const oneWeek = sundayCopy.setHours(
+	    sunday.getHours() + (24 * 7)
+	  )
+	  const week = new Date(oneWeek)
+	  const thisWeek = this.props.list.filter(x => {
+	    const e = new Date(x.eatenAt)
+	    if (week > e && e >= sunday) return x
+	  })
 
-	  const todayDate = new Date()
-	  const todayDay = todayDate.getDay()
-	  let todayDateNum = todayDate.getDate()
-	  if (todayDateNum.toString().length === 1) {
-	    todayDateNum = `0${todayDateNum}`
-	  }
-	  let todayMonth = todayDate.getMonth()
-	  if (todayMonth.toString().length === 1) {
-	    todayMonth = `0${todayMonth + 1}`
-	  }
-	  const todayYear = todayDate.getFullYear()
-
-	  const sunday = todayDate.setHours(todayDate.getHours() - (todayDay * 24))
-	  const sundayDate = new Date(sunday)
-	  const sundayDates = sundayDate.getDate()
-	  const sundayMonth = sundayDate.getMonth() + 1
-	  const sundayYear = sundayDate.getFullYear()
-	  const sundayFullDate = `${sundayMonth} ${sundayDates} ${sundayYear}`
-	  const thisSunday = new Date(sundayFullDate)
-
-	  for (let i = 0; i < this.props.list.length; i++) {
-	    const eatenDate = new Date(this.props.list[i].eatenAt)
-	    if (eatenDate >= thisSunday) {
-	      thisWeek.push(this.props.list[i])
-	    }
-	  }
-
-	  if (sundayDates === todayDateNum) {
-	    this.setState({ highlight: 'sun' })
-	  } else if (sundayDates + 1 === todayDateNum) {
-	    this.setState({ highlight: 'mon' })
-	  } else if (sundayDates + 2 === todayDateNum) {
-	    this.setState({ highlight: 'tue' })
-	  } else if (sundayDates + 3 === todayDateNum) {
-	    this.setState({ highlight: 'wed' })
-	  } else if (sundayDates + 4 === todayDateNum) {
-	    this.setState({ highlight: 'thu' })
-	  } else if (sundayDates + 5 === todayDateNum) {
-	    this.setState({ highlight: 'fri' })
-	  } else if (sundayDates + 6 === todayDateNum) {
-	    this.setState({ highlight: 'sat' })
+	  const displayDay = this.props.dateDisplay.day
+	  switch (displayDay) {
+	    case 'Sunday':
+	      this.setState({ highlight: displayDay })
+	      break
+	    case 'Monday':
+	      this.setState({ highlight: displayDay })
+	      break
+	    case 'Tueday':
+	      this.setState({ highlight: displayDay })
+	      break
+	    case 'Wednesday':
+	      this.setState({ highlight: displayDay })
+	      break
+	    case 'Thursday':
+	      this.setState({ highlight: displayDay })
+	      break
+	    case 'Friday':
+	      this.setState({ highlight: displayDay })
+	      break
+	    case 'Saturday':
+	      this.setState({ highlight: displayDay })
+	      break
+	    default:
+	      break
 	  }
 
 	  const sun = []
@@ -135,51 +134,64 @@ class WeeklyReview extends Component {
 	      ['thu', thu],
 	      ['fri', fri],
 	      ['sat', sat]
-	    ],
-	    sundaysDate: sundayDates,
-	    month: todayMonth,
-	    year: todayYear
+	    ]
+	    // sundaysDate: sundayDates,
+	    // month: todayMonth,
+	    // year: todayYear
 	  })
 	}
 
+	// handles Weekly Review Click to display previous day
 	handleClick = (date, day) => {
-	  this.setState({ highlight: day.toLowerCase() })
+	  this.setState({ highlight: day })
 	  this.props.handleClick(date, day)
 	}
 
 	render() {
 	  let sun, mon, tue, wed, thu, fri, sat
 	  switch (this.state.highlight) {
-	    case 'sun':
+	    case 'Sunday':
 	      sun = 'today'
 	      break
-	    case 'mon':
+	    case 'Monday':
 	      mon = 'today'
 	      break
-	    case 'tue':
+	    case 'Tuesday':
 	      tue = 'today'
 	      break
-	    case 'wed':
+	    case 'Wednesday':
 	      wed = 'today'
 	      break
-	    case 'thu':
+	    case 'Thursday':
 	      thu = 'today'
 	      break
-	    case 'fri':
+	    case 'Friday':
 	      fri = 'today'
 	      break
-	    case 'sat':
+	    case 'Saturday':
 	      sat = 'today'
 	      break
 
 	  }
 
 	  const weekDates = []
-	  if (this.state.weeklyReady) {
-	    for (let i = 0; i < 7; i++) {
-	      weekDates.push(`${this.state.year}-${this.state.month}-${parseInt(this.state.sundaysDate) + i}`)
+	  const sunday = new Date(this.props.dateSunday.timestamp)
+	  for (var i = 0; i < 7; i++) {
+	    if (i === 0) {
+	      const d = sunday.setHours(
+	        sunday.getHours()
+	      )
+	      const date = new Date(d)
+	      weekDates.push(date)
+	    } else {
+	      const d = sunday.setHours(
+	        sunday.getHours() + 24
+	      )
+	      const date = new Date(d)
+	      weekDates.push(date)
 	    }
 	  }
+
 	  return (
 	    <Table>
 	      {
@@ -187,22 +199,22 @@ class WeeklyReview extends Component {
 					<>
 					  <thead className='tableHead'>
 					    <tr className='tableRow'>
-					      <th className={sun} onClick={ () => this.handleClick(weekDates[0], 'Sun') }>Sun</th>
-					      <th className={mon} onClick={ () => this.handleClick(weekDates[1], 'Mon') }>Mon</th>
-					      <th className={tue} onClick={ () => this.handleClick(weekDates[2], 'Tue') }>Tue</th>
-					      <th className={wed} onClick={ () => this.handleClick(weekDates[3], 'Wed') }>Wed</th>
-					      <th className={thu} onClick={ () => this.handleClick(weekDates[4], 'Thu') }>Thu</th>
-					      <th className={fri} onClick={ () => this.handleClick(weekDates[5], 'Fri') }>Fri</th>
-					      <th className={sat} onClick={ () => this.handleClick(weekDates[6], 'Sat') }>Sat</th>
+					      <th className={sun} onClick={ () => this.handleClick(weekDates[0], 'Sunday') }>Sun</th>
+					      <th className={mon} onClick={ () => this.handleClick(weekDates[1], 'Monday') }>Mon</th>
+					      <th className={tue} onClick={ () => this.handleClick(weekDates[2], 'Tuesday') }>Tue</th>
+					      <th className={wed} onClick={ () => this.handleClick(weekDates[3], 'Wednesday') }>Wed</th>
+					      <th className={thu} onClick={ () => this.handleClick(weekDates[4], 'Thursday') }>Thu</th>
+					      <th className={fri} onClick={ () => this.handleClick(weekDates[5], 'Friday') }>Fri</th>
+					      <th className={sat} onClick={ () => this.handleClick(weekDates[6], 'Saturday') }>Sat</th>
 					    </tr>
 					    <tr className='tableRow'>
-					      <th className={sun} onClick={ () => this.handleClick(weekDates[0], 'Sun') }>{this.state.sundaysDate}</th>
-					      <th className={mon} onClick={ () => this.handleClick(weekDates[1], 'Mon') }>{this.state.sundaysDate + 1}</th>
-					      <th className={tue} onClick={ () => this.handleClick(weekDates[2], 'Tue') }>{this.state.sundaysDate + 2}</th>
-					      <th className={wed} onClick={ () => this.handleClick(weekDates[3], 'Wed') }>{this.state.sundaysDate + 3}</th>
-					      <th className={thu} onClick={ () => this.handleClick(weekDates[4], 'Thu') }>{this.state.sundaysDate + 4}</th>
-					      <th className={fri} onClick={ () => this.handleClick(weekDates[5], 'Fri') }>{this.state.sundaysDate + 5}</th>
-					      <th className={sat} onClick={ () => this.handleClick(weekDates[6], 'Sat') }>{this.state.sundaysDate + 6}</th>
+					      <th className={sun} onClick={ () => this.handleClick(weekDates[0], 'Sunday') }>{ new Date(weekDates[0]).getDate()}</th>
+					      <th className={mon} onClick={ () => this.handleClick(weekDates[1], 'Monday') }>{ new Date(weekDates[1]).getDate()}</th>
+					      <th className={tue} onClick={ () => this.handleClick(weekDates[2], 'Tuesday') }>{ new Date(weekDates[2]).getDate()}</th>
+					      <th className={wed} onClick={ () => this.handleClick(weekDates[3], 'Wednesday') }>{ new Date(weekDates[3]).getDate()}</th>
+					      <th className={thu} onClick={ () => this.handleClick(weekDates[4], 'Thursday') }>{ new Date(weekDates[4]).getDate()}</th>
+					      <th className={fri} onClick={ () => this.handleClick(weekDates[5], 'Friday') }>{ new Date(weekDates[5]).getDate()}</th>
+					      <th className={sat} onClick={ () => this.handleClick(weekDates[6], 'Saturday') }>{ new Date(weekDates[6]).getDate()}</th>
 					    </tr>
 					  </thead>
 					  <tbody className='tableBody'>
@@ -226,7 +238,7 @@ class WeeklyReview extends Component {
 					          }
 					          if (isNaN(avg)) { avg = '' }
 					          const weekDays = [sun, mon, tue, wed, thu, fri, sat]
-					          const weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+					          const weekNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 					          return <td className={ weekDays[index] } onClick={ () => this.handleClick(weekDates[index], weekNames[index]) } key={ name }>{ avg }</td>
 					        })
 					      }
@@ -246,6 +258,7 @@ const Table = styled.table`
 	margin: 6px 0;
 	text-align: center;
 	background-color: var(--primary-0);
+	border-radius: 12px;
 
 	.tableHead {
 		border-bottom: 1px solid var(--primary-6);

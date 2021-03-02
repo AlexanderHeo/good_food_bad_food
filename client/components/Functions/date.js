@@ -19,8 +19,8 @@ export const dateFormatter = date => {
   return returnDate
 }
 
-export const sundayFormatter = () => {
-  const timestamp = new Date()
+export const sundayFormatter = date => {
+  const timestamp = new Date(date)
   const dayNum = timestamp.getDay()
   const sunday = timestamp.setHours(timestamp.getHours() - (24 * dayNum))
   const newSunday = new Date(sunday)

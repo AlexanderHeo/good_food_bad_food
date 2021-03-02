@@ -58,7 +58,7 @@ const Container = styled.div`
 		align-items: center;
 		font-size: 1.4rem;
 		font-weight: 700;
-		border-width: 4px;
+		border-width: 2px;
 		border-style: solid;
 		border-radius: 50%;
 	}
