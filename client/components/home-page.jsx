@@ -183,6 +183,27 @@ class HomePage extends Component {
 	        .catch(error => console.error(error))
 	    } else if (category === 'foodPatch') {
 	      // do the foodPatch thing...
+	      const { mealId, name } = parameter.food
+	      // console.log(mealId, name)
+	      const patchData = {
+	        name, mealId
+	      }
+	      const init = {
+	        method: 'PATCH',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(patchData)
+	      }
+	      fetch(`/api/enter/${mealId}`, init)
+	        .then(response => response.json())
+	        .then(data => {
+	          const listCopy = [...this.state.list]
+	          const arrOfIds = listCopy.map(x => x.mealId)
+	          const index = arrOfIds.indexOf(mealId)
+	          listCopy[index].name = name
+	          this.setState({ list: listCopy })
+	        })
 	    }
 	  } else {
 	    // console.log('It is not today!')
