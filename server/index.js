@@ -7,8 +7,6 @@ const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
 
 const bcrypt = require('bcrypt');
-// const axios = require('axios');
-// const pg = require('pg');
 
 const app = express();
 
@@ -110,65 +108,51 @@ app.get('/api/list', (req, res, next) => {
 
 app.post('/api/enter', (req, res, next) => {
   const userId = req.session.userId;
-  const { meal, mealtime } = req.body;
+  const { meal, mealtime, isToday, enterDate } = req.body;
+
   if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400));
   else if (!meal) return next(new ClientError('Please enter a meal.', 400));
   const sql = `
-    with add_to_meals as (
-      insert into "meals" ("name", "userId")
-      values ($1, $2)
-      returning *
-    ), add_to_reports as (
-      insert into "mealReports" ("mealId")
-      select "mealId" from "add_to_meals"
-    ), add_to_mealtime as (
+		with add_to_meals as (
+			insert into "meals" ("name", "userId")
+			values ($1, $2)
+			returning "mealId", "name", "eatenAt"
+		), add_to_reports as (
+			insert into "mealReports" ("mealId")
+			select "mealId" from "add_to_meals"
+		), add_to_mealtime as (
 			insert into "mealtime" ("mealId", "mealtime")
 			values (
 				(select "mealId" from "add_to_meals"), $3)
 			)
 			select *
 			from "add_to_meals"
-  `;
+	`;
   const params = [meal, userId, mealtime];
   db.query(sql, params)
     .then(result => {
       const postedMeal = result.rows[0]
-      postedMeal.mealtime = mealtime
-      postedMeal.report = null
-      res.status(200).json(postedMeal)
-      // const addedMeal = result.rows[0];
-      // return axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?s=${addedMeal.name}`)
-      //   .then(response => {
-      //     if (!response.data.meals) return res.status(201).json(addedMeal.mealId);
-      //     const mealData = response.data.meals[0];
-      //     const ingredients = [];
-      //     Object.keys(mealData).filter(key => {
-      //       if (key.includes('strIngredient') && mealData[key]) return ingredients.push(mealData[key]);
-      //     });
-      //     const insertValues = ingredients.map(ingredient => {
-      //       return `(${pg.Client.prototype.escapeLiteral(ingredient)})`;
-      //     }).join(',');
-      //     const insertValues2 = ingredients.map(ingredient => {
-      //       return `(${addedMeal.mealId}, ${pg.Client.prototype.escapeLiteral(ingredient)})`;
-      //     }).join(',');
-      //     const ingredientSQL = `
-      //     with add_to_ingredients as (
-      //       insert into "ingredients"("name")
-      //       values ${insertValues}
-      //       returning *
-      //     ), add_to_meal_ingredients as (
-      //       insert into "mealIngredients" ("mealId", "ingredientName")
-      //       values ${insertValues2}
-      //       returning *
-      //     )
-      //     select *
-      //     from "add_to_meal_ingredients";
-      //     `;
-      //     return db.query(ingredientSQL)
-      //       .then(ingreTable => {
-      //         res.json(ingreTable.rows);
-      //       });
-      //   });
+      if (isToday) {
+        postedMeal.mealtime = mealtime
+        postedMeal.report = null
+        res.status(200).json(postedMeal)
+      } else {
+        const { mealId } = postedMeal
+        const { timestamp } = enterDate
+        const eatenAt = new Date(timestamp)
+        const sql = `
+					update "meals" set "eatenAt" = $1 where "mealId" = $2
+					returning *
+				`
+        const params = [eatenAt, mealId]
+        db.query(sql, params)
+          .then(result => {
+            const postedMeal = result.rows[0]
+            postedMeal.mealtime = mealtime
+            postedMeal.report = null
+            res.status(200).json(postedMeal)
+          })
+      }
     })
     .catch(error =>
       next(error)
