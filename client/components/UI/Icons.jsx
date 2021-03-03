@@ -22,7 +22,7 @@ const HamburgerContainer = styled.div`
 		.bar {
 			width: 30px;
 			height: 3px;
-			background-color: var(--primary-6);
+			background-color: var(--primary-4);
 			margin: 4px 0;
 			border-radius: 10px;
 		}
@@ -121,6 +121,56 @@ const HamburgerContainer = styled.div`
 		}
 	}
 
+`
+
+export const List = props => (
+  <ListContainer>
+    <div className={ props.clicked ? 'list clicked' : 'list closed' }>
+      <div className='bar bar1'>
+        <div className='dot dot1' />
+        <div className='line line1' />
+      </div>
+      <div className='bar bar2'>
+        <div className='dot dot2' />
+        <div className='line line2' />
+      </div>
+      <div className='bar bar3'>
+        <div className='dot dot3' />
+        <div className='line line3' />
+      </div>
+    </div>
+  </ListContainer>
+)
+
+const ListContainer = styled.div`
+
+	.list {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.bar {
+		display: flex;
+		margin: 3px 0;
+		display: flex;
+		align-items: center;
+		.dot, .line {
+			border-radius: 10px;
+		}
+		.dot {
+			width: 4px;
+			height: 4px;
+			background-color: var(--primary-4);
+			margin-right: 3px;
+		}
+		.line {
+			width: 25px;
+			height: 3px;
+			background-color: var(--primary-4);
+		}
+	}
 `
 
 export const AddPlus = props => (
