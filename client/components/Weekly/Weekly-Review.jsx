@@ -45,9 +45,7 @@ class WeeklyReview extends Component {
 	doTheThing = () => {
 	  const sunday = new Date(this.props.dateSunday.timestamp)
 	  const sundayCopy = new Date(this.props.dateSunday.timestamp)
-	  const oneWeek = sundayCopy.setHours(
-	    sunday.getHours() + (24 * 7)
-	  )
+	  const oneWeek = sundayCopy.setHours(sunday.getHours() + (24 * 7))
 	  const week = new Date(oneWeek)
 	  const thisWeek = this.props.list.filter(x => {
 	    const e = new Date(x.eatenAt)
@@ -93,31 +91,24 @@ class WeeklyReview extends Component {
 	    switch (dayNum) {
 	      case 0:
 	        sun.push(x)
-	        this.setState({ sunReady: true })
 	        break
 	      case 1:
 	        mon.push(x)
-	        this.setState({ monReady: true })
 	        break
 	      case 2:
 	        tue.push(x)
-	        this.setState({ tueReady: true })
 	        break
 	      case 3:
 	        wed.push(x)
-	        this.setState({ wedReady: true })
 	        break
 	      case 4:
 	        thu.push(x)
-	        this.setState({ thuReady: true })
 	        break
 	      case 5:
 	        fri.push(x)
-	        this.setState({ friReady: true })
 	        break
 	      case 6:
 	        sat.push(x)
-	        this.setState({ satReady: true })
 	        break
 	    }
 	  })
@@ -132,14 +123,25 @@ class WeeklyReview extends Component {
 	      ['thu', thu],
 	      ['fri', fri],
 	      ['sat', sat]
-	    ]
+	    ],
+	    sunReady: true,
+	    monReady: true,
+	    tueReady: true,
+	    wedReady: true,
+	    thuReady: true,
+	    friReady: true,
+	    satReady: true
 	  })
 	}
 
 	// handles Weekly Review Click to display previous day
 	handleClick = (date, day) => {
-	  this.setState({ highlight: day })
-	  this.props.handleClick(date, day)
+	  const todaysDate = new Date(this.props.dateToday.timestamp)
+	  const displayDate = new Date(date)
+	  if (todaysDate >= displayDate) {
+	    this.setState({ highlight: day })
+	    this.props.handleClick(date, day)
+	  }
 	}
 
 	render() {
@@ -166,22 +168,17 @@ class WeeklyReview extends Component {
 	    case 'Saturday':
 	      sat = 'today'
 	      break
-
 	  }
 
 	  const weekDates = []
 	  const sunday = new Date(this.props.dateSunday.timestamp)
 	  for (var i = 0; i < 7; i++) {
 	    if (i === 0) {
-	      const d = sunday.setHours(
-	        sunday.getHours()
-	      )
+	      const d = sunday.setHours(sunday.getHours())
 	      const date = new Date(d)
 	      weekDates.push(date)
 	    } else {
-	      const d = sunday.setHours(
-	        sunday.getHours() + 24
-	      )
+	      const d = sunday.setHours(sunday.getHours() + 24)
 	      const date = new Date(d)
 	      weekDates.push(date)
 	    }
@@ -221,9 +218,7 @@ class WeeklyReview extends Component {
 					          const ready = `${name}Ready`
 					          if (ready) {
 					            const reports = []
-					            x[1].forEach(x => {
-					              if (x.report) reports.push(x.report)
-					            })
+					            x[1].forEach(x => { if (x.report) reports.push(x.report) })
 					            const total = reports.reduce((a, b) => a + b, 0)
 					            avg = (total / reports.length).toFixed(2)
 					            const avgSplit = avg.split('.')
@@ -243,6 +238,7 @@ class WeeklyReview extends Component {
 	      }
 	    </Table>
 	  )
+
 	}
 }
 
