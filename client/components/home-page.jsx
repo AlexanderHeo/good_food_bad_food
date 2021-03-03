@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { dateFormatter, sundayFormatter } from './Functions/date';
+import Lists from './Lists/Lists';
 import Settings from './Settings/Settings';
 import TodaysMeals from './Today/Todays-Meals';
 import Footer from './UI/Footer';
@@ -17,7 +18,9 @@ class HomePage extends Component {
 	  list: [],
 	  listLoaded: false,
 	  isToday: '',
-	  isFuture: ''
+	  isFuture: '',
+	  listButtonClicked: true,
+	  hamburgerClicked: false
 	}
 
 	async componentDidMount() {
@@ -98,6 +101,8 @@ class HomePage extends Component {
 	  const action = e.currentTarget.name
 	  if (action === 'today') {
 	    this.setTime()
+	  } else if (action === 'list') {
+	    this.setState({ listButtonClicked: !this.state.listButtonClicked })
 	  } else if (action === 'hamburger') {
 	    this.setState({ hamburgerClicked: !this.state.hamburgerClicked })
 	  } else if (action === 'previousWeek') {
@@ -291,10 +296,9 @@ class HomePage extends Component {
   					/>
 	        }
 	      </section>
-
 	      {
 	        this.state.hamburgerClicked &&
-  					<section className={ this.state.hamburgerClicked ? `${'section settingsSection open'}` : `${'section settingsSection closed'}` }
+  					<section className={ this.state.hamburgerClicked ? 'section settingsSection open' : 'section settingsSection closed' }
   					>
   					  <Settings
   					    clicked={ this.state.hamburgerClicked }
@@ -302,7 +306,13 @@ class HomePage extends Component {
   					    logout={ this.handleLogOut } />
   					</section>
 	      }
-
+	      {
+	        this.state.listButtonClicked &&
+					<section className={ this.state.listButtonClicked ? 'lists open' : 'lists closed' }
+					>
+					  <Lists />
+					</section>
+	      }
 	      <div className='footer'>
         	<Footer
 	          isToday={ this.state.isToday }
