@@ -68,9 +68,11 @@ class RatingSystem extends Component {
 export default RatingSystem
 
 const Container = styled.div`
-	width: 100%;
+	width: 80%;
 	display: flex;
 	justify-content: center;
+	border: 2px solid var(--primary-4);
+	border-radius: 12px;
 
 	.arrow {
 		width: 100%;
@@ -83,21 +85,22 @@ const Container = styled.div`
 			align-items: center;
 			background-color: var(--primary-0);
 			border: none;
+			outline: none;
 		}
 		.end:first-of-type {
 			border-top-left-radius: 12px;
 			border-bottom-left-radius: 12px;
 		}
 		.end:last-of-type {
-			border-left: 1px solid var(--primary-6);
+			border-left: 1px solid var(--primary-4);
 			border-top-right-radius: 12px;
 			border-bottom-right-radius: 12px;
 		}
 		.selection {
-			border-left: 1px solid var(--primary-6);
+			border-left: 1px solid var(--primary-4);
 		}
 		.chosen {
-			background-color: var(--primary-6);
+			background-color: var(--primary-4);
 			color: var(--primary-0);
 		}
 	}

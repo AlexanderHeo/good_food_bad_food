@@ -9,7 +9,7 @@ const Footer = props => (
 			<button
 			  name='today'
 			  onClick={ props.handleClick }
-			  className='button'
+			  className='button home'
 			>
 			  <span className="iconify" data-icon="bx:bxs-home-smile" data-inline="false"></span>
 			</button>
@@ -40,5 +40,11 @@ const Container = styled.div`
 		outline: none;
 		width: 50px;
 		height: 50px
+	}
+	.home {
+		font-size: 36px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 `
