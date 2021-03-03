@@ -45,7 +45,7 @@ class EnterMeal extends Component {
 	      rating: name,
 	      errorMessage: ''
 	    })
-	  } else if (name === 'editName') { // edited name
+	  } else if (name === 'editName') { // change name display to input
 	    this.setState({ editName: true })
 	  } else if (name === 'add') { // clicked plus button
 	    if (!this.state.value) { // if input invalid
@@ -94,6 +94,9 @@ class EnterMeal extends Component {
 	      }
 
 	    }
+	  } else if (name === 'delete') {
+	    this.props.addMeal('delete', this.props[this.props.mealtime].mealId)
+	    this.props.handleClick('return')
 	  }
 	}
 
