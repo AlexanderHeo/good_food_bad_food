@@ -310,7 +310,7 @@ class HomePage extends Component {
 	        this.state.listButtonClicked &&
 					<section className={ this.state.listButtonClicked ? 'lists open' : 'lists closed' }
 					>
-					  <Lists />
+					  <Lists list={ this.state.list } />
 					</section>
 	      }
 	      <div className='footer'>

@@ -87,19 +87,23 @@ class Lists extends Component {
 
 	  return (
 	    <Container>
-	      <section className='listChooserContainer'>
-					List Chooser
+	      <section className='listHeader'>
+	        <div className='title'>Your avg/most/leasts</div>
 	      </section>
 	      <section className='listContainer'>
 					list
 	      </section>
 	      <section className='buttonContainer'>
-	        <Level1 handleClick={ this.handleClick } />
+	        <Level1
+	          handleClick={ this.handleClick }
+	          level1={ this.state.level1 }
+	        />
 	      	{
 	          this.state.level1 &&
 						<Level2
 						  handleClick={ this.handleClick }
 						  dayOrRating={ this.state.dayOrRating }
+						  level2={ this.state.level2 }
 						/>
 	        }
 	        { Level3 }
@@ -118,6 +122,19 @@ const Container = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
+
+	.listHeader {
+		text-align: center;
+		padding: 24px 0;
+		.title {
+			font-size: 1.4rem;
+			font-weight: 700;
+		}
+	}
+
+	.listContainer {
+		border: 10px solid hotpink;
+	}
 
 	.buttonContainer {
 		width: 100%;
