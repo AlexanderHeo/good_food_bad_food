@@ -5,22 +5,22 @@ class Level3Meal extends Component {
     return (
       <section className='buttonContainer level3'>
         <button
-          value='breakfast'
+          name='meal'
           onClick={ this.props.handleClick }
           className='button'
         >Breakfast</button>
         <button
-          value='lunch'
+          name='meal'
           onClick={ this.props.handleClick }
           className='button'
         >Lunch</button>
         <button
-          value='dinner'
+          name='meal'
           onClick={ this.props.handleClick }
           className='button'
         >Dinner</button>
         <button
-          value='snacks'
+          name='meal'
           onClick={ this.props.handleClick }
           className='button'
         >Snacks</button>
