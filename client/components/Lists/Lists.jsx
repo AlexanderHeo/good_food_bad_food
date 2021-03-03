@@ -19,15 +19,14 @@ class Lists extends Component {
 
 	doTheThing = () => {
 	  const { level1, level2 } = this.state
-	  // console.log(level1, level2, level3)
 	  if (!level2) {
 	    this.setState({ displayList: [] })
 	  } else if (level1 === 'average') {
 	    this.getAverage(level2)
 	  } else if (level1 === 'most') {
-	    this.getMost(level2)
+	    this.getMost(level2, 'most')
 	  } else if (level1 === 'least') {
-	    // set average
+	    this.getMost(level2, 'least')
 	  }
 	}
 
@@ -94,31 +93,71 @@ class Lists extends Component {
 	  }
 	}
 
-	// getMost = filter => {
-	//   if (filter === 'meal') {
+	getMost = (filter, rating) => {
+	  const { list } = this.props
+	  if (filter === 'meal') {
+	    const breakfast = []
+	    const lunch = []
+	    const dinner = []
+	    const snacks = []
+	    list.forEach(x => {
+	      const mealtime = x.mealtime
+	      switch (mealtime) {
+	        case 'breakfast':
+	          breakfast.push(x)
+	          break
+	        case 'lunch':
+	          lunch.push(x)
+	          break
+	        case 'dinner':
+	          dinner.push(x)
+	          break
+	        case 'snacks':
+	          snacks.push(x)
+	          break
+	        default:
+	          break
+	      }
+	    })
+	    breakfast.sort((a, b) => a.report - b.report)
+	    lunch.sort((a, b) => a.report - b.report)
+	    dinner.sort((a, b) => a.report - b.report)
+	    snacks.sort((a, b) => a.report - b.report)
+	    if (rating === 'most') {
+	      breakfast.reverse()
+	      lunch.reverse()
+	      dinner.reverse()
+	      snacks.reverse()
+	    }
 
-	//   } else if (filter === 'overall') {
-
-	//   }
-	// }
+	    this.setState({
+	      displayList: [
+	        { breakfast }, { lunch }, { dinner }, { snacks }
+	      ]
+	    })
+	  }
+	}
 
 	handleClick = e => {
 	  e.preventDefault()
 	  const name = e.target.getAttribute('name')
 	  if (name === 'average') {
 	    this.setState({
+	      displayList: [],
 	      level1: 'average',
 	      level2: '',
 	      dayOrRating: 'day'
 	    })
 	  } else if (name === 'most') {
 	    this.setState({
+	      displayList: [],
 	      level1: 'most',
 	      level2: '',
 	      dayOrRating: 'rating'
 	    })
 	  } else if (name === 'least') {
 	    this.setState({
+	      displayList: [],
 	      level1: 'least',
 	      level2: '',
 	      dayOrRating: 'rating'
