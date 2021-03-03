@@ -45,7 +45,7 @@ class EnterMeal extends Component {
 	      rating: name,
 	      errorMessage: ''
 	    })
-	  } else if (name === 'editName') { // edited name
+	  } else if (name === 'editName') { // change name display to input
 	    this.setState({ editName: true })
 	  } else if (name === 'add') { // clicked plus button
 	    if (!this.state.value) { // if input invalid
@@ -94,6 +94,9 @@ class EnterMeal extends Component {
 	      }
 
 	    }
+	  } else if (name === 'delete') {
+	    this.props.addMeal('delete', this.props[this.props.mealtime].mealId)
+	    this.props.handleClick('return')
 	  }
 	}
 
@@ -109,7 +112,11 @@ class EnterMeal extends Component {
 	  return (
 	    <Container>
 	      <div className='enterHeader'>
-	        <button name='return' className='returnButton' onClick={ this.handleButtonClick }>
+	        <button
+	          name='return'
+	          className='returnButton button'
+	          onClick={ this.handleButtonClick }
+	        >
 	          <span className="iconify" data-icon="akar-icons:chevron-left" data-inline="false"></span>
 	        </button>
 	        <span>
@@ -118,10 +125,10 @@ class EnterMeal extends Component {
 	      </div>
 	      <form className='form'>
 	        <label></label>
-	        {
+	        { // was meal already entered
 	          this.props[`${this.props.mealtime}Ready`]
-	            ? this.state.editName
-	              ? <input
+	            ? this.state.editName // was name edited
+	              ? <input // entered, edited
 	                type='text'
 	                placeholder='What did you eat?'
 	                className='input'
@@ -130,7 +137,7 @@ class EnterMeal extends Component {
 	                onFocus={ this.handleInputFocus }
 	                ref={ input => { this.nameInput = input } }
 	              />
-	              : <div className='nameContainer'>
+	              : <div className='nameContainer'> {/* entered, not edited */}
 	                <span className='nameDisplay'>
 	                  {this.props.[this.props.mealtime].name}
 	                </span>
@@ -142,7 +149,7 @@ class EnterMeal extends Component {
 	                  <span className="iconify" data-icon="clarity:note-edit-line" data-inline="false"></span>
 	                </button>
 	            	</div>
-	            : <input
+	            : <input // entering new name
 	                type='text'
 	                placeholder='What did you eat?'
 	                className='input'
@@ -164,13 +171,25 @@ class EnterMeal extends Component {
 	        {
 	          this.state.errorMessage
 	            ? <span className='errorMessage'>{ this.state.errorMessage }</span>
-	            : <button
-	              name='add'
-	              className='addButton'
-	              onClick={ this.handleButtonClick }
-	            >
-	              <span className="iconify" data-icon="akar-icons:plus" data-inline="false"></span>
-	            </button>
+	            : <div className='buttonContainer'>
+	              <button
+	                name='add'
+	                className='addButton button'
+	                onClick={ this.handleButtonClick }
+	              >
+	                <span className="iconify" data-icon="akar-icons:plus" data-inline="false"></span>
+	              </button>
+	              {
+	                this.props[this.props.mealtime] &&
+									<button
+									  name='delete'
+									  className='deleteButton button'
+									  onClick={ this.handleButtonClick }
+									>
+									  <span className="iconify" data-icon="fluent:delete-48-regular" data-inline="false"></span>
+									</button>
+	              }
+	            </div>
 	        }
 	      </div>
 	    </Container>
@@ -189,11 +208,14 @@ const Container = styled.div`
 	align-items: center;
 	padding: 12px 24px;
 
-	.returnButton, .addButton {
+	.button {
 		width: 70px;
 		height: 40px;
 		border: none;
 		border-radius: 12px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	.returnButton {
 		position: absolute;
@@ -201,10 +223,13 @@ const Container = styled.div`
 		left: 0;
 		margin: 12px 0 0 24px;
 	}
-	.addButton {
-		position: relative;
+	.buttonContainer {
+		display: flex;
+	}
+	.addButton, .deleteButton {
 		margin-top: 12px;
 	}
+	svg[data-icon="fluent:delete-48-regular"],
 	svg[data-icon="clarity:note-edit-line"],
 	svg[data-icon="akar-icons:plus"],
 	svg[data-icon="akar-icons:chevron-left"] {

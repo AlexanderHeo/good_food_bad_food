@@ -171,6 +171,46 @@ app.patch('/api/enter/:mealId', (req, res, next) => {
     .then(result => res.status(200).json(result.rows[0]))
 })
 
+app.delete('/api/enter/:mealId', (req, res, next) => {
+  const { mealId } = req.params
+  if (!parseInt(mealId)) {
+    return res.status(400).json({
+      error: 'The meal id must be a positive integer.'
+    })
+  }
+  const sql1 = `
+  	DELETE FROM "mealReports" WHERE "mealId" = $1;
+		`
+  const sql2 = `
+  	DELETE FROM "mealtime" WHERE "mealId" = $1;
+		`
+  const sql3 = `
+  	DELETE FROM "meals" WHERE "mealId" = $1;
+	`
+  const param = [mealId]
+  db.query(sql1, param)
+    .then(result => {
+      db.query(sql2, param)
+        .then(result => {
+          db.query(sql3, param)
+            .then(result => {
+              if (!result.rows[0]) {
+                res.status(404).json({
+                  error: `Cannot find meal at ${mealId}`
+                })
+              } else {
+                res.status(204).json(result.rows[0])
+              }
+            })
+        })
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).json({ error: 'An unexpected error occured.' })
+      next(err)
+    })
+})
+
 app.get('/api/ratefood', (req, res, next) => {
   const userId = req.session.userId;
   const SQL = `
