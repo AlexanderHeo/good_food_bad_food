@@ -204,6 +204,22 @@ class HomePage extends Component {
 	        listCopy[index].name = name
 	        this.setState({ list: listCopy })
 	      })
+	  } else if (category === 'delete') {
+	    const mealId = parameter
+	    const init = {
+	      method: 'DELETE',
+	      headers: {
+	        'Content-Type': 'application/json'
+	      }
+	    }
+	    fetch(`/api/enter/${mealId}`, init)
+	      .then(response => null)
+	      .then(data => {
+	        const listCopy = [...this.state.list]
+	        const index = listCopy.findIndex(x => x.mealId === mealId)
+	        listCopy.splice(index, 1)
+	        this.setState({ list: listCopy })
+	      })
 	  }
 	}
 
