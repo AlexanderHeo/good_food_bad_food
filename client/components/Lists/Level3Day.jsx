@@ -5,37 +5,37 @@ class Level3Day extends Component {
     return (
       <section className='buttonContainer level3'>
         <button
-          value='sunday'
+          name='day'
           onClick={ this.props.handleClick }
           className='button'
         >Sunday</button>
         <button
-          value='monday'
+          name='day'
           onClick={ this.props.handleClick }
           className='button'
         >Monday</button>
         <button
-          value='tuesday'
+          name='day'
           onClick={ this.props.handleClick }
           className='button'
         >Tuesday</button>
         <button
-          value='wednesday'
+          name='day'
           onClick={ this.props.handleClick }
           className='button'
         >Wednesday</button>
         <button
-          value='thursday'
+          name='day'
           onClick={ this.props.handleClick }
           className='button'
         >Thursday</button>
         <button
-          value='friday'
+          name='day'
           onClick={ this.props.handleClick }
           className='button'
         >Friday</button>
         <button
-          value='saturday'
+          name='day'
           onClick={ this.props.handleClick }
           className='button'
         >Saturday</button>

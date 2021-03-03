@@ -2,89 +2,133 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Level1 from './Level1'
 import Level2 from './Level2'
-import Level3Day from './Level3Day'
-import Level3Meal from './Level3Meal'
 
 class Lists extends Component {
 	state = {
 	  level1: '',
 	  level2: '',
-	  level3: '',
-	  dayOrRating: ''
+	  dayOrRating: '',
+	  displayList: []
 	}
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevState.level2 !== this.state.level2) {
+	    this.doTheThing()
+	  }
+	}
+
+	doTheThing = () => {
+	  const { level1, level2 } = this.state
+	  // console.log(level1, level2, level3)
+	  if (!level2) {
+	    this.setState({ displayList: [] })
+	  } else if (level1 === 'average') {
+	    this.getAverage(level2)
+	  } else if (level1 === 'most') {
+	    this.getMost(level2)
+	  } else if (level1 === 'least') {
+	    // set average
+	  }
+	}
+
+	getAverage = filter => {
+	  const { list } = this.props
+	  if (filter === 'meal') {
+	    let breakfast = 0
+	    let lunch = 0
+	    let dinner = 0
+	    let snacks = 0
+	    list.forEach(x => {
+	      const mealtime = x.mealtime
+	      if (mealtime === 'breakfast') breakfast += x.report
+	      if (mealtime === 'lunch') lunch += x.report
+	      if (mealtime === 'dinner') dinner += x.report
+	      if (mealtime === 'snacks') snacks += x.report
+	    })
+	    this.setState({
+	      displayList: [
+	        { breakfast }, { lunch }, { dinner }, { snacks }
+	      ]
+	    })
+	  } else if (filter === 'day') {
+	    let sun = 0
+	    let mon = 0
+	    let tue = 0
+	    let wed = 0
+	    let thu = 0
+	    let fri = 0
+	    let sat = 0
+	    list.forEach(x => {
+	      const day = new Date(x.eatenAt).getDay()
+	      switch (day) {
+	        case 0:
+	          sun += x.report
+	          break
+	        case 1:
+	          mon += x.report
+	          break
+	        case 2:
+	          tue += x.report
+	          break
+	        case 3:
+	          wed += x.report
+	          break
+	        case 4:
+	          thu += x.report
+	          break
+	        case 5:
+	          fri += x.report
+	          break
+	        case 6:
+	          sat += x.report
+	          break
+	        default:
+	          break
+	      }
+	    })
+	    this.setState({
+	      displayList: [
+	      	{ sun }, { mon }, { tue }, { wed }, { thu }, { fri }, { sat }
+	    	]
+	    })
+	  }
+	}
+
+	// getMost = filter => {
+	//   if (filter === 'meal') {
+
+	//   } else if (filter === 'overall') {
+
+	//   }
+	// }
 
 	handleClick = e => {
 	  e.preventDefault()
 	  const name = e.target.getAttribute('name')
-	  const value = e.target.value
 	  if (name === 'average') {
 	    this.setState({
 	      level1: 'average',
 	      level2: '',
-	      level3: '',
 	      dayOrRating: 'day'
 	    })
 	  } else if (name === 'most') {
 	    this.setState({
 	      level1: 'most',
 	      level2: '',
-	      level3: '',
 	      dayOrRating: 'rating'
 	    })
 	  } else if (name === 'least') {
 	    this.setState({
 	      level1: 'least',
 	      level2: '',
-	      level3: '',
 	      dayOrRating: 'rating'
 	    })
-	  } else if (name === 'level21') {
-	    if (this.state.level1 === 'average') {
-	      this.setState({
-	        level2: 'avgMeal',
-	        level3: ''
-	      })
-	    } else if (this.state.level1 === 'most') {
-	      this.setState({
-	        level2: 'mostMeal',
-	        level3: ''
-	      })
-	    } else if (this.state.level1 === 'least') {
-	      this.setState({
-	        level2: 'leastMeal',
-	        level3: ''
-	      })
-	    }
-	  } else if (name === 'byDay') {
-	    this.setState({ level2: 'avgDay' })
-	  } else if (name === 'overall') {
-	    if (this.state.level1 === 'most') {
-	      this.setState({
-	        level2: 'mostOverall',
-	        level3: 'overall'
-	      })
-	    } else if (this.state.level1 === 'least') {
-	      this.setState({
-	        level2: 'leastOverall',
-	        level3: 'overall'
-	      })
-	    }
-	  } else if (value) {
-	    this.setState({ level3: value })
+	  } else {
+	    this.setState({ level2: name })
 	  }
 	}
 
 	render() {
-	  let Level3 = null
-	  const level2 = this.state.level2
-	  if (level2 === 'avgMeal') {
-	    Level3 = <Level3Meal handleClick={ this.handleClick }/>
-	  } else if (level2 === 'avgDay') {
-	    Level3 = <Level3Day handleClick={ this.handleClick }/>
-	  } else if (level2 === 'mostMeal' || level2 === 'leastMeal') {
-	    Level3 = <Level3Meal handleClick={ this.handleClick }/>
-	  }
-
 	  return (
 	    <Container>
 	      <section className='listHeader'>
@@ -106,7 +150,6 @@ class Lists extends Component {
 						  level2={ this.state.level2 }
 						/>
 	        }
-	        { Level3 }
 	      </section>
 	    </Container>
 	  )

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 class Level2 extends Component {
-
   render() {
     let meal, day, overall
     const level2 = this.props.level2
@@ -22,7 +21,7 @@ class Level2 extends Component {
     let button = null
     if (this.props.dayOrRating === 'day') {
       button = <button
-        name='byDay'
+        name='day'
         onClick={ this.props.handleClick }
         className={`button ${day}`}
       >by Day</button>
@@ -37,7 +36,7 @@ class Level2 extends Component {
     return (
       <section className='buttonContainer level2'>
         <button
-          name='level21'
+          name='meal'
           onClick={ this.props.handleClick }
           className={`button ${meal}`}
         >by Meal</button>
