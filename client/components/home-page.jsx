@@ -16,7 +16,8 @@ class HomePage extends Component {
 	  previousWeek: false,
 	  list: [],
 	  listLoaded: false,
-	  isToday: ''
+	  isToday: '',
+	  isFuture: ''
 	}
 
 	async componentDidMount() {
@@ -36,7 +37,11 @@ class HomePage extends Component {
 	  }
 	  if (prevState.dateDisplay !== this.state.dateDisplay) {
 	    const isToday = this.state.dateToday.fullDate === this.state.dateDisplay.fullDate
-	    this.setState({ isToday: isToday })
+	    let isFuture
+	    if (this.state.dateToday.fullDate < this.state.dateDisplay.fullDate) {
+	      isFuture = this.state.dateDisplay.fullDate
+	    }
+	    this.setState({ isToday: isToday, isFuture: isFuture })
 	  }
 	}
 
@@ -263,9 +268,11 @@ class HomePage extends Component {
   					<WeeklyReview
   					  list={ this.state.list }
   					  dateDisplay={ this.state.dateDisplay }
+  					  dateToday={ this.state.dateToday }
   					  dateSunday={ this.state.dateSunday }
   					  handleClick={ this.handleWeeklyClick }
   					  previousWeek={ this.state.previousWeek }
+  					  isFuture={ this.state.isFuture }
   					/>
 	        }
 	      </section>
