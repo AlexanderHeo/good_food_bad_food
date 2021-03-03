@@ -114,10 +114,10 @@ class EnterMeal extends Component {
 	      <div className='enterHeader'>
 	        <button
 	          name='return'
-	          className='returnButton button'
+	          className='returnButton enter'
 	          onClick={ this.handleButtonClick }
 	        >
-	          <span className="iconify" data-icon="akar-icons:chevron-left" data-inline="false"></span>
+	          <span className="iconify" data-icon="ant-design:left-square-filled" data-inline="false" />
 	        </button>
 	        <span>
 	          <h2 className='mealtime'>{ this.props.mealtime }</h2>
@@ -128,25 +128,27 @@ class EnterMeal extends Component {
 	        { // was meal already entered
 	          this.props[`${this.props.mealtime}Ready`]
 	            ? this.state.editName // was name edited
-	              ? <input // entered, edited
-	                type='text'
-	                placeholder='What did you eat?'
-	                className='input'
-	                value={ this.state.value }
-	                onChange={ this.handleInputChange }
-	                onFocus={ this.handleInputFocus }
-	                ref={ input => { this.nameInput = input } }
-	              />
+	              ? <div className='nameContainer'> {/* entered, edited */}
+	                <input
+	                  type='text'
+	                  placeholder='What did you eat?'
+	                  className='input'
+	                  value={ this.state.value }
+	                  onChange={ this.handleInputChange }
+	                  onFocus={ this.handleInputFocus }
+	                  ref={ input => { this.nameInput = input } }
+	                />
+	              </div>
 	              : <div className='nameContainer'> {/* entered, not edited */}
 	                <span className='nameDisplay'>
 	                  {this.props.[this.props.mealtime].name}
 	                </span>
 	                <button
-	                  className='iconContainer'
+	                  className='editButton enter'
 	                  name='editName'
 	                  onClick={ this.handleButtonClick }
 	                >
-	                  <span className="iconify" data-icon="clarity:note-edit-line" data-inline="false"></span>
+	                  <span className="iconify" data-icon="ant-design:edit-filled" data-inline="false" />
 	                </button>
 	            	</div>
 	            : <input // entering new name
@@ -174,19 +176,19 @@ class EnterMeal extends Component {
 	            : <div className='buttonContainer'>
 	              <button
 	                name='add'
-	                className='addButton button'
+	                className='addButton enter'
 	                onClick={ this.handleButtonClick }
 	              >
-	                <span className="iconify" data-icon="akar-icons:plus" data-inline="false"></span>
+	                <span className="iconify" data-icon="ant-design:plus-square-filled" data-inline="false" />
 	              </button>
 	              {
 	                this.props[this.props.mealtime] &&
 									<button
 									  name='delete'
-									  className='deleteButton button'
+									  className='deleteButton enter'
 									  onClick={ this.handleButtonClick }
 									>
-									  <span className="iconify" data-icon="fluent:delete-48-regular" data-inline="false"></span>
+									  <span className="iconify" data-icon="ant-design:delete-filled" data-inline="false" />
 									</button>
 	              }
 	            </div>
@@ -201,93 +203,83 @@ export default EnterMeal
 
 const Container = styled.div`
 	height: 100%;
-	background-color: var(--primary-2);
+	background-color: var(--primary-0);
 	border-radius: 12px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
 	padding: 12px 24px;
 
-	.button {
-		width: 70px;
-		height: 40px;
-		border: none;
-		border-radius: 12px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	.returnButton {
-		position: absolute;
-		top: 0;
-		left: 0;
-		margin: 12px 0 0 24px;
-	}
-	.buttonContainer {
-		display: flex;
-	}
-	.addButton, .deleteButton {
-		margin-top: 12px;
-	}
-	svg[data-icon="fluent:delete-48-regular"],
-	svg[data-icon="clarity:note-edit-line"],
-	svg[data-icon="akar-icons:plus"],
-	svg[data-icon="akar-icons:chevron-left"] {
-		font-size: 30px;
-		color: var(--primary-6);
+	.enterHeader {
+		text-align: center;
 	}
 
 	.form {
 		width: 100%;
-		height: 40%;
+		max-height: 40%;
+		height: 100%;
 		display: flex;
 		align-items: center;
-
-		.input {
-			font-size: 1.2rem;
-			width: 100%;
-			outline: none;
-			border: 2px solid transparent;
-			border-radius: 12px;
-			padding: 8px 24px;
-		}
-		.input:invalid {
-			border: 2px solid var(--warning-4);
-		}
+		justify-content: center;
 		.nameContainer {
 			width: 100%;
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			justify-content: space-between;
 			background-color: var(--primary-0);
 			border-radius: 12px;
-			padding: 3px 0;
 			.nameDisplay {
-				font-size: 2rem;
+				font-size: 1.2rem;
 			}
+		}
+		.input {
+			font-size: 1.2rem;
+			width: 100%;
+			outline: none;
+			border: 1px solid var(--primary-0);
+			border-radius: 12px;
+			padding: 6px 24px;
+		}
+		.input:invalid {
+			border: 2px solid var(--warning-4);
 		}
 	}
 
-	.iconContainer {
-		width: 40px;
-		height: 40px;
-		border: none;
-		border-radius: 12px;
-		background-color: var(--primary-0);
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: absolute;
-		right: 30px;
-		margin-left: 10px;
-	}
-
 	.voteContainer {
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		left: 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		width: 100%;
+	}
+
+	.buttonContainer {
+		display: flex;
+	}
+	.enter {
+		background-color: var(--primary-0);
+		font-size: 26px;
+		border-radius: 25px;
+		border: 2px solid var(--primary-4);
+		color: var(--primary-4);
+		display: flex;
+	}
+	.returnButton,
+	.editButton {
+		padding: 8px 16px;
+		position: absolute;
+	}
+	.returnButton {
+		top: 12px;
+		left: 24px;
+	}
+	.editButton {
+		right: 30px;
+		margin-left: 10px;
+	}
+	.addButton, .deleteButton {
+		margin: 12px;
+		padding: 8px 32px;
 	}
 
 	.errorMessage {
