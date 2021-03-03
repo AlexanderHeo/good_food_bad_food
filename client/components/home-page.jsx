@@ -96,8 +96,11 @@ class HomePage extends Component {
 	handleButtonClick = e => {
 	  e.preventDefault()
 	  const action = e.currentTarget.name
-
-	  if (action === 'previousWeek') {
+	  if (action === 'today') {
+	    this.setTime()
+	  } else if (action === 'hamburger') {
+	    this.setState({ hamburgerClicked: !this.state.hamburgerClicked })
+	  } else if (action === 'previousWeek') {
 	    const sunday = this.state.dateSunday.timestamp
 	    const prev = sunday.setHours(
 	      sunday.getHours() - (24 * 7)
@@ -126,10 +129,6 @@ class HomePage extends Component {
 	    }
 	  }
 	}
-
-  handleFooterClick = () => {
-    this.setState({ hamburgerClicked: !this.state.hamburgerClicked })
-  }
 
   handleLogOut = () => {
     fetch('/api/log-out')
@@ -299,15 +298,16 @@ class HomePage extends Component {
   					>
   					  <Settings
   					    clicked={ this.state.hamburgerClicked }
-  					    handleClick={ this.handleFooterClick }
+  					    handleClick={ this.handleButtonClick }
   					    logout={ this.handleLogOut } />
   					</section>
 	      }
 
 	      <div className='footer'>
         	<Footer
+	          isToday={ this.state.isToday }
 	          clicked={ this.state.hamburgerClicked }
-	          handleClick={ this.handleFooterClick }
+	          handleClick={ this.handleButtonClick }
 	        />
 	      </div>
 	    </Container>

@@ -4,6 +4,16 @@ import { Hamburger } from './Icons'
 
 const Footer = props => (
   <Container>
+    {
+      !props.isToday &&
+			<button
+			  name='today'
+			  onClick={ props.handleClick }
+			  className='button'
+			>
+			  <span className="iconify" data-icon="bx:bxs-home-smile" data-inline="false"></span>
+			</button>
+    }
     <button
       name='hamburger'
       onClick={ props.handleClick }
