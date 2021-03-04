@@ -22,7 +22,7 @@ app.get('/api/health-check', (req, res, next) => {
 });
 
 app.post('/api/sign-up', (req, res, next) => {
-  const { username, password } = req.body;
+  const { username, password, city, state } = req.body;
   if (!username || !password) {
     return next(new ClientError('Invalid username / password!', 400));
   }
@@ -30,11 +30,11 @@ app.post('/api/sign-up', (req, res, next) => {
     .then(hash => {
       const hashedPassword = hash;
       const sql = `
-      insert into "users"("username", "password")
-      values ($1, $2)
-      returning "username", "userId";
+      insert into "users"("username", "password", "city", "state")
+      values ($1, $2, $3, $4)
+      returning *;
       `;
-      const params = [username, hashedPassword];
+      const params = [username, hashedPassword, city, state];
       db.query(sql, params)
         .then(response => {
           const user = response.rows[0].username;
