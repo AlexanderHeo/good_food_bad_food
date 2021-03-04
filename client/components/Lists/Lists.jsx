@@ -31,89 +31,15 @@ class Lists extends Component {
 	}
 
 	getAverage = filter => {
-	  const { list } = this.props
 	  if (filter === 'meal') {
 	    const displayList = this.getAvgMeal()
 	    this.setState({ displayList: displayList })
 	  } else if (filter === 'day') {
-	    const displayList = this.getAvgDay(list)
+	    const displayList = this.getAvgDay()
 	    this.setState({ displayList: displayList })
 	  } else if (filter === 'food') {
-	    // ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	    // ? ???????????????????????????????????
-	    // * ***********************************
-	    const displayList = this.getAvgFood(list)
+	    const displayList = this.getAvgFood()
 	    this.setState({ displayList: displayList })
-	  }
-	}
-
-	getMost = (filter, rating) => {
-	  const { list } = this.props
-	  if (filter === 'meal') {
-	    const breakfast = []
-	    const lunch = []
-	    const dinner = []
-	    const snacks = []
-	    list.forEach(x => {
-	      const mealtime = x.mealtime
-	      switch (mealtime) {
-	        case 'breakfast':
-	          breakfast.push(x)
-	          break
-	        case 'lunch':
-	          lunch.push(x)
-	          break
-	        case 'dinner':
-	          dinner.push(x)
-	          break
-	        case 'snacks':
-	          snacks.push(x)
-	          break
-	        default:
-	          break
-	      }
-	    })
-	    breakfast.sort((a, b) => a.report - b.report)
-	    lunch.sort((a, b) => a.report - b.report)
-	    dinner.sort((a, b) => a.report - b.report)
-	    snacks.sort((a, b) => a.report - b.report)
-	    if (rating === 'most') {
-	      breakfast.reverse()
-	      lunch.reverse()
-	      dinner.reverse()
-	      snacks.reverse()
-	    }
-
-	    this.setState({
-	      displayList: [
-	        { breakfast }, { lunch }, { dinner }, { snacks }
-	      ]
-	    })
-	  } else if (filter === 'food') {
-	  	const filtered = []
-	    const foodList = []
-	    list.forEach(x => {
-	      const name = x.name
-	      if (!foodList.includes(name)) {
-	        filtered.push({
-	          [name]: [name]
-	        })
-	        foodList.push(name)
-	      } else {
-	        const index = foodList.indexOf(name)
-	        filtered[index][name].push(name)
-	        const mapped = filtered.map(x => {
-	          const food = Object.keys(x)[0]
-	          const total = x[food].length
-	          return { [food]: total }
-	        })
-	        const displayList = mapped.sort((a, b) => a[Object.keys(a)[0]] - b[Object.keys(b)[0]])
-	        if (rating === 'most') {
-	          displayList.reverse()
-	        }
-	        this.setState({ displayList: displayList })
-	      }
-	    })
 	  }
 	}
 
@@ -138,7 +64,8 @@ class Lists extends Component {
 	  return [{ breakfast }, { lunch }, { dinner }, { snacks }]
 	}
 
-	getAvgFood = list => {
+	getAvgFood = () => {
+	  const { list } = this.props
 	  const filtered = []
 	  const foodList = []
 	  list.forEach(x => {
@@ -165,7 +92,8 @@ class Lists extends Component {
 	  return displayList
 	}
 
-	getAvgDay = list => {
+	getAvgDay = () => {
+	  const { list } = this.props
 	  const su = []
 	  const mo = []
 	  const tu = []
@@ -218,6 +146,123 @@ class Lists extends Component {
 	  if (sat.toString().includes('.')) sat = sat.toFixed(3)
 
 	  return [{ sun }, { mon }, { tue }, { wed }, { thu }, { fri }, { sat }]
+	}
+
+	getMost = (filter, rating) => {
+	  const { list } = this.props
+	  if (filter === 'meal') {
+	    const breakfastFiltered = []
+	    const breakfastList = breakfastFiltered.map(x => x.name)
+	    const lunchFiltered = []
+	    const lunchList = lunchFiltered.map(x => x.name)
+	    const dinnerFiltered = []
+	    const dinnerList = dinnerFiltered.map(x => x.name)
+	    const snacksFiltered = []
+	    const snacksList = snacksFiltered.map(x => x.name)
+	    list.forEach(x => {
+	      const { name, mealtime } = x
+	      if (mealtime === 'breakfast') {
+	        if (!breakfastList.includes(name)) {
+	          breakfastFiltered.push({ [name]: 1 })
+	          breakfastList.push(name)
+	        } else if (breakfastList.includes(name)) {
+	          const index = breakfastList.indexOf(name)
+	          breakfastFiltered[index][name] += 1
+	        }
+	      }
+	      if (mealtime === 'lunch') {
+	        if (!lunchList.includes(name)) {
+	          lunchFiltered.push({ [name]: 1 })
+	          lunchList.push(name)
+	        } else if (lunchList.includes(name)) {
+	          const index = lunchList.indexOf(name)
+	          lunchFiltered[index][name] += 1
+	        }
+	      }
+	      if (mealtime === 'dinner') {
+	        if (!dinnerList.includes(name)) {
+	          dinnerFiltered.push({ [name]: 1 })
+	          dinnerList.push(name)
+	        } else if (dinnerList.includes(name)) {
+	          const index = dinnerList.indexOf(name)
+	          dinnerFiltered[index][name] += 1
+	        }
+	      }
+	      if (mealtime === 'snacks') {
+	        if (!snacksList.includes(name)) {
+	          snacksFiltered.push({ [name]: 1 })
+	          snacksList.push(name)
+	        } else if (snacksList.includes(name)) {
+	          const index = snacksList.indexOf(name)
+	          snacksFiltered[index][name] += 1
+	        }
+	      }
+	    })
+
+	    const breakfast = breakfastFiltered.sort((a, b) => {
+	      return a[Object.keys(a)[0]] - b[Object.keys(b)[0]]
+	    })
+	    const lunch = lunchFiltered.sort((a, b) => {
+	      return a[Object.keys(a)[0]] - b[Object.keys(b)[0]]
+	    })
+	    const dinner = dinnerFiltered.sort((a, b) => {
+	      return a[Object.keys(a)[0]] - b[Object.keys(b)[0]]
+	    })
+	    const snacks = snacksFiltered.sort((a, b) => {
+	      return a[Object.keys(a)[0]] - b[Object.keys(b)[0]]
+	    })
+
+	    if (rating === 'most') {
+	      breakfast.reverse()
+	      lunch.reverse()
+	      dinner.reverse()
+	      snacks.reverse()
+	    }
+
+	    const displayList = { breakfast, lunch, dinner, snacks }
+	    this.setState({ displayList: displayList })
+
+	  } else if (filter === 'food') {
+	  	const filtered = []
+	    const foodList = []
+	    list.forEach(x => {
+	      const name = x.name
+	      if (!foodList.includes(name)) {
+	        filtered.push({ [name]: [name] })
+	        foodList.push(name)
+	      } else {
+	        const index = foodList.indexOf(name)
+	        filtered[index][name].push(name)
+	        const mapped = filtered.map(x => {
+	          const food = Object.keys(x)[0]
+	          const total = x[food].length
+	          return { [food]: total }
+	        })
+	        const displayList = mapped.sort((a, b) => a[Object.keys(a)[0]] - b[Object.keys(b)[0]])
+	        if (rating === 'most') displayList.reverse()
+	        this.setState({ displayList: displayList })
+	      }
+	    })
+	  } else if (filter === 'overall') {
+	    const filtered = []
+	    const foodList = []
+	    list.forEach(x => {
+	      const name = x.name
+	      if (!foodList.includes(name)) {
+	        filtered.push({ [name]: 1 })
+	        foodList.push(name)
+	      } else {
+	        const index = foodList.indexOf(name)
+	        filtered[index][name] += 1
+	      }
+	      const displayList = [...filtered]
+	      displayList.sort((a, b) => {
+	        return a[Object.keys(a)[0]] - b[Object.keys(b)[0]]
+	      })
+	      if (rating === 'most') displayList.reverse()
+	      this.setState({ displayList: displayList })
+	    })
+	  }
 	}
 
 	handleClick = e => {
