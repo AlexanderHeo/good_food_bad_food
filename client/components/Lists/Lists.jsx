@@ -313,7 +313,11 @@ class Lists extends Component {
 	      dayOrRating: 'rating'
 	    })
 	  } else {
-	    this.setState({ level2: name })
+	    this.setState({
+	      displayList: [],
+	      displayReady: false,
+	      level2: name
+	    })
 	  }
 	}
 
