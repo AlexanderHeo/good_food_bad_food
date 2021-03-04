@@ -5,9 +5,9 @@ import Level2 from './Level2'
 
 class Lists extends Component {
 	state = {
-	  level1: '',
-	  level2: '',
-	  dayOrRating: '',
+	  level1: 'average',
+	  level2: 'food',
+	  dayOrRating: 'day',
 	  displayList: []
 	}
 
@@ -33,63 +33,17 @@ class Lists extends Component {
 	getAverage = filter => {
 	  const { list } = this.props
 	  if (filter === 'meal') {
-	    let breakfast = 0
-	    let lunch = 0
-	    let dinner = 0
-	    let snacks = 0
-	    list.forEach(x => {
-	      const mealtime = x.mealtime
-	      if (mealtime === 'breakfast') breakfast += x.report
-	      if (mealtime === 'lunch') lunch += x.report
-	      if (mealtime === 'dinner') dinner += x.report
-	      if (mealtime === 'snacks') snacks += x.report
-	    })
-	    this.setState({
-	      displayList: [
-	        { breakfast }, { lunch }, { dinner }, { snacks }
-	      ]
-	    })
+	    const displayList = this.getAvgMeal(list)
+	    this.setState({ displayList: displayList })
 	  } else if (filter === 'day') {
-	    let sun = 0
-	    let mon = 0
-	    let tue = 0
-	    let wed = 0
-	    let thu = 0
-	    let fri = 0
-	    let sat = 0
-	    list.forEach(x => {
-	      const day = new Date(x.eatenAt).getDay()
-	      switch (day) {
-	        case 0:
-	          sun += x.report
-	          break
-	        case 1:
-	          mon += x.report
-	          break
-	        case 2:
-	          tue += x.report
-	          break
-	        case 3:
-	          wed += x.report
-	          break
-	        case 4:
-	          thu += x.report
-	          break
-	        case 5:
-	          fri += x.report
-	          break
-	        case 6:
-	          sat += x.report
-	          break
-	        default:
-	          break
-	      }
-	    })
-	    this.setState({
-	      displayList: [
-	      	{ sun }, { mon }, { tue }, { wed }, { thu }, { fri }, { sat }
-	    	]
-	    })
+	    const displayList = this.getAvgDay(list)
+	    this.setState({ displayList: displayList })
+	  } else if (filter === 'food') {
+	    // ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    // ? ???????????????????????????????????
+	    // * ***********************************
+	    const displayList = this.getAvgFood(list)
+	    this.setState({ displayList: displayList })
 	  }
 	}
 
@@ -136,6 +90,90 @@ class Lists extends Component {
 	      ]
 	    })
 	  }
+
+	  // else if (filter === 'food') {
+	  // console.log(list)
+	  // }
+	}
+
+	getAvgMeal = list => {
+	  let breakfast = 0
+	  let lunch = 0
+	  let dinner = 0
+	  let snacks = 0
+	  list.forEach(x => {
+	    const mealtime = x.mealtime
+	    if (mealtime === 'breakfast') breakfast += x.report
+	    if (mealtime === 'lunch') lunch += x.report
+	    if (mealtime === 'dinner') dinner += x.report
+	    if (mealtime === 'snacks') snacks += x.report
+	  })
+	  return [{ breakfast }, { lunch }, { dinner }, { snacks }]
+	}
+
+	getAvgFood = list => {
+	  const filtered = []
+	  const foodList = []
+	  list.forEach(x => {
+	    const food = x.name
+	    if (!foodList.includes(food)) {
+	      foodList.push(food)
+	      filtered.push({ [food]: [x.report] })
+	    } else {
+	      const index = foodList.indexOf(food)
+	      filtered[index][food].push(x.report)
+	    }
+	  })
+	  foodList.sort()
+	  const sorted = new Array(filtered.length)
+	  filtered.forEach(x => {
+	    const index = foodList.indexOf(Object.keys(x)[0])
+	    sorted.splice(index, 1, x)
+	  })
+	  const displayList = sorted.map((x, index) => {
+	    const reduced = x[foodList[index]].reduce((a, b) => a + b)
+	    return { [foodList[index]]: reduced }
+	  })
+	  return displayList
+	}
+
+	getAvgDay = list => {
+	  let sun = 0
+	  let mon = 0
+	  let tue = 0
+	  let wed = 0
+	  let thu = 0
+	  let fri = 0
+	  let sat = 0
+	  list.forEach(x => {
+	    const day = new Date(x.eatenAt).getDay()
+	    switch (day) {
+	      case 0:
+	        sun += x.report
+	        break
+	      case 1:
+	        mon += x.report
+	        break
+	      case 2:
+	        tue += x.report
+	        break
+	      case 3:
+	        wed += x.report
+	        break
+	      case 4:
+	        thu += x.report
+	        break
+	      case 5:
+	        fri += x.report
+	        break
+	      case 6:
+	        sat += x.report
+	        break
+	      default:
+	        break
+	    }
+	  })
+	  return [{ sun }, { mon }, { tue }, { wed }, { thu }, { fri }, { sat }]
 	}
 
 	handleClick = e => {

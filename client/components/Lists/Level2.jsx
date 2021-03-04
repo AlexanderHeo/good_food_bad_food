@@ -2,34 +2,18 @@ import React, { Component } from 'react'
 
 class Level2 extends Component {
   render() {
-    let meal, day, overall
-    const level2 = this.props.level2
-    if (level2 === 'avgMeal') {
-		 meal = 'highlight'
-    } else if (level2 === 'avgDay') {
-		 day = 'highlight'
-    } else if (level2 === 'mostMeal') {
-		 meal = 'highlight'
-    } else if (level2 === 'leastMeal') {
-		 meal = 'highlight'
-    } else if (level2 === 'mostOverall') {
-		 overall = 'highlight'
-    } else if (level2 === 'leastOverall') {
-		 overall = 'highlight'
-    }
-
     let button = null
     if (this.props.dayOrRating === 'day') {
       button = <button
         name='day'
         onClick={ this.props.handleClick }
-        className={`button ${day}`}
+        className="button"
       >by Day</button>
     } else if (this.props.dayOrRating === 'rating') {
       button = <button
         name='overall'
         onClick={ this.props.handleClick }
-        className={`button ${overall}`}
+        className="button"
       >Overall</button>
     }
 
@@ -38,8 +22,13 @@ class Level2 extends Component {
         <button
           name='meal'
           onClick={ this.props.handleClick }
-          className={`button ${meal}`}
+          className='button'
         >by Meal</button>
+        <button
+          name='food'
+          onClick={ this.props.handleClick }
+          className='button'
+        >by Food</button>
         {button}
       </section>
     )
