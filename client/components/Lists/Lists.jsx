@@ -5,9 +5,9 @@ import Level2 from './Level2'
 
 class Lists extends Component {
 	state = {
-	  level1: 'average',
-	  level2: 'food',
-	  dayOrRating: 'day',
+	  level1: '',
+	  level2: '',
+	  dayOrRating: '',
 	  displayList: []
 	}
 
@@ -33,7 +33,7 @@ class Lists extends Component {
 	getAverage = filter => {
 	  const { list } = this.props
 	  if (filter === 'meal') {
-	    const displayList = this.getAvgMeal(list)
+	    const displayList = this.getAvgMeal()
 	    this.setState({ displayList: displayList })
 	  } else if (filter === 'day') {
 	    const displayList = this.getAvgDay(list)
@@ -89,25 +89,52 @@ class Lists extends Component {
 	        { breakfast }, { lunch }, { dinner }, { snacks }
 	      ]
 	    })
+	  } else if (filter === 'food') {
+	  	const filtered = []
+	    const foodList = []
+	    list.forEach(x => {
+	      const name = x.name
+	      if (!foodList.includes(name)) {
+	        filtered.push({
+	          [name]: [name]
+	        })
+	        foodList.push(name)
+	      } else {
+	        const index = foodList.indexOf(name)
+	        filtered[index][name].push(name)
+	        const mapped = filtered.map(x => {
+	          const food = Object.keys(x)[0]
+	          const total = x[food].length
+	          return { [food]: total }
+	        })
+	        const displayList = mapped.sort((a, b) => a[Object.keys(a)[0]] - b[Object.keys(b)[0]])
+	        if (rating === 'most') {
+	          displayList.reverse()
+	        }
+	        this.setState({ displayList: displayList })
+	      }
+	    })
 	  }
-
-	  // else if (filter === 'food') {
-	  // console.log(list)
-	  // }
 	}
 
-	getAvgMeal = list => {
-	  let breakfast = 0
-	  let lunch = 0
-	  let dinner = 0
-	  let snacks = 0
+	getAvgMeal = () => {
+	  const { list } = this.props
+	  const br = []
+	  const l = []
+	  const d = []
+	  const s = []
 	  list.forEach(x => {
 	    const mealtime = x.mealtime
-	    if (mealtime === 'breakfast') breakfast += x.report
-	    if (mealtime === 'lunch') lunch += x.report
-	    if (mealtime === 'dinner') dinner += x.report
-	    if (mealtime === 'snacks') snacks += x.report
+	    if (mealtime === 'breakfast') br.push(x.report)
+	    if (mealtime === 'lunch') l.push(x.report)
+	    if (mealtime === 'dinner') d.push(x.report)
+	    if (mealtime === 'snacks') s.push(x.report)
 	  })
+	  const breakfast = ((br.reduce((a, b) => a + b)) / br.length).toFixed(3)
+	  const lunch = ((l.reduce((a, b) => a + b)) / l.length).toFixed(3)
+	  const dinner = ((d.reduce((a, b) => a + b)) / d.length).toFixed(3)
+	  const snacks = ((s.reduce((a, b) => a + b)) / s.length).toFixed(3)
+
 	  return [{ breakfast }, { lunch }, { dinner }, { snacks }]
 	}
 
@@ -131,48 +158,65 @@ class Lists extends Component {
 	    sorted.splice(index, 1, x)
 	  })
 	  const displayList = sorted.map((x, index) => {
-	    const reduced = x[foodList[index]].reduce((a, b) => a + b)
-	    return { [foodList[index]]: reduced }
+	    let avg = (x[foodList[index]].reduce((a, b) => a + b)) / x[foodList[index]].length
+	    if (avg.toString().includes('.')) avg = avg.toFixed(3)
+	    return { [foodList[index]]: avg }
 	  })
 	  return displayList
 	}
 
 	getAvgDay = list => {
-	  let sun = 0
-	  let mon = 0
-	  let tue = 0
-	  let wed = 0
-	  let thu = 0
-	  let fri = 0
-	  let sat = 0
+	  const su = []
+	  const mo = []
+	  const tu = []
+	  const we = []
+	  const th = []
+	  const fr = []
+	  const sa = []
 	  list.forEach(x => {
 	    const day = new Date(x.eatenAt).getDay()
 	    switch (day) {
 	      case 0:
-	        sun += x.report
+	        su.push(x.report)
 	        break
 	      case 1:
-	        mon += x.report
+	        mo.push(x.report)
 	        break
 	      case 2:
-	        tue += x.report
+	        tu.push(x.report)
 	        break
 	      case 3:
-	        wed += x.report
+	        we.push(x.report)
 	        break
 	      case 4:
-	        thu += x.report
+	        th.push(x.report)
 	        break
 	      case 5:
-	        fri += x.report
+	        fr.push(x.report)
 	        break
 	      case 6:
-	        sat += x.report
+	        sa.push(x.report)
 	        break
 	      default:
 	        break
 	    }
 	  })
+	  let sun = su.reduce((a, b) => a + b) / su.length
+	  let mon = mo.reduce((a, b) => a + b) / mo.length
+	  let tue = tu.reduce((a, b) => a + b) / tu.length
+	  let wed = we.reduce((a, b) => a + b) / we.length
+	  let thu = th.reduce((a, b) => a + b) / th.length
+	  let fri = fr.reduce((a, b) => a + b) / fr.length
+	  let sat = sa.reduce((a, b) => a + b) / sa.length
+
+	  if (sun.toString().includes('.')) sun = sun.toFixed(3)
+	  if (mon.toString().includes('.')) mon = mon.toFixed(3)
+	  if (tue.toString().includes('.')) tue = tue.toFixed(3)
+	  if (wed.toString().includes('.')) wed = wed.toFixed(3)
+	  if (thu.toString().includes('.')) thu = thu.toFixed(3)
+	  if (fri.toString().includes('.')) fri = fri.toFixed(3)
+	  if (sat.toString().includes('.')) sat = sat.toFixed(3)
+
 	  return [{ sun }, { mon }, { tue }, { wed }, { thu }, { fri }, { sat }]
 	}
 
