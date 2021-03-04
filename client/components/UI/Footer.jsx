@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Hamburger } from './Icons'
+import { Hamburger, List } from './Icons'
 
 const Footer = props => (
   <Container>
@@ -15,11 +15,19 @@ const Footer = props => (
 			</button>
     }
     <button
+      name='list'
+      onClick={ props.handleClick }
+      className='button list'
+    >
+      <List clicked={ props.listClicked } />
+      {/* <span className="iconify" data-icon="ant-design:unordered-list-outlined" data-inline="false"></span> */}
+    </button>
+    <button
       name='hamburger'
       onClick={ props.handleClick }
-      className='button'
+      className='button hamburger'
     >
-      <Hamburger clicked={ props.clicked }/>
+      <Hamburger clicked={ props.clicked } />
     </button>
   </Container>
 )
@@ -41,7 +49,7 @@ const Container = styled.div`
 		width: 50px;
 		height: 50px
 	}
-	.home {
+	.home, .list {
 		font-size: 36px;
 		display: flex;
 		justify-content: center;
