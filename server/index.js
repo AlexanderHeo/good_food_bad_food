@@ -128,7 +128,7 @@ app.post('/api/enter', (req, res, next) => {
 			select *
 			from "add_to_meals"
 	`;
-  const params = [meal, userId, mealtime];
+  const params = [meal.toLowerCase(), userId, mealtime];
   db.query(sql, params)
     .then(result => {
       const postedMeal = result.rows[0]
@@ -166,7 +166,7 @@ app.patch('/api/enter/:mealId', (req, res, next) => {
 		WHERE "mealId"=$2
 		RETURNING *;
 	`
-  const values = [req.body.name, req.body.mealId]
+  const values = [req.body.name.toLowerCase(), req.body.mealId]
   db.query(sql, values)
     .then(result => res.status(200).json(result.rows[0]))
 })
