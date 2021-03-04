@@ -71,8 +71,19 @@ app.post('/api/log-in', (req, res, next) => {
 });
 
 app.get('/api/isloggedin', (req, res, next) => {
-  if (!req.session.userId) return res.json({ error: 'not logged in!' });
-  res.json({ success: 'logged in' });
+  const { userId } = req.session
+  if (!userId) return next(new ClientError('Please log in first!', 400))
+  if (isNaN(userId)) return next(new ClientError('User Id must be a positive integer.', 400))
+
+  const sql = `
+		select "username", "city", "state" from "users" where "userId" = $1;`
+  const param = [userId]
+  db.query(sql, param)
+    .then(result => {
+      res.status(200).json(result.rows[0])
+    })
+    .catch(err =>
+      res.status(400).json({ error: err.name }))
 });
 
 app.get('/api/log-out', (req, res, next) => {
