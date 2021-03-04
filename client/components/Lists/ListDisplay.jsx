@@ -35,6 +35,5 @@ class ListDisplay extends Component {
 export default ListDisplay
 
 const Container = styled.div`
-	width: 100%;
-	border: 5px solid rebeccapurple;
+
 `

@@ -376,6 +376,9 @@ const Container = styled.div`
 	}
 
 	.listContainer {
+		max-height: 507px;
+		height: 100%;
+		overflow-y: scroll;
 	}
 
 	.buttonContainer {
