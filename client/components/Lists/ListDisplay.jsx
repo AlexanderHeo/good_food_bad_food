@@ -16,10 +16,8 @@ class ListDisplay extends Component {
                 <div>
                   {
                     displayList[keys[index]].map(z => {
-                      // console.log(z)
                       const k = Object.keys(z)[0]
                       const v = z[Object.keys(z)[0]]
-                      // console.log(k, v)
                       return (
                         <ul key={`${k}${v}${Math.random() * 10}`}>
                           <li>{ k }</li>
