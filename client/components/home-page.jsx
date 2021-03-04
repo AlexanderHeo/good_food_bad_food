@@ -19,7 +19,7 @@ class HomePage extends Component {
 	  listLoaded: false,
 	  isToday: '',
 	  isFuture: '',
-	  listButtonClicked: true,
+	  listButtonClicked: false,
 	  hamburgerClicked: false
 	}
 
@@ -228,11 +228,13 @@ class HomePage extends Component {
 	}
 
 	render() {
-	  const username = this.props.location.state.username
+	  let username
+	  if (this.props.location.state) username = this.props.location.state.username
+	  else username = 'user'
 	  return (
 	    <Container>
 	      <section className='section helloSection'>
-	        <div className='hello'>Hello, { username }!</div>
+	        <div className='hello'>Hello,  { username } !</div>
 	      </section>
 	      <section className='section todaySection'>
 	        {
