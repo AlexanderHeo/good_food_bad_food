@@ -6,7 +6,34 @@ class ListDisplay extends Component {
     let display = null
     const { displayList, level1, level2 } = this.props
     if ((level1 === 'most' || level1 === 'least') && level2 === 'meal') {
-      display = <h1>not set up to display this yet. please come back soon.</h1>
+      const keys = Object.keys(displayList)
+      display = <div>
+        {
+          keys.map((x, index) => {
+            return (
+              <div key={`${x}${Math.random() * 10}`}>
+                <div>{ x }</div>
+                <div>
+                  {
+                    displayList[keys[index]].map(z => {
+                      // console.log(z)
+                      const k = Object.keys(z)[0]
+                      const v = z[Object.keys(z)[0]]
+                      // console.log(k, v)
+                      return (
+                        <ul key={`${k}${v}${Math.random() * 10}`}>
+                          <li>{ k }</li>
+                          <li>{ v }</li>
+                        </ul>
+                      )
+                    })
+                  }
+                </div>
+            	</div>
+            )
+          })
+        }
+      </div>
     } else {
       display = <div>
         {
