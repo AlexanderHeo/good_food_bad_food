@@ -2,13 +2,15 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Level1 from './Level1'
 import Level2 from './Level2'
+import ListDisplay from './ListDisplay'
 
 class Lists extends Component {
 	state = {
 	  level1: '',
 	  level2: '',
 	  dayOrRating: '',
-	  displayList: []
+	  displayList: [],
+	  displayReady: false
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -33,13 +35,22 @@ class Lists extends Component {
 	getAverage = filter => {
 	  if (filter === 'meal') {
 	    const displayList = this.getAvgMeal()
-	    this.setState({ displayList: displayList })
+	    this.setState({
+	      displayList: displayList,
+	      displayReady: true
+	    })
 	  } else if (filter === 'day') {
 	    const displayList = this.getAvgDay()
-	    this.setState({ displayList: displayList })
+	    this.setState({
+	      displayList: displayList,
+	      displayReady: true
+	    })
 	  } else if (filter === 'food') {
 	    const displayList = this.getAvgFood()
-	    this.setState({ displayList: displayList })
+	    this.setState({
+	      displayList: displayList,
+	      displayReady: true
+	    })
 	  }
 	}
 
@@ -220,7 +231,10 @@ class Lists extends Component {
 	    }
 
 	    const displayList = { breakfast, lunch, dinner, snacks }
-	    this.setState({ displayList: displayList })
+	    this.setState({
+	      displayList: displayList,
+	      displayReady: true
+	    })
 
 	  } else if (filter === 'food') {
 	  	const filtered = []
@@ -240,7 +254,10 @@ class Lists extends Component {
 	        })
 	        const displayList = mapped.sort((a, b) => a[Object.keys(a)[0]] - b[Object.keys(b)[0]])
 	        if (rating === 'most') displayList.reverse()
-	        this.setState({ displayList: displayList })
+	        this.setState({
+	          displayList: displayList,
+	          displayReady: true
+	        })
 	      }
 	    })
 	  } else if (filter === 'overall') {
@@ -260,7 +277,10 @@ class Lists extends Component {
 	        return a[Object.keys(a)[0]] - b[Object.keys(b)[0]]
 	      })
 	      if (rating === 'most') displayList.reverse()
-	      this.setState({ displayList: displayList })
+	      this.setState({
+	        displayList: displayList,
+	        displayReady: true
+	      })
 	    })
 	  }
 	}
@@ -271,6 +291,7 @@ class Lists extends Component {
 	  if (name === 'average') {
 	    this.setState({
 	      displayList: [],
+	      displayReady: false,
 	      level1: 'average',
 	      level2: '',
 	      dayOrRating: 'day'
@@ -278,6 +299,7 @@ class Lists extends Component {
 	  } else if (name === 'most') {
 	    this.setState({
 	      displayList: [],
+	      displayReady: false,
 	      level1: 'most',
 	      level2: '',
 	      dayOrRating: 'rating'
@@ -285,6 +307,7 @@ class Lists extends Component {
 	  } else if (name === 'least') {
 	    this.setState({
 	      displayList: [],
+	      displayReady: false,
 	      level1: 'least',
 	      level2: '',
 	      dayOrRating: 'rating'
@@ -301,7 +324,14 @@ class Lists extends Component {
 	        <div className='title'>Your avg/most/leasts</div>
 	      </section>
 	      <section className='listContainer'>
-					list
+	        {
+	          this.state.displayReady &&
+	        	<ListDisplay
+	        	  displayList={ this.state.displayList }
+	        	  level1={ this.state.level1 }
+	        	  level2={ this.state.level2 }
+	        	/>
+	        }
 	      </section>
 	      <section className='buttonContainer'>
 	        <Level1
@@ -342,7 +372,6 @@ const Container = styled.div`
 	}
 
 	.listContainer {
-		border: 10px solid hotpink;
 	}
 
 	.buttonContainer {
