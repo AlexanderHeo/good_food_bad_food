@@ -5,22 +5,22 @@ const Level3Meal = props => {
     <section className='buttonContainer level3'>
       <button
         name='meal'
-        onClick={ this.props.handleClick }
+        onClick={ props.handleClick }
         className='button'
       >Breakfast</button>
       <button
         name='meal'
-        onClick={ this.props.handleClick }
+        onClick={ props.handleClick }
         className='button'
       >Lunch</button>
       <button
         name='meal'
-        onClick={ this.props.handleClick }
+        onClick={ props.handleClick }
         className='button'
       >Dinner</button>
       <button
         name='meal'
-        onClick={ this.props.handleClick }
+        onClick={ props.handleClick }
         className='button'
       >Snacks</button>
     </section>

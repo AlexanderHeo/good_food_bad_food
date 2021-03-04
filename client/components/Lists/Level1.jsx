@@ -2,7 +2,7 @@ import React from 'react'
 
 const Level1 = props => {
   let average, most, least
-  const level1 = this.props.level1
+  const level1 = props.level1
   if (level1 === 'average') {
     average = 'highlight'
   } else if (level1 === 'most') {
@@ -15,17 +15,17 @@ const Level1 = props => {
     <>
       <button
         name='average'
-        onClick={ this.props.handleClick }
+        onClick={ props.handleClick }
         className={`button ${average}`}
       >Average Rating</button>
       <button
         name='most'
-        onClick={ this.props.handleClick }
+        onClick={ props.handleClick }
         className={`button ${most}`}
       >Most Favorite</button>
       <button
         name='least'
-        onClick={ this.props.handleClick }
+        onClick={ props.handleClick }
         className={`button ${least}`}
       >Least Liked</button>
     </>
