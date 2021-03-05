@@ -104,9 +104,15 @@ class HomePage extends Component {
 	  if (action === 'today') {
 	    this.setTime()
 	  } else if (action === 'list') {
-	    this.setState({ listButtonClicked: !this.state.listButtonClicked })
+	    this.setState({
+	      listButtonClicked: !this.state.listButtonClicked,
+	      hamburgerClicked: false
+	    })
 	  } else if (action === 'hamburger') {
-	    this.setState({ hamburgerClicked: !this.state.hamburgerClicked })
+	    this.setState({
+	      hamburgerClicked: !this.state.hamburgerClicked,
+	      listButtonClicked: false
+	    })
 	  } else if (action === 'previousWeek') {
 	    const sunday = this.state.dateSunday.timestamp
 	    const prev = sunday.setHours(
