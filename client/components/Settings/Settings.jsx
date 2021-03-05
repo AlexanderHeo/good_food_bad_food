@@ -123,15 +123,24 @@ const Container = styled.div`
 			padding: 12px 0;
 		}
 		.searchSection {
+			.input {
+				padding: 12px;
+				border: none;
+				outline: none;
+				border-radius: 12px;
+			}
+		}
+		.searchSection {
 			padding-bottom: 36px;
 		}
 		.mainSection {
-			height: 70%;
 			width: 80%;
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
-			align-items: center;
+			overflow-y: scroll;
+			padding: 12px;
+			border: 1px solid var(--primary-4);
+			border-radius: 12px;
 		}
 		.buttonContainer {
 			margin: 12px 0;
@@ -151,6 +160,11 @@ const Container = styled.div`
 			padding: 12px 24px;
 			margin: 12px 0;
 		}
+	}
+
+	.disclaimer {
+		color: var(--warning-4);
+		font-weight: 500;
 	}
 
 	@keyframes slideUp {
