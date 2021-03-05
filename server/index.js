@@ -22,7 +22,7 @@ app.get('/api/health-check', (req, res, next) => {
 });
 
 app.post('/api/sign-up', (req, res, next) => {
-  const { username, password } = req.body;
+  const { username, password, city, state } = req.body;
   if (!username || !password) {
     return next(new ClientError('Invalid username / password!', 400));
   }
@@ -30,11 +30,11 @@ app.post('/api/sign-up', (req, res, next) => {
     .then(hash => {
       const hashedPassword = hash;
       const sql = `
-      insert into "users"("username", "password")
-      values ($1, $2)
-      returning "username", "userId";
+      insert into "users"("username", "password", "city", "state")
+      values ($1, $2, $3, $4)
+      returning *;
       `;
-      const params = [username, hashedPassword];
+      const params = [username, hashedPassword, city, state];
       db.query(sql, params)
         .then(response => {
           const user = response.rows[0].username;
@@ -71,8 +71,19 @@ app.post('/api/log-in', (req, res, next) => {
 });
 
 app.get('/api/isloggedin', (req, res, next) => {
-  if (!req.session.userId) return res.json({ error: 'not logged in!' });
-  res.json({ success: 'logged in' });
+  const { userId } = req.session
+  if (!userId) return next(new ClientError('Please log in first!', 400))
+  if (isNaN(userId)) return next(new ClientError('User Id must be a positive integer.', 400))
+
+  const sql = `
+		select "username", "city", "state" from "users" where "userId" = $1;`
+  const param = [userId]
+  db.query(sql, param)
+    .then(result => {
+      res.status(200).json(result.rows[0])
+    })
+    .catch(err =>
+      res.status(400).json({ error: err.name }))
 });
 
 app.get('/api/log-out', (req, res, next) => {
