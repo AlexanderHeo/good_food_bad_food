@@ -21,7 +21,9 @@ class HomePage extends Component {
 	  isToday: '',
 	  isFuture: '',
 	  listButtonClicked: false,
-	  hamburgerClicked: true
+	  listButtonX: false,
+	  hamburgerClicked: false,
+	  hamburgerX: false
 	}
 
 	async componentDidMount() {
@@ -104,15 +106,27 @@ class HomePage extends Component {
 	  if (action === 'today') {
 	    this.setTime()
 	  } else if (action === 'list') {
-	    this.setState({
-	      listButtonClicked: !this.state.listButtonClicked,
-	      hamburgerClicked: false
-	    })
+	    if (!this.state.listButtonClicked) {
+	      this.setState({
+	        listButtonClicked: true,
+	        listButtonX: true,
+	        hamburgerClicked: false,
+	        hamburgerX: false
+	      })
+	    } else if (this.state.listButtonClicked) {
+	      this.delayState()
+	    }
 	  } else if (action === 'hamburger') {
-	    this.setState({
-	      hamburgerClicked: !this.state.hamburgerClicked,
-	      listButtonClicked: false
-	    })
+	    if (!this.state.hamburgerClicked) {
+	      this.setState({
+	        hamburgerClicked: true,
+	        hamburgerX: true,
+	        listButtonClicked: false,
+	        listButtonX: false
+	      })
+	    } else if (this.state.hamburgerClicked) {
+	      this.delayState()
+	    }
 	  } else if (action === 'previousWeek') {
 	    const sunday = this.state.dateSunday.timestamp
 	    const prev = sunday.setHours(
@@ -143,9 +157,18 @@ class HomePage extends Component {
 	  }
 	}
 
-	handleBackdropClick = () => this.setState({
-	  hamburgerClicked: !this.state.hamburgerClicked
-	})
+	delayState = () => {
+	  this.setState({
+	    hamburgerX: !this.state.hamburgerX,
+	    listButtonX: !this.state.listButtonX
+	  })
+	  setTimeout(() => {
+	    this.setState({
+	      hamburgerClicked: false,
+	      listButtonClicked: false
+	    })
+	  }, 300)
+	}
 
   handleLogOut = () => {
     fetch('/api/log-out')
@@ -316,24 +339,27 @@ class HomePage extends Component {
   					>
   					  <Settings
   					    userData={ this.state.userData }
-  					    clicked={ this.state.hamburgerClicked }
+  					    clicked={ this.state.hamburgerX }
   					    handleClick={ this.handleButtonClick }
-  					    handleBackdropClick={ this.handleBackdropClick }
   					    logout={ this.handleLogOut }
   					  />
   					</section>
 	      }
 	      {
 	        this.state.listButtonClicked &&
-					<section className={ this.state.listButtonClicked ? 'lists open' : 'lists closed' }
+					<section className={ this.state.listButtonClicked ? 'section listsSection open' : 'section listsSection closed' }
 					>
-					  <Lists list={ this.state.list } />
+					  <Lists
+					    list={ this.state.list }
+					    clicked={ this.state.listButtonX }
+					  />
 					</section>
 	      }
 	      <div className='footer'>
         	<Footer
 	          isToday={ this.state.isToday }
 	          clicked={ this.state.hamburgerClicked }
+	          listClicked={ this.state.listButtonClicked }
 	          handleClick={ this.handleButtonClick }
 	        />
 	      </div>
@@ -420,7 +446,7 @@ const Container = styled.div`
 		}
 	}
 
-	.settingsSection {
+	.settingsSection, .listsSection {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -428,10 +454,12 @@ const Container = styled.div`
 		height: calc(100% - 80px);
 		align-items: flex-end;
 	}
-	.settingsSection.open {
+	.settingsSection.open,
+	.listsSection.open {
 		display: flex;
 	}
-	.settingsSection.closed {
+	.settingsSection.closed,
+	.listsSection.closed {
 		display: none;
 	}
 	.footer {
@@ -440,5 +468,22 @@ const Container = styled.div`
 		left: 0;
 		width: 100%;
 		z-index: 1000;
+	}
+
+	@keyframes slideUp {
+		from {
+			transform: translateY(1000px);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+	@keyframes slideDown {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(1000px);
+		}
 	}
 `

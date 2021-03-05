@@ -20,7 +20,6 @@ const Footer = props => (
       className='button list'
     >
       <List clicked={ props.listClicked } />
-      {/* <span className="iconify" data-icon="ant-design:unordered-list-outlined" data-inline="false"></span> */}
     </button>
     <button
       name='hamburger'

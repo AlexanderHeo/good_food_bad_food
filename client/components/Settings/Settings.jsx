@@ -79,7 +79,6 @@ class Setting extends Component {
 
 	  return (
 	    <Container>
-	      {/* <Backdrop handleClick={ () => this.props.handleBackdropClick() } /> */}
 	      <div className={ this.props.clicked ? `${'setting'} ${'open'}` : `${'setting'} ${'closed'}`}>
 	        { SettingDisplay }
 	      </div>
@@ -91,6 +90,9 @@ class Setting extends Component {
 export default Setting
 
 const Container = styled.div`
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--gray-9);
 	.setting {
 		width: 100%;
 		height: 100%;
@@ -168,23 +170,6 @@ const Container = styled.div`
 		background-color: var(--gray-0);
 		border-radius: 2px;
 		padding: 26px;
-	}
-
-	@keyframes slideUp {
-		from {
-			transform: translateY(1000px);
-		}
-		to {
-			transform: translateY(0);
-		}
-	}
-	@keyframes slideDown {
-		from {
-			transform: translateY(0);
-		}
-		to {
-			transform: translateY(1000px);
-		}
 	}
 
 `
