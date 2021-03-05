@@ -165,6 +165,9 @@ const Container = styled.div`
 	.disclaimer {
 		color: var(--warning-4);
 		font-weight: 500;
+		background-color: var(--gray-0);
+		border-radius: 2px;
+		padding: 26px;
 	}
 
 	@keyframes slideUp {
