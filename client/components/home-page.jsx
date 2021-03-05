@@ -9,6 +9,7 @@ import WeeklyReview from './Weekly/Weekly-Review';
 
 class HomePage extends Component {
 	state = {
+	  userData: {},
 	  isLoggedIn: false,
 	  dateToday: '',
 	  dateDisplay: '',
@@ -19,8 +20,8 @@ class HomePage extends Component {
 	  listLoaded: false,
 	  isToday: '',
 	  isFuture: '',
-	  listButtonClicked: true,
-	  hamburgerClicked: false
+	  listButtonClicked: false,
+	  hamburgerClicked: true
 	}
 
 	async componentDidMount() {
@@ -30,14 +31,15 @@ class HomePage extends Component {
 	  if (json.error) return this.props.history.push('/ls')
 	  if (this._isMounted) {
 	    this.setTime()
-	    this.setState({ isLoggedIn: true })
+	    this.setState({
+	      isLoggedIn: true,
+	      userData: json
+	    })
 	  }
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-	  if (prevState.isLoggedIn !== this.state.isLoggedIn) {
-	    this.getList()
-	  }
+	  if (prevState.isLoggedIn !== this.state.isLoggedIn) this.getList()
 	  if (prevState.dateDisplay !== this.state.dateDisplay) {
 	    const isToday = this.state.dateToday.fullDate === this.state.dateDisplay.fullDate
 	    let isFuture
@@ -135,6 +137,10 @@ class HomePage extends Component {
 	  }
 	}
 
+	handleBackdropClick = () => this.setState({
+	  hamburgerClicked: !this.state.hamburgerClicked
+	})
+
   handleLogOut = () => {
     fetch('/api/log-out')
       .then(response => response.json())
@@ -228,11 +234,13 @@ class HomePage extends Component {
 	}
 
 	render() {
-	  const username = this.props.location.state.username
+	  let username
+	  if (this.props.location.state) username = this.props.location.state.username
+	  else username = 'user'
 	  return (
 	    <Container>
 	      <section className='section helloSection'>
-	        <div className='hello'>Hello, { username }!</div>
+	        <div className='hello'>Hello,  { username } !</div>
 	      </section>
 	      <section className='section todaySection'>
 	        {
@@ -301,9 +309,12 @@ class HomePage extends Component {
   					<section className={ this.state.hamburgerClicked ? 'section settingsSection open' : 'section settingsSection closed' }
   					>
   					  <Settings
+  					    userData={ this.state.userData }
   					    clicked={ this.state.hamburgerClicked }
   					    handleClick={ this.handleButtonClick }
-  					    logout={ this.handleLogOut } />
+  					    handleBackdropClick={ this.handleBackdropClick }
+  					    logout={ this.handleLogOut }
+  					  />
   					</section>
 	      }
 	      {

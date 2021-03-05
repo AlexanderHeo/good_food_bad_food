@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import State from '../Functions/StateChooser';
 
@@ -10,7 +10,8 @@ class Signup extends React.Component {
     email: '',
     city: '',
     state: '',
-    message: ''
+    message: '',
+    success: false
   }
 
   handleSubmit = e => {
@@ -21,7 +22,9 @@ class Signup extends React.Component {
   createAccount = () => {
     const goodStuff = {
       username: this.state.username,
-      password: this.state.password
+      password: this.state.password,
+      city: this.state.city,
+      state: this.state.state
     };
     const init = {
       method: 'POST',
@@ -35,6 +38,7 @@ class Signup extends React.Component {
       .then(response => response.json())
       .then(result => {
         if (result.success) {
+          this.setState({ success: true })
           this.props.history.push('/home');
         } else {
           this.setState({ message: result.error });
@@ -129,6 +133,16 @@ class Signup extends React.Component {
 	      <div className='linkContainer'>
 	      	<Link to='/login' className='link'>login</Link>
 	      </div>
+	      {
+	        this.state.success &&
+					<Redirect
+					  from='/signup'
+					  to={{
+					    pathname: 'home',
+					    state: { username: this.state.username }
+					  }}
+					/>
+	      }
 	    </Container>
 	  );
 	}
