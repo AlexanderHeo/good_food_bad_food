@@ -10,10 +10,23 @@ class Lists extends Component {
 	  level2: '',
 	  dayOrRating: '',
 	  displayList: [],
-	  displayReady: false
+	  displayReady: false,
+	  level2opening: false,
+	  level2closing: false
 	}
 
 	componentDidUpdate(prevProps, prevState) {
+	  if (prevState.level1 !== this.state.level1) {
+	    if (this.state.level2opening) {
+	      this.openLevel2()
+	      this.setState({
+	        level2opening: false,
+	        level2closing: true
+	      })
+	    } else if (!this.state.level2opening) {
+	      this.setState({ level2opening: true })
+	    }
+	  }
 	  if (prevState.level2 !== this.state.level2) {
 	    this.doTheThing()
 	  }
@@ -30,6 +43,15 @@ class Lists extends Component {
 	  } else if (level1 === 'least') {
 	    this.getMost(level2, 'least')
 	  }
+	}
+
+	openLevel2 = () => {
+	  setTimeout(() => {
+	    this.setState({
+	      level2opening: !this.state.level2opening,
+	      level2closing: !this.state.level2closing
+	    })
+	  }, 300)
 	}
 
 	getAverage = filter => {
@@ -322,35 +344,44 @@ class Lists extends Component {
 	}
 
 	render() {
+	  let buttonContainerClass = 'buttonContainer'
+	  if (this.state.level2opening) buttonContainerClass = 'buttonContainer opening'
+	  if (this.state.level2closing) buttonContainerClass = 'buttonContainer closing'
+
 	  return (
 	    <Container>
-	      <section className='listHeader'>
-	        <div className='title'>Your avg/most/leasts</div>
-	      </section>
-	      <section className='listContainer'>
-	        {
-	          this.state.displayReady &&
-	        	<ListDisplay
-	        	  displayList={ this.state.displayList }
-	        	  level1={ this.state.level1 }
-	        	  level2={ this.state.level2 }
-	        	/>
-	        }
-	      </section>
-	      <section className='buttonContainer'>
-	        <Level1
-	          handleClick={ this.handleClick }
-	          level1={ this.state.level1 }
-	        />
-	      	{
-	          this.state.level1 &&
-						<Level2
-						  handleClick={ this.handleClick }
-						  dayOrRating={ this.state.dayOrRating }
-						  level2={ this.state.level2 }
-						/>
-	        }
-	      </section>
+	      <div className={ this.props.clicked ? `${'lists'} ${'open'}` : `${'lists'} ${'closed'}` }>
+
+	        <section className='listHeader'>
+	          <div className='title'>Your avg/most/leasts</div>
+	        </section>
+	        <section className='listContainer'>
+	          {
+	            this.state.displayReady &&
+							<ListDisplay
+							  displayList={ this.state.displayList }
+							  level1={ this.state.level1 }
+							  level2={ this.state.level2 }
+							/>
+	          }
+	        </section>
+	        <section className={ buttonContainerClass }>
+	          <div className='level1container'>
+	            <Level1
+	              handleClick={ this.handleClick }
+	              level1={ this.state.level1 }
+	            />
+	          </div>
+	          <div className='level2container'>
+	            <Level2
+	              handleClick={ this.handleClick }
+	              dayOrRating={ this.state.dayOrRating }
+	              level2={ this.state.level2 }
+	            />
+	          </div>
+
+	        </section>
+	      </div>
 	    </Container>
 	  )
 	}
@@ -360,11 +391,25 @@ export default Lists
 
 const Container = styled.div`
 	width: 100vw;
-	height: calc(100vh - 80px);
-	background-color: var(--primary-0);
-	position: absolute;
-	top: 0;
-	left: 0;
+	height: 100vh;
+	background-color: var(--gray-9);
+	.lists {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 100;
+		background-color: var(--primary-0);
+		transform: translateY(1000px);
+		overflow-y: scroll;
+	}
+	.lists.open {
+		animation: slideUp 0.3s forwards;
+	}
+	.lists.closed {
+		animation: slideDown 0.3s forwards;
+	}
 
 	.listHeader {
 		text-align: center;
@@ -376,19 +421,17 @@ const Container = styled.div`
 	}
 
 	.listContainer {
-		max-height: 507px;
-		height: 100%;
 		overflow-y: scroll;
 	}
 
 	.buttonContainer {
 		width: 100%;
-		position: absolute;
-		bottom: 0;
-		left: 0;
 		background-color: var(--primary-2);
 		padding: 16px 0 0;
 		text-align: center;
+		position: fixed;
+		bottom: 0;
+		transform: translateY(50px);
 	}
 	.button {
 		font-size: 1rem;
@@ -399,11 +442,36 @@ const Container = styled.div`
 		justify-content: center;
 		margin: 2px;
 	}
-	.level2, .level3 {
+	.level1container,
+	.level2container {
 		position: initial;
+		margin-bottom: 6px;
 	}
 	.highlight {
 		background-color: var(--primary-6);
 		color: var(--primary-0);
+	}
+	.buttonContainer.opening {
+		animation: level2SlideUp 0.3s forwards ease-out;
+		animation-delay: 0.3s;
+	}
+	.buttonContainer.closing {
+		animation: level2SlideDown 0.3s forwards ease-in;
+	}
+	@keyframes level2SlideUp {
+		from {
+			transform: translateY(50px);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+	@keyframes level2SlideDown {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(50px);
+		}
 	}
 `

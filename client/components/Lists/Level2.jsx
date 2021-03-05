@@ -17,7 +17,7 @@ const Level2 = props => {
   }
 
   return (
-    <section className='buttonContainer level2'>
+    <>
       <button
         name='meal'
         onClick={ props.handleClick }
@@ -29,7 +29,7 @@ const Level2 = props => {
         className='button'
       >by Food</button>
       {button}
-    </section>
+    </>
   )
 }
 
