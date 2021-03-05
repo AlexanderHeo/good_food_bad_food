@@ -359,6 +359,7 @@ class HomePage extends Component {
         	<Footer
 	          isToday={ this.state.isToday }
 	          clicked={ this.state.hamburgerClicked }
+	          listClicked={ this.state.listButtonClicked }
 	          handleClick={ this.handleButtonClick }
 	        />
 	      </div>

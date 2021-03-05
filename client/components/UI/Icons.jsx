@@ -125,7 +125,9 @@ const HamburgerContainer = styled.div`
 
 export const List = props => (
   <ListContainer>
-    <div className={ props.clicked ? 'list clicked' : 'list closed' }>
+    <div className={ props.clicked ? 'listComponent open' : 'listComponent closed' }>
+      <div className='x x1' />
+      <div className='x x2' />
       <div className='bar bar1'>
         <div className='dot dot1' />
         <div className='line line1' />
@@ -144,11 +146,12 @@ export const List = props => (
 
 const ListContainer = styled.div`
 
-	.list {
+	.listComponent {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		overflow: hidden;
 	}
 
 	.bar {
@@ -171,6 +174,45 @@ const ListContainer = styled.div`
 			background-color: var(--primary-4);
 		}
 	}
+	.x {
+		width: 30px;
+		height: 3px;
+		background-color: var(--primary-4);
+	}
+	.x1 { transform: rotate(50deg) translate(-28px, 10px); }
+	.x2 { transform: rotate(-50deg) translate(30px, 8px); }
+	.listComponent.open .bar { animation: hideBarsopen .3s forwards ease-out; }
+	.listComponent.open .x1 { animation: x1open .3s forwards ease-out; }
+	.listComponent.open .x2 { animation: x2open .3s forwards ease-out; }
+	.listComponent.closed .bar { animation: hideBarsclosed .3s forwards ease-out; }
+	.listComponent.closed .x1 { animation: x1closed .3s forwards ease-out; }
+	.listComponent.closed .x2 { animation: x2closed .3s forwards ease-out; }
+
+	@keyframes hideBarsopen {
+		from { transform: translateY(0); }
+		to { transform: translateY(38px); }
+	}
+	@keyframes x1open {
+	from { transform: rotate(50deg) translate(-28px, 10px); }
+	to { transform: rotate(50deg) translate(12px, 10px); }
+	}
+	@keyframes x2open {
+	from { transform: rotate(-50deg) translate(28px, 10px); }
+	to { transform: rotate(-50deg) translate(-10px, 8px); }
+	}
+	@keyframes hideBarsclosed {
+		from { transform: translateY(38px); }
+		to { transform: translateY(0); }
+	}
+	@keyframes x1closed {
+		from { transform: rotate(50deg) translate(12px, 10px); }
+		to { transform: rotate(50deg) translate(-28px, 10px); }
+	}
+	@keyframes x2closed {
+		from { transform: rotate(-50deg) translate(-10px, 8px); }
+		to { transform: rotate(-50deg) translate(28px, 10px); }
+	}
+
 `
 
 export const AddPlus = props => (
