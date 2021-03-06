@@ -76,7 +76,7 @@ app.get('/api/isloggedin', (req, res, next) => {
   if (isNaN(userId)) return next(new ClientError('User Id must be a positive integer.', 400))
 
   const sql = `
-		select "username", "city", "state" from "users" where "userId" = $1;`
+		select "userId", "username", "city", "state" from "users" where "userId" = $1;`
   const param = [userId]
   db.query(sql, param)
     .then(result => {
@@ -91,6 +91,51 @@ app.get('/api/log-out', (req, res, next) => {
   delete req.session.userId;
   res.json({ success: 'Successful log-out' });
 });
+
+app.patch('/api/reset/:userId', (req, res, next) => {
+  const { userId, newPassword } = req.body
+  // validation for userId and newPassword
+  bcrypt.hash(newPassword, 10)
+    .then(hash => {
+      const sql = `
+				update "users"
+				set "password" = $2
+				where "userId" = $1
+				returning *;
+			`
+      const params = [userId, hash]
+      db.query(sql, params)
+        .then(response => {
+          if (response.rows[0]) {
+            res.json({ success: true })
+          }
+        })
+    })
+})
+
+app.post('/api/check', (req, res, next) => {
+  const { userId, password } = req.body
+  // console.log(userId, password)
+  // validate userId and password
+  const sql = `
+		select * from "users" where "userId" = $1
+	`
+  const param = [userId]
+  db.query(sql, param)
+    .then(response => {
+      const resp = response.rows[0]
+      const dbPW = resp.password
+      // if (!resp) return next(new ClientError('User Account Does Not Exist!', 400))
+      // if (resp.userId !== req.session.userId) return next(new ClientError('Error: code 234kd'))
+      // if (resp.username !== username) return next(new ClientError('Username does not exist', 400))
+      bcrypt.compare(password, dbPW)
+        .then(result => {
+          if (!result) return next(new ClientError('Invalid username/password!', 400))
+          res.json({ success: result })
+        })
+        .catch(err => next(err))
+    })
+})
 
 app.get('/api/list', (req, res, next) => {
   const { userId } = req.session;
