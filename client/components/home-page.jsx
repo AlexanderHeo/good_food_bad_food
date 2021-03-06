@@ -486,4 +486,15 @@ const Container = styled.div`
 			transform: translateY(1000px);
 		}
 	}
+	.mealDisplay, .enterMealDisplay, .weeklyDisplay {
+		height: 100%;
+		transform: translateX(-20px);
+		opacity: 0;
+	}
+	.slideIn {
+		animation: slideIn 0.4s forwards;
+	}
+	@keyframes slideIn {
+		to { transform: translateX(0); opacity: 1 }
+	}
 `

@@ -110,7 +110,7 @@ class EnterMeal extends Component {
 
 	render() {
 	  return (
-	    <Container>
+	    <Container className='enterMealDisplay slideIn'>
 	      <div className='enterHeader'>
 	        <button
 	          name='return'
@@ -150,16 +150,16 @@ class EnterMeal extends Component {
 	                >
 	                  <span className="iconify" data-icon="ant-design:edit-filled" data-inline="false" />
 	                </button>
-	            	</div>
+	              </div>
 	            : <input // entering new name
-	                type='text'
-	                placeholder='What did you eat?'
-	                className='input'
-	                value={ this.state.value }
-	                onChange={ this.handleInputChange }
-	                onFocus={ this.handleInputFocus }
-	                ref={ input => { this.nameInput = input } }
-	              />
+	              type='text'
+	              placeholder='What did you eat?'
+	              className='input'
+	              value={ this.state.value }
+	              onChange={ this.handleInputChange }
+	              onFocus={ this.handleInputFocus }
+	              ref={ input => { this.nameInput = input } }
+	            />
 	        }
 	      </form>
 	      <div className='voteContainer'>
