@@ -594,9 +594,128 @@ class WeeklyReview extends Component {
 	      weekDates.push(date)
 	    }
 	  }
+	  let sunBE = ''
+	  let sunBR = ''
+	  let sunLE = ''
+	  let sunLR = ''
+	  let sunDE = ''
+	  let sunDR = ''
+	  let sunSE = ''
+	  let sunSR = ''
+	  let monBE = ''
+	  let monBR = ''
+	  let monLE = ''
+	  let monLR = ''
+	  let monDE = ''
+	  let monDR = ''
+	  let monSE = ''
+	  let monSR = ''
+	  let tueBE = ''
+	  let tueBR = ''
+	  let tueLE = ''
+	  let tueLR = ''
+	  let tueDE = ''
+	  let tueDR = ''
+	  let tueSE = ''
+	  let tueSR = ''
+	  let wedBE = ''
+	  let wedBR = ''
+	  let wedLE = ''
+	  let wedLR = ''
+	  let wedDE = ''
+	  let wedDR = ''
+	  let wedSE = ''
+	  let wedSR = ''
+	  let thuBE = ''
+	  let thuBR = ''
+	  let thuLE = ''
+	  let thuLR = ''
+	  let thuDE = ''
+	  let thuDR = ''
+	  let thuSE = ''
+	  let thuSR = ''
+	  let friBE = ''
+	  let friBR = ''
+	  let friLE = ''
+	  let friLR = ''
+	  let friDE = ''
+	  let friDR = ''
+	  let friSE = ''
+	  let friSR = ''
+	  let satBE = ''
+	  let satBR = ''
+	  let satLE = ''
+	  let satLR = ''
+	  let satDE = ''
+	  let satDR = ''
+	  let satSE = ''
+	  let satSR = ''
+	  // const { mealHighlights } = this.state
+	  const { sunHighlight, monHighlight, tueHighlight, wedHighlight, thuHighlight, friHighlight, satHighlight } = this.state.mealHighlights
+	  // console.log(mealHighlights)
+	  if (sunHighlight.b.entered) sunBE = 'entered'
+	  if (sunHighlight.b.rated) sunBR = 'rated'
+	  if (sunHighlight.l.entered) sunLE = 'entered'
+	  if (sunHighlight.l.rated) sunLR = 'rated'
+	  if (sunHighlight.d.entered) sunDE = 'entered'
+	  if (sunHighlight.d.rated) sunDR = 'rated'
+	  if (sunHighlight.s.entered) sunSE = 'entered'
+	  if (sunHighlight.s.rated) sunSR = 'rated'
 
-	  const entered = ''
-	  const rated = ''
+	  if (monHighlight.b.entered) monBE = 'entered'
+	  if (monHighlight.b.rated) monBR = 'rated'
+	  if (monHighlight.l.entered) monLE = 'entered'
+	  if (monHighlight.l.rated) monLR = 'rated'
+	  if (monHighlight.d.entered) monDE = 'entered'
+	  if (monHighlight.d.rated) monDR = 'rated'
+	  if (monHighlight.s.entered) monSE = 'entered'
+	  if (monHighlight.s.rated) monSR = 'rated'
+
+	  if (tueHighlight.b.entered) tueBE = 'entered'
+	  if (tueHighlight.b.rated) tueBR = 'rated'
+	  if (tueHighlight.l.entered) tueLE = 'entered'
+	  if (tueHighlight.l.rated) tueLR = 'rated'
+	  if (tueHighlight.d.entered) tueDE = 'entered'
+	  if (tueHighlight.d.rated) tueDR = 'rated'
+	  if (tueHighlight.s.entered) tueSE = 'entered'
+	  if (tueHighlight.s.rated) tueSR = 'rated'
+
+	  if (wedHighlight.b.entered) wedBE = 'entered'
+	  if (wedHighlight.b.rated) wedBR = 'rated'
+	  if (wedHighlight.l.entered) wedLE = 'entered'
+	  if (wedHighlight.l.rated) wedLR = 'rated'
+	  if (wedHighlight.d.entered) wedDE = 'entered'
+	  if (wedHighlight.d.rated) wedDR = 'rated'
+	  if (wedHighlight.s.entered) wedSE = 'entered'
+	  if (wedHighlight.s.rated) wedSR = 'rated'
+
+	  if (thuHighlight.b.entered) thuBE = 'entered'
+	  if (thuHighlight.b.rated) thuBR = 'rated'
+	  if (thuHighlight.l.entered) thuLE = 'entered'
+	  if (thuHighlight.l.rated) thuLR = 'rated'
+	  if (thuHighlight.d.entered) thuDE = 'entered'
+	  if (thuHighlight.d.rated) thuDR = 'rated'
+	  if (thuHighlight.s.entered) thuSE = 'entered'
+	  if (thuHighlight.s.rated) thuSR = 'rated'
+
+	  if (friHighlight.b.entered) friBE = 'entered'
+	  if (friHighlight.b.rated) friBR = 'rated'
+	  if (friHighlight.l.entered) friLE = 'entered'
+	  if (friHighlight.l.rated) friLR = 'rated'
+	  if (friHighlight.d.entered) friDE = 'entered'
+	  if (friHighlight.d.rated) friDR = 'rated'
+	  if (friHighlight.s.entered) friSE = 'entered'
+	  if (friHighlight.s.rated) friSR = 'rated'
+
+	  if (satHighlight.b.entered) satBE = 'entered'
+	  if (satHighlight.b.rated) satBR = 'rated'
+	  if (satHighlight.l.entered) satLE = 'entered'
+	  if (satHighlight.l.rated) satLR = 'rated'
+	  if (satHighlight.d.entered) satDE = 'entered'
+	  if (satHighlight.d.rated) satDR = 'rated'
+	  if (satHighlight.s.entered) satSE = 'entered'
+	  if (satHighlight.s.rated) satSR = 'rated'
+
 	  return (
 	    <Table>
 	      {
@@ -625,46 +744,46 @@ class WeeklyReview extends Component {
 					  <tbody className='tableBody'>
 					    <tr className='mealHighlight'>
 					      <td className='mealInitialContainer sun'>
-					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
-					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
-					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
-					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					        <span className={`mealInitial breakfast ${sunBE} ${sunBR}`}>B</span>
+					        <span className={`mealInitial lunch ${sunLE} ${sunLR}`}>L</span>
+					        <span className={`mealInitial dinner ${sunDE} ${sunDR}`}>D</span>
+					        <span className={`mealInitial snacks ${sunSE} ${sunSR}`}>S</span>
 					      </td>
 					      <td className='mealInitialContainer mon'>
-					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
-					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
-					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
-					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					        <span className={`mealInitial breakfast ${monBE} ${monBR}`}>B</span>
+					        <span className={`mealInitial lunch ${monLE} ${monLR}`}>L</span>
+					        <span className={`mealInitial dinner ${monDE} ${monDR}`}>D</span>
+					        <span className={`mealInitial snacks ${monSE} ${monSR}`}>S</span>
 					      </td>
 					      <td className='mealInitialContainer tue'>
-					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
-					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
-					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
-					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					        <span className={`mealInitial breakfast ${tueBE} ${tueBR}`}>B</span>
+					        <span className={`mealInitial lunch ${tueLE} ${tueLR}`}>L</span>
+					        <span className={`mealInitial dinner ${tueDE} ${tueDR}`}>D</span>
+					        <span className={`mealInitial snacks ${tueSE} ${tueSR}`}>S</span>
 					      </td>
 					      <td className='mealInitialContainer wed'>
-					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
-					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
-					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
-					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					        <span className={`mealInitial breakfast ${wedBE} ${wedBR}`}>B</span>
+					        <span className={`mealInitial lunch ${wedLE} ${wedLR}`}>L</span>
+					        <span className={`mealInitial dinner ${wedDE} ${wedDR}`}>D</span>
+					        <span className={`mealInitial snacks ${wedSE} ${wedSR}`}>S</span>
 					      </td>
 					      <td className='mealInitialContainer thu'>
-					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
-					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
-					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
-					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					        <span className={`mealInitial breakfast ${thuBE} ${thuBR}`}>B</span>
+					        <span className={`mealInitial lunch ${thuLE} ${thuLR}`}>L</span>
+					        <span className={`mealInitial dinner ${thuDE} ${thuDR}`}>D</span>
+					        <span className={`mealInitial snacks ${thuSE} ${thuSR}`}>S</span>
 					      </td>
 					      <td className='mealInitialContainer fri'>
-					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
-					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
-					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
-					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					        <span className={`mealInitial breakfast ${friBE} ${friBR}`}>B</span>
+					        <span className={`mealInitial lunch ${friLE} ${friLR}`}>L</span>
+					        <span className={`mealInitial dinner ${friDE} ${friDR}`}>D</span>
+					        <span className={`mealInitial snacks ${friSE} ${friSR}`}>S</span>
 					      </td>
 					      <td className='mealInitialContainer sat'>
-					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
-					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
-					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
-					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					        <span className={`mealInitial breakfast ${satBE} ${satBR}`}>B</span>
+					        <span className={`mealInitial lunch ${satLE} ${satLR}`}>L</span>
+					        <span className={`mealInitial dinner ${satDE} ${satDR}`}>D</span>
+					        <span className={`mealInitial snacks ${satSE} ${satSR}`}>S</span>
 					      </td>
 					    </tr>
 					    <tr className='tableRow'>
