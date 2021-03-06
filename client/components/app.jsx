@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import HomePage from './Home-Page';
 import Login from './Login-Signup/Login';
-import LoginSignup from './Login-Signup/Login-Signup';
+import Logo from './Login-Signup/Logo';
 import Reset from './Login-Signup/ResetPassword';
 import Signup from './Login-Signup/Signup';
 
@@ -11,12 +11,12 @@ const App = () => {
   return (
     <Container>
       <Router>
-        <Route path="/ls" component={LoginSignup} />
+        <Route path="/logo" component={Logo} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/home" component={HomePage} />
         <Route path='/reset' component={Reset} />
-        <Redirect from='/' to='login' />
+        <Redirect from='/' to='logo' />
       </Router>
     </Container>
   )

@@ -329,6 +329,7 @@ class HomePage extends Component {
   					  dateSunday={ this.state.dateSunday }
   					  handleClick={ this.handleWeeklyClick }
   					  previousWeek={ this.state.previousWeek }
+  					  isToday={ this.state.isToday }
   					  isFuture={ this.state.isFuture }
   					/>
 	        }
@@ -485,5 +486,16 @@ const Container = styled.div`
 		to {
 			transform: translateY(1000px);
 		}
+	}
+	.slideDisplay {
+		height: 100%;
+		transform: translateX(-20px);
+		opacity: 0;
+	}
+	.slideIn {
+		animation: slideIn 0.4s forwards;
+	}
+	@keyframes slideIn {
+		to { transform: translateX(0); opacity: 1 }
 	}
 `

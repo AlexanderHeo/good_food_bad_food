@@ -1,35 +1,49 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Hamburger, List } from './Icons'
 
-const Footer = props => (
-  <Container>
-    {
-      !props.isToday &&
-			<button
-			  name='today'
-			  onClick={ props.handleClick }
-			  className='button home'
-			>
-			  <span className="iconify" data-icon="bx:bxs-home-smile" data-inline="false"></span>
-			</button>
-    }
-    <button
-      name='list'
-      onClick={ props.handleClick }
-      className='button list'
-    >
-      <List clicked={ props.listClicked } />
-    </button>
-    <button
-      name='hamburger'
-      onClick={ props.handleClick }
-      className='button hamburger'
-    >
-      <Hamburger clicked={ props.clicked } />
-    </button>
-  </Container>
-)
+class Footer extends Component {
+	state = {
+	  isToday: true
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevProps.isToday !== this.props.isToday) {
+	    this.setState({ isToday: this.props.isToday })
+	  }
+	}
+
+	render() {
+	  return (
+	    <Container>
+	      {
+	        !this.state.isToday &&
+					<button
+					  name='today'
+					  onClick={ this.props.handleClick }
+					  className='button home'
+					>
+					  <span className="iconify" data-icon="bx:bxs-home-smile" data-inline="false"></span>
+					</button>
+	      }
+	      <button
+	        name='list'
+	        onClick={ this.props.handleClick }
+	        className='button list'
+	      >
+	        <List clicked={ this.props.listClicked } />
+	      </button>
+	      <button
+	        name='hamburger'
+	        onClick={ this.props.handleClick }
+	        className='button hamburger'
+	      >
+	        <Hamburger clicked={ this.props.clicked } />
+	      </button>
+	    </Container>
+	  )
+	}
+}
 
 export default Footer
 
