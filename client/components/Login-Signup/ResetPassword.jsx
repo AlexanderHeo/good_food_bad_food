@@ -48,9 +48,16 @@ class ResetPassword extends Component {
 	      this.setState({
 	        newPasswordModalDisplay: true
 	      })
-	    } else if (!newPassword) {
+	    }
+	  } else if (e.target.name === 'finalSubmit') {
+	    if (!newPassword) {
 	      this.setState({
 	        errorMessage: 'Enter a new password.'
+	      })
+	    }
+	    if (newPassword === oldone) {
+	      this.setState({
+	        errorMessage: 'New password must be different.'
 	      })
 	    }
 	  }
@@ -59,46 +66,51 @@ class ResetPassword extends Component {
 	render() {
 	  return (
 	    <Container>
-	      <form className='form'>
-	        <div>
-	          <label htmlFor='username'>Username: </label>
-	          <input onChange={this.handleChange} onFocus={this.handleOnFocus} name='username' value={this.state.username} type='text' />
-	        </div>
-	        <div>
-	          <label htmlFor='oldone'>Old Password: </label>
-	          <input onChange={this.handleChange} onFocus={this.handleOnFocus} name='oldone' value={this.state.oldone} type={this.state.p1Displayed ? 'text' : 'password'} />
-	          <button className='passwordDisplay' onClick={this.handleClick} name='oldone'>{this.state.p1Displayed ? 'Hide' : 'Show' }</button>
-	        </div>
-	        <div>
-	          <label htmlFor='oldtwo'>Old Password: </label>
-	          <input onChange={this.handleChange} onFocus={this.handleOnFocus} name='oldtwo' value={this.state.oldtwo} type={this.state.p2Displayed ? 'text' : 'password'} />
-	          <button className='passwordDisplay' onClick={this.handleClick} name='oldtwo'>{this.state.p2Displayed ? 'Hide' : 'Show' }</button>
-	        </div>
-	        {
-	          this.state.errorMessage
-	            ? <div>{ this.state.errorMessage }</div>
-	            : <div className='buttonContainer'>
-	              <button onClick={this.handleClick} name='submit'>Submit</button>
-	              <button>Return</button>
-	            </div>
-	        }
-	      </form>
-	      <Link to='/login' className='link'>Return</Link>
 	      {
-	        this.state.newPasswordModalDisplay &&
-					<div className='newPassword'>
+	        this.state.newPasswordModalDisplay
+	          ? <div className='newPasswordContainer'>
 					  <h2>Change yo passwords here!</h2>
 					  <form className='form'>
-					    <div>
-					      <label htmlFor='newPassword'>New Password:</label>
-					      <input name='newPassword' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.newPassword} type={this.state.newDisplayed ? 'text' : 'password'} />
+					    <div className='formSection'>
+					      <label className='label' htmlFor='newPassword'>New Password:</label>
+					      <input className='input' name='newPassword' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.newPassword} type={this.state.newDisplayed ? 'text' : 'password'} />
 					      <button onClick={this.handleClick} className='passwordDisplay' name='newPassword'>{this.state.newDisplayed ? 'Hide' : 'Show'}</button>
 					    </div>
-					    <div className='buttonContainer'>
-					      <button onClick={this.handleClick} name='finalSubmit' className='button'>Submit</button>
-					    </div>
+	              {
+	                this.state.errorMessage
+	                  ? <h2>{ this.state.errorMessage }</h2>
+	                  : <div className='buttonContainer'>
+	                    <button onClick={this.handleClick} name='finalSubmit' className='button'>Submit</button>
+	                    <Link to='/login' className='link'>Return</Link>
+	                  </div>
+	              }
 					  </form>
-					</div>
+	          </div>
+	          : <form className='form'>
+	            <div className='formSection'>
+	              <label className='label' htmlFor='username'>Username: </label>
+	              <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='username' value={this.state.username} type='text' />
+	            </div>
+	            <div className='formSection'>
+	              <label className='label' htmlFor='oldone'>Old Password: </label>
+	              <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='oldone' value={this.state.oldone} type={this.state.p1Displayed ? 'text' : 'password'} />
+	              <button className='passwordDisplay' onClick={this.handleClick} name='oldone'>{this.state.p1Displayed ? 'Hide' : 'Show' }</button>
+	            </div>
+	            <div className='formSection'>
+	              <label className='label' htmlFor='oldtwo'>Old Password: </label>
+	              <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='oldtwo' value={this.state.oldtwo} type={this.state.p2Displayed ? 'text' : 'password'} />
+	              <button className='passwordDisplay' onClick={this.handleClick} name='oldtwo'>{this.state.p2Displayed ? 'Hide' : 'Show' }</button>
+	            </div>
+	            {
+	              this.state.errorMessage
+	                ? <div>{ this.state.errorMessage }</div>
+	                : <div className='buttonContainer'>
+	                  <button onClick={this.handleClick} name='submit'>Submit</button>
+	                  <button>Return</button>
+	                  <Link to='/login' className=''>Return</Link>
+	                </div>
+	            }
+	          </form>
 	      }
 	    </Container>
 	  )
@@ -127,7 +139,7 @@ const Container = styled.div`
 		background-color: var(--primary-6);
 		color: var(--primary-0);
 	}
-	.newPassword {
+	.newPasswordContainer {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -137,5 +149,32 @@ const Container = styled.div`
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+	}
+	.form {
+		border: 1px solid black;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		align-items: center;
+	}
+	.formSection {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		margin: 6px 0;
+		position: relative;
+	}
+	.label {
+		width: 24%;
+		text-align: right;
+		margin-right: 6px;
+	}
+	.input {
+		width: 70%;
+	}
+	.passwordDisplay {
+		position: absolute;
+		right: 8px;
+		bottom: 1px;
 	}
 `
