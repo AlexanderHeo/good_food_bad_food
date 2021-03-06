@@ -31,10 +31,10 @@ const Main = props => (
       <Link to={{
 	            pathname: '/reset',
 	            state: {
-	              username: props.userData.username
+	              userData: props.userData
 	            }
 	          }}
-	            className='link'
+	            className='button'
 	          >reset password</Link>
       <button
         name='signout'

@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
 class ResetPassword extends Component {
 	state = {
-	  username: '',
 	  password: '',
-	  oldtwo: '',
+	  reenter: '',
 	  newPassword: '',
 	  p1Displayed: false,
 	  p2Displayed: false,
 	  newDisplayed: false,
 	  errorMessage: '',
-	  newPasswordModalDisplay: false
+	  newPasswordModalDisplay: false,
+	  success: false
 	}
 
 	handleChange = e => {
@@ -25,26 +25,22 @@ class ResetPassword extends Component {
 
 	handleClick = e => {
 	  e.preventDefault()
-	  const { password, oldtwo, newPassword, p1Displayed, p2Displayed, newDisplayed } = this.state
+	  const { password, reenter, newPassword, p1Displayed, p2Displayed, newDisplayed } = this.state
 
 	  if (e.target.name === 'password') {
 	    this.setState({ p1Displayed: !p1Displayed })
-	  } else if (e.target.name === 'oldtwo') {
+	  } else if (e.target.name === 'reenter') {
 	    this.setState({ p2Displayed: !p2Displayed })
 	  } else if (e.target.name === 'newPassword') {
 	    this.setState({ newDisplayed: !newDisplayed })
 	  } else if (e.target.name === 'submit') {
-	    if (!this.state.username) {
-	      this.setState({
-	        errorMessage: 'Please enter your username.'
-	      })
-	    } else if (!password || !oldtwo) {
+	    if (!password || !reenter) {
 	      this.setState({ errorMessage: 'Enter your password' })
-	    } else if ((password && oldtwo) && (password !== oldtwo)) {
+	    } else if ((password && reenter) && (password !== reenter)) {
 	      this.setState({
 	        errorMessage: 'Passwords do not match.'
 	      })
-	    } else if ((password && oldtwo) && (password === oldtwo)) {
+	    } else if ((password && reenter) && (password === reenter)) {
 	      this.checkOldPassword()
 	    }
 	  } else if (e.target.name === 'finalSubmit') {
@@ -65,16 +61,16 @@ class ResetPassword extends Component {
 	}
 
 	checkOldPassword = async () => {
-	  const { username, password } = this.state
-	  const usernameData = {
-	    username, password
+	  const { password } = this.state
+	  const userData = {
+	    userId: this.props.location.state.userData.userId, password
 	  }
 	  const init = {
 	    method: 'POST',
 	    headers: {
 	      'Content-Type': 'application/json'
 	    },
-	    body: JSON.stringify(usernameData)
+	    body: JSON.stringify(userData)
 	  }
 	  const checkRes = await fetch('/api/check', init)
 	  const checkJSON = await checkRes.json()
@@ -85,23 +81,31 @@ class ResetPassword extends Component {
 	  }
 	}
 
-	setNewPassword = async () => {
-	  const { username, newPassword } = this.state
-	  const usernameData = { username, newPassword }
+	setNewPassword = () => {
+	  const { newPassword } = this.state
+	  const userId = this.props.location.state.userData.userId
+	  const patchData = { userId, newPassword }
 	  const init = {
-	    method: 'POST',
-	    header: {
+	    method: 'PATCH',
+	    headers: {
 	      'Content-Type': 'application/json'
 	    },
-	    body: JSON.stringify(usernameData)
+	    body: JSON.stringify(patchData)
 	  }
-	  const setNewRes = await fetch('/api/setNew', init)
-	  const setNewJSON = await setNewRes.json()
-	  if (setNewJSON.success) {
-	    this.setState({ success: true })
-	  } else if (setNewJSON.error) {
-	    this.setState({ error: setNewJSON.error })
-	  }
+	  fetch(`/api/reset/${userId}`, init)
+	    .then(response => response.json())
+	    .then(data => {
+	      if (data.success) {
+	        this.setState({ success: true })
+	      }
+	    })
+	  // const setNewRes = await fetch(`/api/reset/${userId}`, init)
+	  // const setNewJSON = await setNewRes.json()
+	  // if (setNewJSON.success) {
+	  //   this.setState({ success: true })
+	  // } else if (setNewJSON.error) {
+	  //   this.setState({ error: setNewJSON.error })
+	  // }
 	}
 
 	render() {
@@ -131,18 +135,14 @@ class ResetPassword extends Component {
 	            <h2>Enter yo old password here!</h2>
 	            <form className='form'>
 	              <div className='formSection'>
-	                <label className='label' htmlFor='username'>Username: </label>
-	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='username' value={this.state.username} type='text' />
-	              </div>
-	              <div className='formSection'>
 	                <label className='label' htmlFor='password'>Old Password: </label>
 	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='password' value={this.state.password} type={this.state.p1Displayed ? 'text' : 'password'} />
 	                <button className='passwordDisplay' onClick={this.handleClick} name='password'>{this.state.p1Displayed ? 'Hide' : 'Show' }</button>
 	              </div>
 	              <div className='formSection'>
-	                <label className='label' htmlFor='oldtwo'>Old Password: </label>
-	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='oldtwo' value={this.state.oldtwo} type={this.state.p2Displayed ? 'text' : 'password'} />
-	                <button className='passwordDisplay' onClick={this.handleClick} name='oldtwo'>{this.state.p2Displayed ? 'Hide' : 'Show' }</button>
+	                <label className='label' htmlFor='reenter'>Old Password: </label>
+	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='reenter' value={this.state.reenter} type={this.state.p2Displayed ? 'text' : 'password'} />
+	                <button className='passwordDisplay' onClick={this.handleClick} name='reenter'>{this.state.p2Displayed ? 'Hide' : 'Show' }</button>
 	              </div>
 	              {
 	                this.state.errorMessage
@@ -155,6 +155,10 @@ class ResetPassword extends Component {
 	              }
 	            </form>
 	          </div>
+	      }
+	      {
+	        this.state.success &&
+					<Redirect to='/login' />
 	      }
 	    </Container>
 	  )
