@@ -329,6 +329,7 @@ class HomePage extends Component {
   					  dateSunday={ this.state.dateSunday }
   					  handleClick={ this.handleWeeklyClick }
   					  previousWeek={ this.state.previousWeek }
+  					  isToday={ this.state.isToday }
   					  isFuture={ this.state.isFuture }
   					/>
 	        }
