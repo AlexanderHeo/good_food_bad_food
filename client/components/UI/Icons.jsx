@@ -1,15 +1,36 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 
-export const Hamburger = props => (
-  <HamburgerContainer >
-    <div className={ props.clicked ? `${'hamburger'} ${'open'}` : `${'hamburger'} ${'closed'}` }>
-      <div className='bar bar1' />
-      <div className='bar bar2' />
-      <div className='bar bar3' />
-    </div>
-  </HamburgerContainer>
-)
+class Hamburger extends Component {
+	state = { clicked: false }
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevProps.clicked !== this.props.clicked) {
+	    this.setState({ clicked: true })
+	  }
+	}
+
+	render() {
+	  return (
+	    <HamburgerContainer >
+	      <div
+	        className={
+	          !this.props.clicked
+	            ? this.state.clicked
+	              ? 'hamburger closed'
+	              : 'hamburger'
+	            : this.state.clicked
+	              ? 'hamburger open'
+	              : 'hamburger'
+	        }>
+	        <div className='bar bar1' />
+	        <div className='bar bar2' />
+	        <div className='bar bar3' />
+	      </div>
+	    </HamburgerContainer>
+	  )
+	}
+}
 
 const HamburgerContainer = styled.div`
 
@@ -29,13 +50,13 @@ const HamburgerContainer = styled.div`
 	}
 
 	.hamburger .bar1 {
-		transform: rotate(45deg) translate(5px, 4px);
+		transform: rotate(0) translate(0, 0);
 	}
 	.hamburger .bar2 {
 		transform: opacity(1);
 	}
 	.hamburger .bar3 {
-		transform: rotate(-45deg) translate(5px, -4px);
+		transform: rotate(0) translate(0, 0);
 	}
 
 	.hamburger.open .bar1 {
@@ -123,28 +144,51 @@ const HamburgerContainer = styled.div`
 
 `
 
-export const List = props => (
-  <ListContainer>
-    <div className={ props.clicked ? 'listComponent open' : 'listComponent closed' }>
-      <div className='x x1' />
-      <div className='bars'>
-        <div className='bar bar1'>
-          <div className='dot dot1' />
-          <div className='line line1' />
-        </div>
-        <div className='bar bar2'>
-          <div className='dot dot2' />
-          <div className='line line2' />
-        </div>
-        <div className='bar bar3'>
-          <div className='dot dot3' />
-          <div className='line line3' />
-        </div>
-      </div>
-      <div className='x x2' />
-    </div>
-  </ListContainer>
-)
+class List extends Component {
+  state = { clicked: false }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.clicked !== this.props.clicked) {
+      this.setState({ clicked: true })
+    }
+  }
+
+  render() {
+	  return (
+	    <ListContainer>
+	      <div
+          className={
+            !this.props.clicked
+              ? this.state.clicked // not open
+                ? 'listComponent closed' // clicked
+                : 'listComponent' // not clicked
+              : this.state.clicked // open
+                ? 'listComponent open' // clicked
+                : 'listComponent' // not clicked ?
+          }>
+	        <div className='x x1' />
+	        <div className='bars'>
+	          <div className='bar bar1'>
+	            <div className='dot dot1' />
+	            <div className='line line1' />
+	          </div>
+	          <div className='bar bar2'>
+	            <div className='dot dot2' />
+	            <div className='line line2' />
+	          </div>
+	          <div className='bar bar3'>
+	            <div className='dot dot3' />
+	            <div className='line line3' />
+	          </div>
+	        </div>
+	        <div className='x x2' />
+	      </div>
+	    </ListContainer>
+	  )
+  }
+}
+
+export { Hamburger, List }
 
 const ListContainer = styled.div`
 
