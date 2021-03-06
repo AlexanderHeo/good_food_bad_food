@@ -23,7 +23,135 @@ class WeeklyReview extends Component {
 	  sundaysDate: '',
 	  month: '',
 	  year: '',
-	  highlight: ''
+	  highlight: '',
+	  mealHighlights: {
+	    sunHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    monHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    tueHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    wedHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    thuHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    friHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    satHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    }
+	  }
 	}
 
 	componentDidMount() {
@@ -113,6 +241,288 @@ class WeeklyReview extends Component {
 	    }
 	  })
 
+	  const allWeek = [sun, mon, tue, wed, thu, fri, sat]
+	  const mealHighlights = {
+	    sunHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    monHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    tueHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    wedHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    thuHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    friHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    },
+	    satHighlight: {
+	      b: {
+	        entered: false,
+	        rated: false
+	      },
+	      l: {
+	        entered: false,
+	        rated: false
+	      },
+	      d: {
+	        entered: false,
+	        rated: false
+	      },
+	      s: {
+	        entered: false,
+	        rated: false
+	      }
+	    }
+	  }
+
+	  allWeek.forEach(x => {
+	    x.forEach(z => {
+	      let entered, rated
+	      if (z.name) entered = true
+	      if (z.report) rated = true
+	      const dayNum = new Date(z.eatenAt).getDay()
+	      const mealtime = z.mealtime
+	      switch (dayNum) {
+	        case 0:
+	          switch (mealtime) {
+	            case 'breakfast':
+	              mealHighlights.sunHighlight.b.entered = entered
+	              mealHighlights.sunHighlight.b.rated = rated
+	              break
+	            case 'lunch':
+	              mealHighlights.sunHighlight.l.entered = entered
+	              mealHighlights.sunHighlight.l.rated = rated
+	              break
+	            case 'dinner':
+	              mealHighlights.sunHighlight.d.entered = entered
+	              mealHighlights.sunHighlight.d.rated = rated
+	              break
+	            case 'snacks':
+	              mealHighlights.sunHighlight.s.entered = entered
+	              mealHighlights.sunHighlight.s.rated = rated
+	              break
+	          }
+	          break
+	        case 1:
+	          switch (mealtime) {
+	            case 'breakfast':
+	              mealHighlights.monHighlight.b.entered = entered
+	              mealHighlights.monHighlight.b.rated = rated
+	              break
+	            case 'lunch':
+	              mealHighlights.monHighlight.l.entered = entered
+	              mealHighlights.monHighlight.l.rated = rated
+	              break
+	            case 'dinner':
+	              mealHighlights.monHighlight.d.entered = entered
+	              mealHighlights.monHighlight.d.rated = rated
+	              break
+	            case 'snacks':
+	              mealHighlights.monHighlight.s.entered = entered
+	              mealHighlights.monHighlight.s.rated = rated
+	              break
+	          }
+	          break
+	        case 2:
+	          switch (mealtime) {
+	            case 'breakfast':
+	              mealHighlights.tueHighlight.b.entered = entered
+	              mealHighlights.tueHighlight.b.rated = rated
+	              break
+	            case 'lunch':
+	              mealHighlights.tueHighlight.l.entered = entered
+	              mealHighlights.tueHighlight.l.rated = rated
+	              break
+	            case 'dinner':
+	              mealHighlights.tueHighlight.d.entered = entered
+	              mealHighlights.tueHighlight.d.rated = rated
+	              break
+	            case 'snacks':
+	              mealHighlights.tueHighlight.s.entered = entered
+	              mealHighlights.tueHighlight.s.rated = rated
+	              break
+	          }
+	          break
+	        case 3:
+	          switch (mealtime) {
+	            case 'breakfast':
+	              mealHighlights.wedHighlight.b.entered = entered
+	              mealHighlights.wedHighlight.b.rated = rated
+	              break
+	            case 'lunch':
+	              mealHighlights.wedHighlight.l.entered = entered
+	              mealHighlights.wedHighlight.l.rated = rated
+	              break
+	            case 'dinner':
+	              mealHighlights.wedHighlight.d.entered = entered
+	              mealHighlights.wedHighlight.d.rated = rated
+	              break
+	            case 'snacks':
+	              mealHighlights.wedHighlight.s.entered = entered
+	              mealHighlights.wedHighlight.s.rated = rated
+	              break
+	          }
+	          break
+	        case 4:
+	          switch (mealtime) {
+	            case 'breakfast':
+	              mealHighlights.thuHighlight.b.entered = entered
+	              mealHighlights.thuHighlight.b.rated = rated
+	              break
+	            case 'lunch':
+	              mealHighlights.thuHighlight.l.entered = entered
+	              mealHighlights.thuHighlight.l.rated = rated
+	              break
+	            case 'dinner':
+	              mealHighlights.thuHighlight.d.entered = entered
+	              mealHighlights.thuHighlight.d.rated = rated
+	              break
+	            case 'snacks':
+	              mealHighlights.thuHighlight.s.entered = entered
+	              mealHighlights.thuHighlight.s.rated = rated
+	              break
+	          }
+	          break
+	        case 5:
+	          switch (mealtime) {
+	            case 'breakfast':
+	              mealHighlights.friHighlight.b.entered = entered
+	              mealHighlights.friHighlight.b.rated = rated
+	              break
+	            case 'lunch':
+	              mealHighlights.friHighlight.l.entered = entered
+	              mealHighlights.friHighlight.l.rated = rated
+	              break
+	            case 'dinner':
+	              mealHighlights.friHighlight.d.entered = entered
+	              mealHighlights.friHighlight.d.rated = rated
+	              break
+	            case 'snacks':
+	              mealHighlights.friHighlight.s.entered = entered
+	              mealHighlights.friHighlight.s.rated = rated
+	              break
+	          }
+	          break
+	        case 6:
+	          switch (mealtime) {
+	            case 'breakfast':
+	              mealHighlights.satHighlight.b.entered = entered
+	              mealHighlights.satHighlight.b.rated = rated
+	              break
+	            case 'lunch':
+	              mealHighlights.satHighlight.l.entered = entered
+	              mealHighlights.satHighlight.l.rated = rated
+	              break
+	            case 'dinner':
+	              mealHighlights.satHighlight.d.entered = entered
+	              mealHighlights.satHighlight.d.rated = rated
+	              break
+	            case 'snacks':
+	              mealHighlights.satHighlight.s.entered = entered
+	              mealHighlights.satHighlight.s.rated = rated
+	              break
+	          }
+	          break
+	      }
+	    })
+	  })
+
 	  this.setState({
 	    weeklyReady: true,
 	    thisWeek: [
@@ -130,7 +540,8 @@ class WeeklyReview extends Component {
 	    wedReady: true,
 	    thuReady: true,
 	    friReady: true,
-	    satReady: true
+	    satReady: true,
+	    mealHighlights: mealHighlights
 	  })
 	}
 
@@ -184,6 +595,8 @@ class WeeklyReview extends Component {
 	    }
 	  }
 
+	  const entered = ''
+	  const rated = ''
 	  return (
 	    <Table>
 	      {
@@ -210,6 +623,50 @@ class WeeklyReview extends Component {
 					    </tr>
 					  </thead>
 					  <tbody className='tableBody'>
+					    <tr className='mealHighlight'>
+					      <td className='mealInitialContainer sun'>
+					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
+					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
+					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
+					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					      </td>
+					      <td className='mealInitialContainer mon'>
+					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
+					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
+					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
+					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					      </td>
+					      <td className='mealInitialContainer tue'>
+					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
+					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
+					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
+					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					      </td>
+					      <td className='mealInitialContainer wed'>
+					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
+					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
+					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
+					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					      </td>
+					      <td className='mealInitialContainer thu'>
+					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
+					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
+					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
+					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					      </td>
+					      <td className='mealInitialContainer fri'>
+					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
+					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
+					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
+					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					      </td>
+					      <td className='mealInitialContainer sat'>
+					        <span className={`mealInitial breakfast ${entered} ${rated}`}>B</span>
+					        <span className={`mealInitial lunch ${entered} ${rated}`}>L</span>
+					        <span className={`mealInitial dinner ${entered} ${rated}`}>D</span>
+					        <span className={`mealInitial snacks ${entered} ${rated}`}>S</span>
+					      </td>
+					    </tr>
 					    <tr className='tableRow'>
 					      {
 					        this.state.thisWeek.map((x, index) => {
@@ -229,7 +686,13 @@ class WeeklyReview extends Component {
 					          if (isNaN(avg)) { avg = '' }
 					          const weekDays = [sun, mon, tue, wed, thu, fri, sat]
 					          const weekNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-					          return <td className={ weekDays[index] } onClick={ () => this.handleClick(weekDates[index], weekNames[index]) } key={ name }>{ avg }</td>
+					          return (
+					            <td
+					              className={ `${weekDays[index]} rating` }
+					              onClick={ () => this.handleClick(weekDates[index], weekNames[index]) }
+					              key={ name }>{ avg }
+					            </td>
+					          )
 					        })
 					      }
 					    </tr>
@@ -251,17 +714,14 @@ const Table = styled.table`
 	background-color: var(--primary-0);
 	border-radius: 12px;
 
-	.tableHead {
-		border-bottom: 1px solid var(--primary-6);
-	}
 	.tableHead tr:first-of-type th {
-		padding: 24px 0 0 0;
+		padding-top: 6px;
 	}
 	.tableHead tr:last-of-type th {
-		padding: 0 0 12px 0;
+		padding-bottom: 2px;
 	}
 	.tableBody tr td {
-		padding: 24px 0;
+		padding: 12px 0;
 	}
 	.tableRow td, .tableRow th {
 		width: calc(100vw - 24px / 7)
@@ -269,6 +729,33 @@ const Table = styled.table`
 
 	.today {
 		animation: colorFlip 0.4s forwards;
+	}
+
+	.tableBody .mealHighlight {
+		td, th { padding: 0; }
+			.mealInitial {
+				padding: 0 1px;
+				border: 1px solid var(--primary-1);
+				color: var(--primary-1);
+				background-color: var(--gray-0);
+			}
+		}
+	}
+
+	.mealInitialContainer .mealInitial.entered {
+		border: 1px solid var(--primary-4);
+		color: var(--primary-4);
+	}
+
+	.mealInitialContainer .mealInitial.rated {
+		border: 1px solid var(--primary-0);
+		color: var(--primary-0);
+		background-color: var(--primary-6);
+	}
+
+	.rating {
+		font-size: 1.2rem;
+		font-weight: 500;
 	}
 
 	@keyframes colorFlip {
