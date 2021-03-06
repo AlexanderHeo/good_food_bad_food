@@ -5,7 +5,7 @@ import styled from 'styled-components'
 class ResetPassword extends Component {
 	state = {
 	  username: '',
-	  oldone: '',
+	  password: '',
 	  oldtwo: '',
 	  newPassword: '',
 	  p1Displayed: false,
@@ -25,9 +25,9 @@ class ResetPassword extends Component {
 
 	handleClick = e => {
 	  e.preventDefault()
-	  const { oldone, oldtwo, newPassword, p1Displayed, p2Displayed, newDisplayed } = this.state
+	  const { password, oldtwo, newPassword, p1Displayed, p2Displayed, newDisplayed } = this.state
 
-	  if (e.target.name === 'oldone') {
+	  if (e.target.name === 'password') {
 	    this.setState({ p1Displayed: !p1Displayed })
 	  } else if (e.target.name === 'oldtwo') {
 	    this.setState({ p2Displayed: !p2Displayed })
@@ -38,16 +38,14 @@ class ResetPassword extends Component {
 	      this.setState({
 	        errorMessage: 'Please enter your username.'
 	      })
-	    } else if (!oldone || !oldtwo) {
+	    } else if (!password || !oldtwo) {
 	      this.setState({ errorMessage: 'Enter your password' })
-	    } else if ((oldone && oldtwo) && (oldone !== oldtwo)) {
+	    } else if ((password && oldtwo) && (password !== oldtwo)) {
 	      this.setState({
 	        errorMessage: 'Passwords do not match.'
 	      })
-	    } else if ((oldone && oldtwo) && (oldone === oldtwo)) {
-	      this.setState({
-	        newPasswordModalDisplay: true
-	      })
+	    } else if ((password && oldtwo) && (password === oldtwo)) {
+	      this.checkOldPassword()
 	    }
 	  } else if (e.target.name === 'finalSubmit') {
 	    if (!newPassword) {
@@ -55,11 +53,54 @@ class ResetPassword extends Component {
 	        errorMessage: 'Enter a new password.'
 	      })
 	    }
-	    if (newPassword === oldone) {
+	    if (newPassword === password) {
 	      this.setState({
 	        errorMessage: 'New password must be different.'
 	      })
 	    }
+	    if (newPassword && newPassword !== password) {
+	      this.setNewPassword()
+	    }
+	  }
+	}
+
+	checkOldPassword = async () => {
+	  const { username, password } = this.state
+	  const usernameData = {
+	    username, password
+	  }
+	  const init = {
+	    method: 'POST',
+	    headers: {
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify(usernameData)
+	  }
+	  const checkRes = await fetch('/api/check', init)
+	  const checkJSON = await checkRes.json()
+	  if (checkJSON.success) {
+	    this.setState({ newPasswordModalDisplay: true })
+	  } else if (checkJSON.error) {
+	    this.setState({ error: checkJSON.error })
+	  }
+	}
+
+	setNewPassword = async () => {
+	  const { username, newPassword } = this.state
+	  const usernameData = { username, newPassword }
+	  const init = {
+	    method: 'POST',
+	    header: {
+	      'Content-Type': 'application/json'
+	    },
+	    body: JSON.stringify(usernameData)
+	  }
+	  const setNewRes = await fetch('/api/setNew', init)
+	  const setNewJSON = await setNewRes.json()
+	  if (setNewJSON.success) {
+	    this.setState({ success: true })
+	  } else if (setNewJSON.error) {
+	    this.setState({ error: setNewJSON.error })
 	  }
 	}
 
@@ -69,7 +110,7 @@ class ResetPassword extends Component {
 	      {
 	        this.state.newPasswordModalDisplay
 	          ? <div className='newPasswordContainer'>
-					  <h2>Change yo passwords here!</h2>
+					  <h2>Enter yo new password here!</h2>
 					  <form className='form'>
 					    <div className='formSection'>
 					      <label className='label' htmlFor='newPassword'>New Password:</label>
@@ -86,31 +127,34 @@ class ResetPassword extends Component {
 	              }
 					  </form>
 	          </div>
-	          : <form className='form'>
-	            <div className='formSection'>
-	              <label className='label' htmlFor='username'>Username: </label>
-	              <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='username' value={this.state.username} type='text' />
-	            </div>
-	            <div className='formSection'>
-	              <label className='label' htmlFor='oldone'>Old Password: </label>
-	              <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='oldone' value={this.state.oldone} type={this.state.p1Displayed ? 'text' : 'password'} />
-	              <button className='passwordDisplay' onClick={this.handleClick} name='oldone'>{this.state.p1Displayed ? 'Hide' : 'Show' }</button>
-	            </div>
-	            <div className='formSection'>
-	              <label className='label' htmlFor='oldtwo'>Old Password: </label>
-	              <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='oldtwo' value={this.state.oldtwo} type={this.state.p2Displayed ? 'text' : 'password'} />
-	              <button className='passwordDisplay' onClick={this.handleClick} name='oldtwo'>{this.state.p2Displayed ? 'Hide' : 'Show' }</button>
-	            </div>
-	            {
-	              this.state.errorMessage
-	                ? <div>{ this.state.errorMessage }</div>
-	                : <div className='buttonContainer'>
-	                  <button onClick={this.handleClick} name='submit'>Submit</button>
-	                  <button>Return</button>
-	                  <Link to='/login' className=''>Return</Link>
-	                </div>
-	            }
-	          </form>
+	          : <div className='newPasswordContainer'>
+	            <h2>Enter yo old password here!</h2>
+	            <form className='form'>
+	              <div className='formSection'>
+	                <label className='label' htmlFor='username'>Username: </label>
+	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='username' value={this.state.username} type='text' />
+	              </div>
+	              <div className='formSection'>
+	                <label className='label' htmlFor='password'>Old Password: </label>
+	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='password' value={this.state.password} type={this.state.p1Displayed ? 'text' : 'password'} />
+	                <button className='passwordDisplay' onClick={this.handleClick} name='password'>{this.state.p1Displayed ? 'Hide' : 'Show' }</button>
+	              </div>
+	              <div className='formSection'>
+	                <label className='label' htmlFor='oldtwo'>Old Password: </label>
+	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='oldtwo' value={this.state.oldtwo} type={this.state.p2Displayed ? 'text' : 'password'} />
+	                <button className='passwordDisplay' onClick={this.handleClick} name='oldtwo'>{this.state.p2Displayed ? 'Hide' : 'Show' }</button>
+	              </div>
+	              {
+	                this.state.errorMessage
+	                  ? <div>{ this.state.errorMessage }</div>
+	                  : <div className='buttonContainer'>
+	                    <button onClick={this.handleClick} name='submit'>Submit</button>
+	                    <button>Return</button>
+	                    <Link to='/login' className=''>Return</Link>
+	                  </div>
+	              }
+	            </form>
+	          </div>
 	      }
 	    </Container>
 	  )
