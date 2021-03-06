@@ -110,7 +110,7 @@ class EnterMeal extends Component {
 
 	render() {
 	  return (
-	    <Container className='enterMealDisplay slideIn'>
+	    <Container className='slideDisplay slideIn'>
 	      <div className='enterHeader'>
 	        <button
 	          name='return'

@@ -486,7 +486,7 @@ const Container = styled.div`
 			transform: translateY(1000px);
 		}
 	}
-	.mealDisplay, .enterMealDisplay, .weeklyDisplay {
+	.slideDisplay {
 		height: 100%;
 		transform: translateX(-20px);
 		opacity: 0;

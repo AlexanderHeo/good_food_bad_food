@@ -500,7 +500,7 @@ class WeeklyReview extends Component {
 	  if (satHighlight.s.rated) satSR = 'rated'
 
 	  return (
-	    <Table className={`${this.state.slideIn ? 'weeklyDisplay slideIn' : 'weeklyDisplay'}`}>
+	    <Table className={`${this.state.slideIn ? 'slideDisplay slideIn' : 'slideDisplay'}`}>
 	      {
 	        this.state.weeklyReady &&
 					<>

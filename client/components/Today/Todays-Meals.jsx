@@ -91,7 +91,7 @@ class TodaysMeals extends Component {
   render() {
 
     let TodayDisplay = (
-      <div className={this.state.slideIn ? 'mealDisplay slideIn' : 'mealDisplay'}>
+      <div className={this.state.slideIn ? 'slideDisplay slideIn' : 'slideDisplay'}>
         {
           this.state.breakfastReady
             ? <TodaysMealItem
