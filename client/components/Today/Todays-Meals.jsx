@@ -206,15 +206,4 @@ const Container = styled.div`
 		justify-content: center;
 		align-items: center;
 	}
-	.mealDisplay, .enterMealDisplay {
-		height: 100%;
-		transform: translateX(-20px);
-		opacity: 0;
-	}
-		.slideIn {
-		animation: slideIn 0.4s forwards;
-	}
-	@keyframes slideIn {
-		to { transform: translateX(0); opacity: 1 }
-	}
 `
