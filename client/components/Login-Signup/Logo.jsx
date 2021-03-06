@@ -9,9 +9,16 @@ class Logo extends Component {
 	  login: false
 	}
 
-	componentDidMount() {
-	  setTimeout(() => this.setState({ fadeout: true }), 900)
-	  setTimeout(() => this.setState({ login: true }), 2000)
+	componentDidMount = () => {
+	  this._isMounted = true
+	  if (this._isMounted) {
+	    setTimeout(() => this.setState({ fadeout: true }), 900)
+	    setTimeout(() => this.setState({ login: true }), 2000)
+	  }
+	}
+
+	componentWillUnmount = () => {
+	  this._isMounted = false
 	}
 
 	render() {
