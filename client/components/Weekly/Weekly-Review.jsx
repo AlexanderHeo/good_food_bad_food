@@ -26,136 +26,58 @@ class WeeklyReview extends Component {
 	  highlight: '',
 	  mealHighlights: {
 	    sunHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    monHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    tueHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    wedHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    thuHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    friHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    satHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    }
-	  }
+	  },
+	  slideIn: false
 	}
 
 	componentDidMount() {
 	  this.doTheThing()
+	  this.slideIn()
+	}
+
+	slideIn = () => {
+	  setTimeout(() => { this.setState({ slideIn: true }) }, 1000)
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -244,130 +166,46 @@ class WeeklyReview extends Component {
 	  const allWeek = [sun, mon, tue, wed, thu, fri, sat]
 	  const mealHighlights = {
 	    sunHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    monHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    tueHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    wedHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    thuHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    friHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    },
 	    satHighlight: {
-	      b: {
-	        entered: false,
-	        rated: false
-	      },
-	      l: {
-	        entered: false,
-	        rated: false
-	      },
-	      d: {
-	        entered: false,
-	        rated: false
-	      },
-	      s: {
-	        entered: false,
-	        rated: false
-	      }
+	      b: { entered: false, rated: false },
+	      l: { entered: false, rated: false },
+	      d: { entered: false, rated: false },
+	      s: { entered: false, rated: false }
 	    }
 	  }
 
@@ -594,62 +432,7 @@ class WeeklyReview extends Component {
 	      weekDates.push(date)
 	    }
 	  }
-	  let sunBE = ''
-	  let sunBR = ''
-	  let sunLE = ''
-	  let sunLR = ''
-	  let sunDE = ''
-	  let sunDR = ''
-	  let sunSE = ''
-	  let sunSR = ''
-	  let monBE = ''
-	  let monBR = ''
-	  let monLE = ''
-	  let monLR = ''
-	  let monDE = ''
-	  let monDR = ''
-	  let monSE = ''
-	  let monSR = ''
-	  let tueBE = ''
-	  let tueBR = ''
-	  let tueLE = ''
-	  let tueLR = ''
-	  let tueDE = ''
-	  let tueDR = ''
-	  let tueSE = ''
-	  let tueSR = ''
-	  let wedBE = ''
-	  let wedBR = ''
-	  let wedLE = ''
-	  let wedLR = ''
-	  let wedDE = ''
-	  let wedDR = ''
-	  let wedSE = ''
-	  let wedSR = ''
-	  let thuBE = ''
-	  let thuBR = ''
-	  let thuLE = ''
-	  let thuLR = ''
-	  let thuDE = ''
-	  let thuDR = ''
-	  let thuSE = ''
-	  let thuSR = ''
-	  let friBE = ''
-	  let friBR = ''
-	  let friLE = ''
-	  let friLR = ''
-	  let friDE = ''
-	  let friDR = ''
-	  let friSE = ''
-	  let friSR = ''
-	  let satBE = ''
-	  let satBR = ''
-	  let satLE = ''
-	  let satLR = ''
-	  let satDE = ''
-	  let satDR = ''
-	  let satSE = ''
-	  let satSR = ''
+	  let sunBE, sunBR, sunLE, sunLR, sunDE, sunDR, sunSE, sunSR, monBE, monBR, monLE, monLR, monDE, monDR, monSE, monSR, tueBE, tueBR, tueLE, tueLR, tueDE, tueDR, tueSE, tueSR, wedBE, wedBR, wedLE, wedLR, wedDE, wedDR, wedSE, wedSR, thuBE, thuBR, thuLE, thuLR, thuDE, thuDR, thuSE, thuSR, friBE, friBR, friLE, friLR, friDE, friDR, friSE, friSR, satBE, satBR, satLE, satLR, satDE, satDR, satSE, satSR
 	  // const { mealHighlights } = this.state
 	  const { sunHighlight, monHighlight, tueHighlight, wedHighlight, thuHighlight, friHighlight, satHighlight } = this.state.mealHighlights
 	  // console.log(mealHighlights)
@@ -717,7 +500,7 @@ class WeeklyReview extends Component {
 	  if (satHighlight.s.rated) satSR = 'rated'
 
 	  return (
-	    <Table>
+	    <Table className={`${this.state.slideIn ? 'slideDisplay slideIn' : 'slideDisplay'}`}>
 	      {
 	        this.state.weeklyReady &&
 					<>

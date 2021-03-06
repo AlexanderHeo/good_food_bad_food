@@ -1,15 +1,36 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 
-export const Hamburger = props => (
-  <HamburgerContainer >
-    <div className={ props.clicked ? `${'hamburger'} ${'open'}` : `${'hamburger'} ${'closed'}` }>
-      <div className='bar bar1' />
-      <div className='bar bar2' />
-      <div className='bar bar3' />
-    </div>
-  </HamburgerContainer>
-)
+class Hamburger extends Component {
+	state = { clicked: false }
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevProps.clicked !== this.props.clicked) {
+	    this.setState({ clicked: true })
+	  }
+	}
+
+	render() {
+	  return (
+	    <HamburgerContainer >
+	      <div
+	        className={
+	          !this.props.clicked
+	            ? this.state.clicked
+	              ? 'hamburger closed'
+	              : 'hamburger'
+	            : this.state.clicked
+	              ? 'hamburger open'
+	              : 'hamburger'
+	        }>
+	        <div className='bar bar1' />
+	        <div className='bar bar2' />
+	        <div className='bar bar3' />
+	      </div>
+	    </HamburgerContainer>
+	  )
+	}
+}
 
 const HamburgerContainer = styled.div`
 
@@ -29,13 +50,13 @@ const HamburgerContainer = styled.div`
 	}
 
 	.hamburger .bar1 {
-		transform: rotate(45deg) translate(5px, 4px);
+		transform: rotate(0) translate(0, 0);
 	}
 	.hamburger .bar2 {
 		transform: opacity(1);
 	}
 	.hamburger .bar3 {
-		transform: rotate(-45deg) translate(5px, -4px);
+		transform: rotate(0) translate(0, 0);
 	}
 
 	.hamburger.open .bar1 {
@@ -123,32 +144,56 @@ const HamburgerContainer = styled.div`
 
 `
 
-export const List = props => (
-  <ListContainer>
-    <div className={ props.clicked ? 'listComponent open' : 'listComponent closed' }>
-      <div className='x x1' />
-      <div className='x x2' />
-      <div className='bar bar1'>
-        <div className='dot dot1' />
-        <div className='line line1' />
-      </div>
-      <div className='bar bar2'>
-        <div className='dot dot2' />
-        <div className='line line2' />
-      </div>
-      <div className='bar bar3'>
-        <div className='dot dot3' />
-        <div className='line line3' />
-      </div>
-    </div>
-  </ListContainer>
-)
+class List extends Component {
+  state = { clicked: false }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.clicked !== this.props.clicked) {
+      this.setState({ clicked: true })
+    }
+  }
+
+  render() {
+	  return (
+	    <ListContainer>
+	      <div
+          className={
+            !this.props.clicked
+              ? this.state.clicked // not open
+                ? 'listComponent closed' // clicked
+                : 'listComponent' // not clicked
+              : this.state.clicked // open
+                ? 'listComponent open' // clicked
+                : 'listComponent' // not clicked ?
+          }>
+	        <div className='x x1' />
+	        <div className='bars'>
+	          <div className='bar bar1'>
+	            <div className='dot dot1' />
+	            <div className='line line1' />
+	          </div>
+	          <div className='bar bar2'>
+	            <div className='dot dot2' />
+	            <div className='line line2' />
+	          </div>
+	          <div className='bar bar3'>
+	            <div className='dot dot3' />
+	            <div className='line line3' />
+	          </div>
+	        </div>
+	        <div className='x x2' />
+	      </div>
+	    </ListContainer>
+	  )
+  }
+}
+
+export { Hamburger, List }
 
 const ListContainer = styled.div`
 
 	.listComponent {
 		display: flex;
-		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		overflow: hidden;
@@ -175,12 +220,14 @@ const ListContainer = styled.div`
 		}
 	}
 	.x {
-		width: 30px;
-		height: 3px;
+		width: 3px;
+		height: 30px;
 		background-color: var(--primary-4);
 	}
-	.x1 { transform: rotate(50deg) translate(-28px, 10px); }
-	.x2 { transform: rotate(-50deg) translate(30px, 8px); }
+	.x1 { transform: rotate(-38deg) translate(15px, -24px); }
+	.x2 { transform: rotate(38deg) translate(-13px, -30px); }
+
+
 	.listComponent.open .bar { animation: hideBarsopen .3s forwards ease-out; }
 	.listComponent.open .x1 { animation: x1open .3s forwards ease-out; }
 	.listComponent.open .x2 { animation: x2open .3s forwards ease-out; }
@@ -193,24 +240,24 @@ const ListContainer = styled.div`
 		to { transform: translateY(38px); }
 	}
 	@keyframes x1open {
-	from { transform: rotate(50deg) translate(-28px, 10px); }
-	to { transform: rotate(50deg) translate(12px, 10px); }
+		from { transform: rotate(-38deg) translate(15px, -24px); }
+		to { transform: rotate(-38deg) translate(15px, 11px); }
 	}
 	@keyframes x2open {
-	from { transform: rotate(-50deg) translate(28px, 10px); }
-	to { transform: rotate(-50deg) translate(-10px, 8px); }
+		from { transform: rotate(38deg) translate(-13px, -30px); }
+		to { transform: rotate(38deg) translate(-13px, 10px); }
 	}
 	@keyframes hideBarsclosed {
 		from { transform: translateY(38px); }
 		to { transform: translateY(0); }
 	}
 	@keyframes x1closed {
-		from { transform: rotate(50deg) translate(12px, 10px); }
-		to { transform: rotate(50deg) translate(-28px, 10px); }
+		from { transform: rotate(-38deg) translate(15px, 11px); }
+		to { transform: rotate(-38deg) translate(15px, -24px); }
 	}
 	@keyframes x2closed {
-		from { transform: rotate(-50deg) translate(-10px, 8px); }
-		to { transform: rotate(-50deg) translate(28px, 10px); }
+		from { transform: rotate(38deg) translate(-13px, 10px); }
+		to { transform: rotate(38deg) translate(-13px, -30px); }
 	}
 
 `

@@ -14,21 +14,31 @@ class TodaysMeals extends Component {
     breakfastReady: false,
     lunchReady: false,
     dinnerReady: false,
-    snacksReady: false
+    snacksReady: false,
+    slideIn: false
   }
 
   componentDidMount() {
     this.separateMealTime()
+    this.slideIn()
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.dateDisplay !== this.props.dateDisplay) {
       this.separateMealTime()
+      this.setState({ slideIn: false })
+      this.slideIn()
     }
     if (prevProps.list !== this.props.list) {
       this.separateMealTime()
     }
   }
+
+	slideIn = () => {
+	  setTimeout(() => {
+	    this.setState({ slideIn: true })
+	  }, 300)
+	}
 
   separateMealTime = () => {
     const displayDay = this.props.list.filter(x => {
@@ -81,7 +91,7 @@ class TodaysMeals extends Component {
   render() {
 
     let TodayDisplay = (
-      <>
+      <div className={this.state.slideIn ? 'slideDisplay slideIn' : 'slideDisplay'}>
         {
           this.state.breakfastReady
             ? <TodaysMealItem
@@ -130,7 +140,7 @@ class TodaysMeals extends Component {
               className='meal mealTime'
             >Snacks</button>
         }
-      </>
+      </div>
     )
     if (this.state.enterModalDisplayed) {
       TodayDisplay = (
