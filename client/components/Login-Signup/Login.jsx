@@ -10,8 +10,7 @@ class Login extends React.Component {
     usernameFocused: false,
     passwordFocused: false,
     isLoggedIn: false,
-    errorMessage: '',
-    pwErrorMessage: ''
+    errorMessage: ''
   };
 
   handleButtonClick = e => {
@@ -43,8 +42,6 @@ class Login extends React.Component {
       .then(result => {
         if (result.success) {
           this.setState({ isLoggedIn: true });
-        } else {
-          this.setState({ pwErrorMessage: result.error });
         }
       })
       .catch(err => console.error(err));
@@ -56,14 +53,12 @@ class Login extends React.Component {
     if (type === 'username') {
       this.setState({
         username: value,
-        errorMessage: '',
-        pwErrorMessage: ''
+        errorMessage: ''
       })
     } else if (type === 'password') {
       this.setState({
         password: value,
-        errorMessage: '',
-        pwErrorMessage: ''
+        errorMessage: ''
       });
     }
   }
@@ -89,11 +84,13 @@ class Login extends React.Component {
 					    <div className='text'>If you just want to test the app, use the following info to see an active acount you can play around with.</div>
 					    <div className='user'>username=alex</div>
 					    <div className='user'>password=alex</div>
+					    <div className='modalButtonContainer'>
+					      <button
+					        className='modalButton'
+					        onClick={() => this.setState({ showModal: false })}
+					      > Gotcha</button>
+					    </div>
 					  </div>
-					  <button
-					    className='modalButton'
-					    onClick={() => this.setState({ showModal: false })}
-					  > Gotcha</button>
 					</IntroModal>
 	      }
 
@@ -134,13 +131,11 @@ class Login extends React.Component {
 	          {
 	            this.state.errorMessage
 	              ? <div className="errorMessage">{ this.state.errorMessage }</div>
-	              : this.state.pwErrorMessage
-	                ? <div className="errorMessage">{ this.state.pwErrorMessage }</div>
-	                : <div className="button-container">
-	                  <button
-	                    className="button"
-	                    onClick={ this.handleButtonClick }>Log In</button>
-	                </div>
+	              : <div className="button-container">
+	                <button
+	                  className="button"
+	                  onClick={ this.handleButtonClick }>Log In</button>
+	              </div>
 	          }
 
 	        </form>
@@ -161,7 +156,7 @@ export default Login;
 const IntroModal = styled.div`
 	width: 100vw;
 	height: 100vh;
-	background-color: hsla(0, 0%, 0%, 0.75);
+	background-color: var(--gray-0);
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -173,6 +168,7 @@ const IntroModal = styled.div`
 
 	.container {
 		width: 100%;
+		height: 100%;
 		margin: 0 12px;
 		background-color: var(--primary-0);
 		padding: 36px 18px;
@@ -196,6 +192,12 @@ const IntroModal = styled.div`
 		.user:last-of-type {
 			margin: 0;
 		}
+	}
+	.modalButtonContainer {
+		position: fixed;
+		bottom: 20px;
+		width: calc(100% - 36px);
+		text-align: center;
 	}
 	.modalButton {
 		padding: 12px 24px;
