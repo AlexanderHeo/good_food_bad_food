@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-// import Backdrop from '../UI/Backdrop'
 import About from './About'
 import Change from './Change'
 import FDA from './FDA'
@@ -47,6 +46,7 @@ class Setting extends Component {
 	  if (display === 'main') {
 	    SettingDisplay = <Main
 	      handleClick={ this.handleClick }
+	      userData={ this.props.userData }
 	    />
 	  } else if (display === 'fda') {
 	    SettingDisplay = <FDA
