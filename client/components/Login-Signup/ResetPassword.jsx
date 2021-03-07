@@ -9,12 +9,14 @@ class ResetPassword extends Component {
 	  newPassword: '',
 	  p1Displayed: false,
 	  p2Displayed: false,
+	  pnDisplayed: false,
 	  newDisplayed: false,
 	  errorMessage: '',
 	  newPasswordModalDisplay: false,
 	  success: false,
 	  p1Clicked: false,
-	  p2Clicked: false
+	  p2Clicked: false,
+	  pnClicked: false
 	}
 
 	handleChange = e => {
@@ -63,7 +65,7 @@ class ResetPassword extends Component {
 	}
 
 	setEye = selection => {
-	  const { p1Displayed, p2Displayed } = this.state
+	  const { p1Displayed, p2Displayed, pnDisplayed } = this.state
 	  if (selection === 'first') {
 	    this.setState({
 	      p1Displayed: !p1Displayed,
@@ -74,6 +76,12 @@ class ResetPassword extends Component {
 	    this.setState({
 	      p2Displayed: !p2Displayed,
 	      p2Clicked: true
+	    })
+	  }
+	  if (selection === 'new') {
+	    this.setState({
+	      pnDisplayed: !pnDisplayed,
+	      pnClicked: true
 	    })
 	  }
 	}
@@ -129,8 +137,26 @@ class ResetPassword extends Component {
 					  <form className='form'>
 					    <div className='formSection'>
 					      <label className='label' htmlFor='newPassword'>New Password:</label>
-					      <input className='input' name='newPassword' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.newPassword} type={this.state.newDisplayed ? 'text' : 'password'} />
-					      <button onClick={this.handleClick} className='passwordDisplay' name='newPassword'>{this.state.newDisplayed ? 'Hide' : 'Show'}</button>
+					      <input className='input' name='new' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.newPassword} type={this.state.newDisplayed ? 'text' : 'password'} />
+					      <div
+	                  className={
+	                    !this.state.pnDisplayed
+	                      ? this.state.pnClicked
+	                        ? 'passwordEye closed'
+	                        : 'passwordEye'
+	                      : this.state.pnClicked
+	                        ? 'passwordEye open'
+	                        : 'passwordEye'
+	                  }
+	                  onClick={() => this.setEye('new')}
+	                >
+	                  <div className='openEye'>
+	                    <span className="iconify" data-icon="fe:eye" data-inline="false" />
+	                  </div>
+	                  <div className='closedEye'>
+	                    <span className="iconify" data-icon="eva:eye-off-2-fill" data-inline="false" />
+	                  </div>
+	                </div>
 					    </div>
 	              {
 	                this.state.errorMessage
