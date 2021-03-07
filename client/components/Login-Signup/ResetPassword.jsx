@@ -9,10 +9,14 @@ class ResetPassword extends Component {
 	  newPassword: '',
 	  p1Displayed: false,
 	  p2Displayed: false,
+	  pnDisplayed: false,
 	  newDisplayed: false,
 	  errorMessage: '',
 	  newPasswordModalDisplay: false,
-	  success: false
+	  success: false,
+	  p1Clicked: false,
+	  p2Clicked: false,
+	  pnClicked: false
 	}
 
 	handleChange = e => {
@@ -60,6 +64,28 @@ class ResetPassword extends Component {
 	  }
 	}
 
+	setEye = selection => {
+	  const { p1Displayed, p2Displayed, pnDisplayed } = this.state
+	  if (selection === 'first') {
+	    this.setState({
+	      p1Displayed: !p1Displayed,
+	      p1Clicked: true
+	    })
+	  }
+	  if (selection === 'second') {
+	    this.setState({
+	      p2Displayed: !p2Displayed,
+	      p2Clicked: true
+	    })
+	  }
+	  if (selection === 'new') {
+	    this.setState({
+	      pnDisplayed: !pnDisplayed,
+	      pnClicked: true
+	    })
+	  }
+	}
+
 	checkOldPassword = async () => {
 	  const { password } = this.state
 	  const userData = {
@@ -99,13 +125,6 @@ class ResetPassword extends Component {
 	        this.setState({ success: true })
 	      }
 	    })
-	  // const setNewRes = await fetch(`/api/reset/${userId}`, init)
-	  // const setNewJSON = await setNewRes.json()
-	  // if (setNewJSON.success) {
-	  //   this.setState({ success: true })
-	  // } else if (setNewJSON.error) {
-	  //   this.setState({ error: setNewJSON.error })
-	  // }
 	}
 
 	render() {
@@ -118,8 +137,26 @@ class ResetPassword extends Component {
 					  <form className='form'>
 					    <div className='formSection'>
 					      <label className='label' htmlFor='newPassword'>New Password:</label>
-					      <input className='input' name='newPassword' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.newPassword} type={this.state.newDisplayed ? 'text' : 'password'} />
-					      <button onClick={this.handleClick} className='passwordDisplay' name='newPassword'>{this.state.newDisplayed ? 'Hide' : 'Show'}</button>
+					      <input className='input' name='new' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.newPassword} type={this.state.newDisplayed ? 'text' : 'password'} />
+					      <div
+	                  className={
+	                    !this.state.pnDisplayed
+	                      ? this.state.pnClicked
+	                        ? 'passwordEye closed'
+	                        : 'passwordEye'
+	                      : this.state.pnClicked
+	                        ? 'passwordEye open'
+	                        : 'passwordEye'
+	                  }
+	                  onClick={() => this.setEye('new')}
+	                >
+	                  <div className='openEye'>
+	                    <span className="iconify" data-icon="fe:eye" data-inline="false" />
+	                  </div>
+	                  <div className='closedEye'>
+	                    <span className="iconify" data-icon="eva:eye-off-2-fill" data-inline="false" />
+	                  </div>
+	                </div>
 					    </div>
 	              {
 	                this.state.errorMessage
@@ -135,22 +172,57 @@ class ResetPassword extends Component {
 	            <h2>Enter yo old password here!</h2>
 	            <form className='form'>
 	              <div className='formSection'>
-	                <label className='label' htmlFor='password'>Old Password: </label>
+	                <label className='label' htmlFor='password'>Old Password:</label>
 	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='password' value={this.state.password} type={this.state.p1Displayed ? 'text' : 'password'} />
-	                <button className='passwordDisplay' onClick={this.handleClick} name='password'>{this.state.p1Displayed ? 'Hide' : 'Show' }</button>
+	                <div
+	                  className={
+	                    !this.state.p1Displayed
+	                      ? this.state.p1Clicked
+	                        ? 'passwordEye closed'
+	                        : 'passwordEye'
+	                      : this.state.p1Clicked
+	                        ? 'passwordEye open'
+	                        : 'passwordEye'
+	                  }
+	                  onClick={() => this.setEye('first')}
+	                >
+	                  <div className='openEye'>
+	                    <span className="iconify" data-icon="fe:eye" data-inline="false" />
+	                  </div>
+	                  <div className='closedEye'>
+	                    <span className="iconify" data-icon="eva:eye-off-2-fill" data-inline="false" />
+	                  </div>
+	                </div>
 	              </div>
 	              <div className='formSection'>
 	                <label className='label' htmlFor='reenter'>Old Password: </label>
 	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='reenter' value={this.state.reenter} type={this.state.p2Displayed ? 'text' : 'password'} />
-	                <button className='passwordDisplay' onClick={this.handleClick} name='reenter'>{this.state.p2Displayed ? 'Hide' : 'Show' }</button>
+	                <div
+	                  className={
+	                    !this.state.p2Displayed
+	                      ? this.state.p2Clicked
+	                        ? 'passwordEye closed'
+	                        : 'passwordEye'
+	                      : this.state.p2Clicked
+	                        ? 'passwordEye open'
+	                        : 'passwordEye'
+	                  }
+	                  onClick={() => this.setEye('second')}
+	                >
+	                  <div className='openEye'>
+	                    <span className="iconify" data-icon="fe:eye" data-inline="false" />
+	                  </div>
+	                  <div className='closedEye'>
+	                    <span className="iconify" data-icon="eva:eye-off-2-fill" data-inline="false" />
+	                  </div>
+	                </div>
 	              </div>
 	              {
 	                this.state.errorMessage
 	                  ? <div>{ this.state.errorMessage }</div>
 	                  : <div className='buttonContainer'>
-	                    <button onClick={this.handleClick} name='submit'>Submit</button>
-	                    <button>Return</button>
-	                    <Link to='/login' className=''>Return</Link>
+	                    <button className='button' onClick={this.handleClick} name='submit'>Submit</button>
+	                    <Link to='/home' className='button'>Return</Link>
 	                  </div>
 	              }
 	            </form>
@@ -176,9 +248,7 @@ const Container = styled.div`
 	align-items: center;
 	background-color: hotpink;
 	border: 5px solid rebeccapurple;
-	.message {
-		text-align: center;
-	}
+	.message { text-align: center; }
 	.link {
 		border: 3px solid rebeccapurple;
 		border-radius: 36px;
@@ -198,8 +268,8 @@ const Container = styled.div`
 		justify-content: center;
 		align-items: center;
 	}
+	h2 { text-align: center; }
 	.form {
-		border: 1px solid black;
 		display: flex;
 		flex-direction: column;
 		width: 100%;
@@ -209,20 +279,79 @@ const Container = styled.div`
 		width: 100%;
 		display: flex;
 		justify-content: center;
+		align-items: center;
 		margin: 6px 0;
 		position: relative;
 	}
 	.label {
-		width: 24%;
+		font-size: 1rem;
+		font-weight: 700;
+		width: 30%;
 		text-align: right;
 		margin-right: 6px;
+		height: min-content;
 	}
 	.input {
-		width: 70%;
+		width: 60%;
+		outline: none;
+		border-radius: 16px;
+		padding: 6px;
+		margin: 0 12px;
+		font-size: 1.3rem;
+		font-weight: 700;
+		text-align: left;
+		background-color: var(--primary-2);
+		box-shadow: 0 0 0 transparent;
 	}
-	.passwordDisplay {
+	.input:invalid { box-shadow: 0 0 3px 3px var(--warning-4) }
+	.passwordEye {
+		width: 35px;
+		height: 35px;
 		position: absolute;
-		right: 8px;
-		bottom: 1px;
+		right: 0;
+		top: -2px;
+		transform: translate(-23px, 8px);
+		background-color: var(--primary-0);
+		line-height: 0;
+		font-size: 2.2rem;
+		border-radius: 50%;
+		padding: 2px;
+	}
+	.openEye, .closedEye {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+	.closedEye { transform: rotateX(90deg); }
+	.openEye { transform: rotateX(0deg); }
+	.passwordEye.open .closedEye { animation: closedEyeOpen 0.5s forwards }
+	.passwordEye.closed .closedEye { animation: closedEyeClose 0.5s forwards }
+	.passwordEye.open .openEye { animation: openEyeOpen 0.5s forwards }
+	.passwordEye.closed .openEye { animation: openEyeClose 0.5s forwards }
+	@keyframes closedEyeOpen {
+		from { transform: rotateX(90deg); } to { transform: rotateX(0); }
+	}
+	@keyframes closedEyeClose {
+		from { transform: rotateX(0); } to { transform: rotateX(90deg); }
+	}
+	@keyframes openEyeOpen {
+		from { transform: rotateX(0); } to { transform: rotateX(-90deg); }
+	}
+	@keyframes openEyeClose {
+		from { transform: rotateX(-90deg); } to { transform: rotateX(0); }
+	}
+
+	.buttonContainer {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.button {
+		border: 1px solid var(--primary-6);
+		text-align: center;
+		width: 80%;
+		padding: 12px 24px;
+		margin: 12px 0;
 	}
 `

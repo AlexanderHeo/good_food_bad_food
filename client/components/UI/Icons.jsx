@@ -188,8 +188,6 @@ class List extends Component {
   }
 }
 
-export { Hamburger, List }
-
 const ListContainer = styled.div`
 
 	.listComponent {
@@ -260,6 +258,79 @@ const ListContainer = styled.div`
 		to { transform: rotate(38deg) translate(-13px, -30px); }
 	}
 
+`
+
+class Eye extends Component {
+	state = { clicked: false }
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevProps.clicked !== this.props.clicked) {
+	    this.setState({ clicked: true })
+	  }
+	}
+
+	render() {
+	  return (
+	    <EyeContainer>
+	      <div className='eyeLashContainer'>
+	        <div className='eyelash eyelash1' />
+	        <div className='eyelash eyelash2' />
+	        <div className='eyelash eyelash3' />
+	        <div className='eyelash eyelash4' />
+	      </div>
+	      <div className='outer'>
+	        <div className='iris' />
+	      </div>
+	    </EyeContainer>
+	  )
+	}
+}
+
+const EyeContainer = styled.div`
+	display: inline-flex;
+	position: relative;
+	.passwordEye .eyelashContainer {
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		position: absolute;
+		top: -5px;
+		left: 0;
+		.eyelash {
+			width: 3px;
+			height: 8px;
+			background-color: var(--primary-6);
+		}
+		.eyelash1 {
+			transform: translate(-3px 7px) rotate(-50deg)
+		}
+		.eyelash2 {
+			transform: translate(-2px -1px) rotate(-20deg)
+		}
+		.eyelash3 {
+			transform: translate(2px -1px) rotate(20deg)
+		}
+		.eyelash4 {
+			transform: translate(3px 7px) rotate(50deg)
+		}
+	}
+	.outer {
+		width: 40px;
+		height: 40px;
+		background-color: white;
+		border: 2px solid var(--primary-6);
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+	}
+	.iris {
+		width: 18px;
+		height: 18px;
+		background-color: var(--primary-6);
+		border-radius:  50%;
+	}
 `
 
 export const AddPlus = props => (
@@ -382,3 +453,5 @@ const DownVoteContainer = styled.div`
 	}
 
 `
+
+export { Hamburger, List, Eye }
