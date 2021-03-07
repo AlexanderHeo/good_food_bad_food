@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 
 class ResetPassword extends Component {
@@ -10,7 +10,6 @@ class ResetPassword extends Component {
 	  p1Displayed: false,
 	  p2Displayed: false,
 	  pnDisplayed: false,
-	  newDisplayed: false,
 	  errorMessage: '',
 	  newPasswordModalDisplay: false,
 	  success: false,
@@ -29,34 +28,28 @@ class ResetPassword extends Component {
 
 	handleClick = e => {
 	  e.preventDefault()
-	  const { password, reenter, newPassword, p1Displayed, p2Displayed, newDisplayed } = this.state
+	  const { password, reenter, newPassword, p1Displayed, p2Displayed, pnDisplayed } = this.state
 
 	  if (e.target.name === 'password') {
 	    this.setState({ p1Displayed: !p1Displayed })
 	  } else if (e.target.name === 'reenter') {
 	    this.setState({ p2Displayed: !p2Displayed })
 	  } else if (e.target.name === 'newPassword') {
-	    this.setState({ newDisplayed: !newDisplayed })
+	    this.setState({ pnDisplayed: !pnDisplayed })
 	  } else if (e.target.name === 'submit') {
 	    if (!password || !reenter) {
 	      this.setState({ errorMessage: 'Enter your password' })
 	    } else if ((password && reenter) && (password !== reenter)) {
-	      this.setState({
-	        errorMessage: 'Passwords do not match.'
-	      })
+	      this.setState({ errorMessage: 'Passwords do not match.' })
 	    } else if ((password && reenter) && (password === reenter)) {
 	      this.checkOldPassword()
 	    }
 	  } else if (e.target.name === 'finalSubmit') {
 	    if (!newPassword) {
-	      this.setState({
-	        errorMessage: 'Enter a new password.'
-	      })
+	      this.setState({ errorMessage: 'Enter a new password.' })
 	    }
 	    if (newPassword === password) {
-	      this.setState({
-	        errorMessage: 'New password must be different.'
-	      })
+	      this.setState({ errorMessage: 'New password must be different.' })
 	    }
 	    if (newPassword && newPassword !== password) {
 	      this.setNewPassword()
@@ -88,14 +81,11 @@ class ResetPassword extends Component {
 
 	checkOldPassword = async () => {
 	  const { password } = this.state
-	  const userData = {
-	    userId: this.props.location.state.userData.userId, password
-	  }
+	  const { userId } = this.props.userData
+	  const userData = { userId, password }
 	  const init = {
 	    method: 'POST',
-	    headers: {
-	      'Content-Type': 'application/json'
-	    },
+	    headers: { 'Content-Type': 'application/json' },
 	    body: JSON.stringify(userData)
 	  }
 	  const checkRes = await fetch('/api/check', init)
@@ -109,13 +99,11 @@ class ResetPassword extends Component {
 
 	setNewPassword = () => {
 	  const { newPassword } = this.state
-	  const userId = this.props.location.state.userData.userId
+	  const { userId } = this.props.userData
 	  const patchData = { userId, newPassword }
 	  const init = {
 	    method: 'PATCH',
-	    headers: {
-	      'Content-Type': 'application/json'
-	    },
+	    headers: { 'Content-Type': 'application/json' },
 	    body: JSON.stringify(patchData)
 	  }
 	  fetch(`/api/reset/${userId}`, init)
@@ -137,7 +125,7 @@ class ResetPassword extends Component {
 					  <form className='form'>
 					    <div className='formSection'>
 					      <label className='label' htmlFor='newPassword'>New Password:</label>
-					      <input className='input' name='new' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.newPassword} type={this.state.newDisplayed ? 'text' : 'password'} />
+					      <input className='input' name='newPassword' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.newPassword} type={this.state.pnDisplayed ? 'text' : 'password'} />
 					      <div
 	                  className={
 	                    !this.state.pnDisplayed
@@ -162,8 +150,8 @@ class ResetPassword extends Component {
 	                this.state.errorMessage
 	                  ? <h2>{ this.state.errorMessage }</h2>
 	                  : <div className='buttonContainer'>
-	                    <button onClick={this.handleClick} name='finalSubmit' className='button'>Submit</button>
-	                    <Link to='/login' className='link'>Return</Link>
+	                    <button className='button' name='finalSubmit' onClick={this.handleClick}>Submit</button>
+	                    <button className='button' name='return' onClick={this.handleClick}>Cancel</button>
 	                  </div>
 	              }
 					  </form>
@@ -173,7 +161,7 @@ class ResetPassword extends Component {
 	            <form className='form'>
 	              <div className='formSection'>
 	                <label className='label' htmlFor='password'>Old Password:</label>
-	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='password' value={this.state.password} type={this.state.p1Displayed ? 'text' : 'password'} />
+	                <input className='input' name='password' onFocus={this.handleOnFocus} onChange={this.handleChange} value={this.state.password} type={this.state.p1Displayed ? 'text' : 'password'} />
 	                <div
 	                  className={
 	                    !this.state.p1Displayed
@@ -221,17 +209,14 @@ class ResetPassword extends Component {
 	                this.state.errorMessage
 	                  ? <div>{ this.state.errorMessage }</div>
 	                  : <div className='buttonContainer'>
-	                    <button className='button' onClick={this.handleClick} name='submit'>Submit</button>
-	                    <Link to='/home' className='button'>Return</Link>
+	                    <button className='button' name='submit' onClick={this.handleClick} >Submit</button>
+	                    <button className='button' name='return' onClick={this.handleClick}>Cancel</button>
 	                  </div>
 	              }
 	            </form>
 	          </div>
 	      }
-	      {
-	        this.state.success &&
-					<Redirect to='/login' />
-	      }
+	      { this.state.success && <Redirect to='/login' /> }
 	    </Container>
 	  )
 	}
@@ -284,7 +269,7 @@ const Container = styled.div`
 		position: relative;
 	}
 	.label {
-		font-size: 1rem;
+		font-size: 0.9rem;
 		font-weight: 700;
 		width: 30%;
 		text-align: right;

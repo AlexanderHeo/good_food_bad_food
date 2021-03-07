@@ -4,6 +4,7 @@ import About from './About'
 import Change from './Change'
 import FDA from './FDA'
 import Main from './Main'
+import Reset from './Reset'
 
 class Setting extends Component {
 	state = {
@@ -14,17 +15,20 @@ class Setting extends Component {
 	  e.preventDefault()
 	  const name = e.target.name
 	  switch (name) {
-	    case 'fda':
-	      this.setState({ settingDisplay: 'fda' })
-	      break
 	    case 'main':
 	      this.setState({ settingDisplay: 'main' })
+	      break
+	    case 'fda':
+	      this.setState({ settingDisplay: 'fda' })
 	      break
 	    case 'setting':
 	      this.setState({ settingDisplay: 'setting' })
 	      break
 	    case 'about':
 	      this.setState({ settingDisplay: 'about' })
+	      break
+	    case 'reset':
+	      this.setState({ settingDisplay: 'reset' })
 	      break
 	    case 'signout':
 	      this.setState({ settingDisplay: 'signout' })
@@ -64,6 +68,11 @@ class Setting extends Component {
 	    />
 	  } else if (display === 'about') {
 	    SettingDisplay = <About handleClick={ this.handleClick } />
+	  } else if (display === 'reset') {
+	    SettingDisplay = <Reset
+	      handleClick={ this.handleClick }
+	      userData={ this.props.userData }
+	    />
 	  } else if (display === 'signout') {
 	    SettingDisplay = (
 	      <>

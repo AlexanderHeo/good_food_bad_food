@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 const Main = props => (
   <section className='section'>
@@ -28,14 +27,13 @@ const Main = props => (
       >
 				About
       </button>
-      <Link to={{
-	            pathname: '/reset',
-	            state: {
-	              userData: props.userData
-	            }
-	          }}
-	            className='button'
-	          >reset password</Link>
+      <button
+        name='reset'
+        className='button'
+        onClick={ props.handleClick }
+      >
+				Reset Password
+      </button>
       <button
         name='signout'
         className='button'
