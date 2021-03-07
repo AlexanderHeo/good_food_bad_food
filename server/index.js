@@ -113,6 +113,22 @@ app.patch('/api/reset/:userId', (req, res, next) => {
     })
 })
 
+app.patch('/api/location/:userId', (req, res, next) => {
+  const { city, state } = req.body
+  const { userId } = req.body.userData
+  // validation
+  const sql = `
+		UPDATE "users"
+		SET "city"=$1, "state"=$2
+		WHERE "userId"=$3
+		returning "userId", "username", "city", "state";
+	`
+  const params = [city, state, userId]
+  db.query(sql, params)
+    .then(result => res.status(200).json(result.rows[0]))
+    .catch(err => console.error(err))
+})
+
 app.post('/api/check', (req, res, next) => {
   const { userId, password } = req.body
   // console.log(userId, password)
