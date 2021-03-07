@@ -12,7 +12,9 @@ class ResetPassword extends Component {
 	  newDisplayed: false,
 	  errorMessage: '',
 	  newPasswordModalDisplay: false,
-	  success: false
+	  success: false,
+	  p1Clicked: false,
+	  p2Clicked: false
 	}
 
 	handleChange = e => {
@@ -62,8 +64,18 @@ class ResetPassword extends Component {
 
 	setEye = selection => {
 	  const { p1Displayed, p2Displayed } = this.state
-	  if (selection === 'first') this.setState({ p1Displayed: !p1Displayed })
-	  if (selection === 'second') this.setState({ p2Displayed: !p2Displayed })
+	  if (selection === 'first') {
+	    this.setState({
+	      p1Displayed: !p1Displayed,
+	      p1Clicked: true
+	    })
+	  }
+	  if (selection === 'second') {
+	    this.setState({
+	      p2Displayed: !p2Displayed,
+	      p2Clicked: true
+	    })
+	  }
 	}
 
 	checkOldPassword = async () => {
@@ -108,15 +120,6 @@ class ResetPassword extends Component {
 	}
 
 	render() {
-	  const openEye = <span
-	                      className="iconify"
-	                      data-icon="fe:eye"
-	                      data-inline="false" />
-	  const closedEye = <span
-	                      className="iconify"
-	                      data-icon="eva:eye-off-2-fill"
-	                      data-inline="false"
-	                    />
 	  return (
 	    <Container>
 	      {
@@ -143,42 +146,50 @@ class ResetPassword extends Component {
 	            <h2>Enter yo old password here!</h2>
 	            <form className='form'>
 	              <div className='formSection'>
-	                <label className='label' htmlFor='password'>Old Password: </label>
+	                <label className='label' htmlFor='password'>Old Password:</label>
 	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='password' value={this.state.password} type={this.state.p1Displayed ? 'text' : 'password'} />
 	                <div
-	                    className='passwordEye'
-	                    onClick={() => this.setEye('first')}
-	                  >
-	                {
-	                    this.state.p1Displayed
-	                  ? closedEye
-	                  : openEye
-	                }
-
+	                  className={
+	                    !this.state.p1Displayed
+	                      ? this.state.p1Clicked
+	                        ? 'passwordEye closed'
+	                        : 'passwordEye'
+	                      : this.state.p1Clicked
+	                        ? 'passwordEye open'
+	                        : 'passwordEye'
+	                  }
+	                  onClick={() => this.setEye('first')}
+	                >
+	                  <div className='openEye'>
+	                    <span className="iconify" data-icon="fe:eye" data-inline="false" />
 	                  </div>
+	                  <div className='closedEye'>
+	                    <span className="iconify" data-icon="eva:eye-off-2-fill" data-inline="false" />
+	                  </div>
+	                </div>
 	              </div>
 	              <div className='formSection'>
 	                <label className='label' htmlFor='reenter'>Old Password: </label>
 	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='reenter' value={this.state.reenter} type={this.state.p2Displayed ? 'text' : 'password'} />
-	                {
-	                  this.state.p2Displayed
-	                    ? <div
-	                      className='passwordEye'
-	                      onClick={() => this.setEye('second')}>
-	                      <span
-	                        className="iconify"
-	                        data-icon="eva:eye-off-2-outline"
-	                        data-inline="false" />
-	                    </div>
-	                    : <div
-	                      className='passwordEye'
-	                      onClick={() => this.setEye('second')}>
-	                      <span
-	                        className="iconify"
-	                        data-icon="fe:eye"
-	                        data-inline="false" />
-	                    </div>
-	                }
+	                <div
+	                  className={
+	                    !this.state.p2Displayed
+	                      ? this.state.p2Clicked
+	                        ? 'passwordEye closed'
+	                        : 'passwordEye'
+	                      : this.state.p2Clicked
+	                        ? 'passwordEye open'
+	                        : 'passwordEye'
+	                  }
+	                  onClick={() => this.setEye('second')}
+	                >
+	                  <div className='openEye'>
+	                    <span className="iconify" data-icon="fe:eye" data-inline="false" />
+	                  </div>
+	                  <div className='closedEye'>
+	                    <span className="iconify" data-icon="eva:eye-off-2-fill" data-inline="false" />
+	                  </div>
+	                </div>
 	              </div>
 	              {
 	                this.state.errorMessage
@@ -211,9 +222,7 @@ const Container = styled.div`
 	align-items: center;
 	background-color: hotpink;
 	border: 5px solid rebeccapurple;
-	.message {
-		text-align: center;
-	}
+	.message { text-align: center; }
 	.link {
 		border: 3px solid rebeccapurple;
 		border-radius: 36px;
@@ -268,20 +277,44 @@ const Container = styled.div`
 		background-color: var(--primary-2);
 		box-shadow: 0 0 0 transparent;
 	}
-	.input:invalid {
-		box-shadow: 0 0 3px 3px var(--warning-4)
-	}
+	.input:invalid { box-shadow: 0 0 3px 3px var(--warning-4) }
 	.passwordEye {
+		width: 35px;
+		height: 35px;
 		position: absolute;
 		right: 0;
-		top: 0;
+		top: -2px;
 		transform: translate(-23px, 8px);
 		background-color: var(--primary-0);
 		line-height: 0;
-		font-size: 1.7rem;
+		font-size: 2.2rem;
 		border-radius: 50%;
 		padding: 2px;
 	}
+	.openEye, .closedEye {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+	.closedEye { transform: rotateX(90deg); }
+	.openEye { transform: rotateX(0deg); }
+	.passwordEye.open .closedEye { animation: closedEyeOpen 0.5s forwards }
+	.passwordEye.closed .closedEye { animation: closedEyeClose 0.5s forwards }
+	.passwordEye.open .openEye { animation: openEyeOpen 0.5s forwards }
+	.passwordEye.closed .openEye { animation: openEyeClose 0.5s forwards }
+	@keyframes closedEyeOpen {
+		from { transform: rotateX(90deg); } to { transform: rotateX(0); }
+	}
+	@keyframes closedEyeClose {
+		from { transform: rotateX(0); } to { transform: rotateX(90deg); }
+	}
+	@keyframes openEyeOpen {
+		from { transform: rotateX(0); } to { transform: rotateX(-90deg); }
+	}
+	@keyframes openEyeClose {
+		from { transform: rotateX(-90deg); } to { transform: rotateX(0); }
+	}
+
 	.buttonContainer {
 		width: 100%;
 		display: flex;
