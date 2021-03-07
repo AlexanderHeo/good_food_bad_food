@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import HomePage from './Home-Page';
 import Login from './Login-Signup/Login';
 import Logo from './Login-Signup/Logo';
-import Reset from './Login-Signup/ResetPassword';
 import Signup from './Login-Signup/Signup';
 
 const App = () => {
@@ -15,7 +14,6 @@ const App = () => {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/home" render={ props => <HomePage {...props} /> } />
-        <Route path='/reset' component={Reset} />
         <Redirect from='/' to='logo' />
       </Router>
     </Container>
