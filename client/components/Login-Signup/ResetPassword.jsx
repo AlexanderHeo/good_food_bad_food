@@ -60,6 +60,12 @@ class ResetPassword extends Component {
 	  }
 	}
 
+	setEye = selection => {
+	  const { p1Displayed, p2Displayed } = this.state
+	  if (selection === 'first') this.setState({ p1Displayed: !p1Displayed })
+	  if (selection === 'second') this.setState({ p2Displayed: !p2Displayed })
+	}
+
 	checkOldPassword = async () => {
 	  const { password } = this.state
 	  const userData = {
@@ -99,16 +105,18 @@ class ResetPassword extends Component {
 	        this.setState({ success: true })
 	      }
 	    })
-	  // const setNewRes = await fetch(`/api/reset/${userId}`, init)
-	  // const setNewJSON = await setNewRes.json()
-	  // if (setNewJSON.success) {
-	  //   this.setState({ success: true })
-	  // } else if (setNewJSON.error) {
-	  //   this.setState({ error: setNewJSON.error })
-	  // }
 	}
 
 	render() {
+	  const openEye = <span
+	                      className="iconify"
+	                      data-icon="fe:eye"
+	                      data-inline="false" />
+	  const closedEye = <span
+	                      className="iconify"
+	                      data-icon="eva:eye-off-2-fill"
+	                      data-inline="false"
+	                    />
 	  return (
 	    <Container>
 	      {
@@ -137,20 +145,47 @@ class ResetPassword extends Component {
 	              <div className='formSection'>
 	                <label className='label' htmlFor='password'>Old Password: </label>
 	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='password' value={this.state.password} type={this.state.p1Displayed ? 'text' : 'password'} />
-	                <button className='passwordDisplay' onClick={this.handleClick} name='password'>{this.state.p1Displayed ? 'Hide' : 'Show' }</button>
+	                <div
+	                    className='passwordEye'
+	                    onClick={() => this.setEye('first')}
+	                  >
+	                {
+	                    this.state.p1Displayed
+	                  ? closedEye
+	                  : openEye
+	                }
+
+	                  </div>
 	              </div>
 	              <div className='formSection'>
 	                <label className='label' htmlFor='reenter'>Old Password: </label>
 	                <input className='input' onChange={this.handleChange} onFocus={this.handleOnFocus} name='reenter' value={this.state.reenter} type={this.state.p2Displayed ? 'text' : 'password'} />
-	                <button className='passwordDisplay' onClick={this.handleClick} name='reenter'>{this.state.p2Displayed ? 'Hide' : 'Show' }</button>
+	                {
+	                  this.state.p2Displayed
+	                    ? <div
+	                      className='passwordEye'
+	                      onClick={() => this.setEye('second')}>
+	                      <span
+	                        className="iconify"
+	                        data-icon="eva:eye-off-2-outline"
+	                        data-inline="false" />
+	                    </div>
+	                    : <div
+	                      className='passwordEye'
+	                      onClick={() => this.setEye('second')}>
+	                      <span
+	                        className="iconify"
+	                        data-icon="fe:eye"
+	                        data-inline="false" />
+	                    </div>
+	                }
 	              </div>
 	              {
 	                this.state.errorMessage
 	                  ? <div>{ this.state.errorMessage }</div>
 	                  : <div className='buttonContainer'>
-	                    <button onClick={this.handleClick} name='submit'>Submit</button>
-	                    <button>Return</button>
-	                    <Link to='/login' className=''>Return</Link>
+	                    <button className='button' onClick={this.handleClick} name='submit'>Submit</button>
+	                    <Link to='/home' className='button'>Return</Link>
 	                  </div>
 	              }
 	            </form>
@@ -198,8 +233,8 @@ const Container = styled.div`
 		justify-content: center;
 		align-items: center;
 	}
+	h2 { text-align: center; }
 	.form {
-		border: 1px solid black;
 		display: flex;
 		flex-direction: column;
 		width: 100%;
@@ -209,20 +244,55 @@ const Container = styled.div`
 		width: 100%;
 		display: flex;
 		justify-content: center;
+		align-items: center;
 		margin: 6px 0;
 		position: relative;
 	}
 	.label {
-		width: 24%;
+		font-size: 1rem;
+		font-weight: 700;
+		width: 30%;
 		text-align: right;
 		margin-right: 6px;
+		height: min-content;
 	}
 	.input {
-		width: 70%;
+		width: 60%;
+		outline: none;
+		border-radius: 16px;
+		padding: 6px;
+		margin: 0 12px;
+		font-size: 1.3rem;
+		font-weight: 700;
+		text-align: left;
+		background-color: var(--primary-2);
+		box-shadow: 0 0 0 transparent;
 	}
-	.passwordDisplay {
+	.input:invalid {
+		box-shadow: 0 0 3px 3px var(--warning-4)
+	}
+	.passwordEye {
 		position: absolute;
-		right: 8px;
-		bottom: 1px;
+		right: 0;
+		top: 0;
+		transform: translate(-23px, 8px);
+		background-color: var(--primary-0);
+		line-height: 0;
+		font-size: 1.7rem;
+		border-radius: 50%;
+		padding: 2px;
+	}
+	.buttonContainer {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.button {
+		border: 1px solid var(--primary-6);
+		text-align: center;
+		width: 80%;
+		padding: 12px 24px;
+		margin: 12px 0;
 	}
 `
