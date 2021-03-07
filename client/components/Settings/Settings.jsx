@@ -139,6 +139,10 @@ const Container = styled.div`
 		}
 		.searchSection {
 			padding-bottom: 36px;
+			width: 100%;
+			.input {
+				width: 80%;
+			}
 		}
 		.mainSection {
 			width: 80%;
@@ -159,14 +163,19 @@ const Container = styled.div`
 			font-size: 1.2rem;
 		}
 	}
+	.buttonContainer {
+		width: 100vw;
+	}
 	.mainButtonContainer {
+		width: 100vw;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		.button {
-			padding: 12px 24px;
-			margin: 12px 0;
-		}
+	}
+	.button {
+		width: 80%;
+		padding: 12px 24px;
+		margin: 12px 0;
 	}
 
 	.disclaimer {
