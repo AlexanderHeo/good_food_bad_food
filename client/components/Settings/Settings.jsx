@@ -40,6 +40,8 @@ class Setting extends Component {
 	  }
 	}
 
+	return = () => { this.setState({ settingDisplay: 'main' }) }
+
 	render() {
 	  let SettingDisplay
 	  const display = this.state.settingDisplay
@@ -56,6 +58,9 @@ class Setting extends Component {
 	  } else if (display === 'setting') {
 	    SettingDisplay = <Change
 	      handleClick={ this.handleClick }
+	      userData={ this.props.userData }
+	      submitPatchData={ this.props.updateUserData }
+	      return={ this.return }
 	    />
 	  } else if (display === 'about') {
 	    SettingDisplay = <About handleClick={ this.handleClick } />
