@@ -114,8 +114,7 @@ app.patch('/api/reset/:userId', (req, res, next) => {
 })
 
 app.patch('/api/location/:userId', (req, res, next) => {
-  const { city, state } = req.body
-  const { userId } = req.body.userData
+  const { city, state, userId } = req.body
   // validation
   const sql = `
 		UPDATE "users"
