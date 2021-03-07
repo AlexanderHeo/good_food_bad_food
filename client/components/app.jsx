@@ -14,7 +14,7 @@ const App = () => {
         <Route path="/logo" component={Logo} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/home" component={HomePage} />
+        <Route path="/home" render={ props => <HomePage {...props} /> } />
         <Route path='/reset' component={Reset} />
         <Redirect from='/' to='logo' />
       </Router>
