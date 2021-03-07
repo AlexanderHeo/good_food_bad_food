@@ -262,6 +262,10 @@ class HomePage extends Component {
 	  }
 	}
 
+	updateUserData = data => {
+	  this.setState({ userData: data })
+	}
+
 	render() {
 	  let username
 	  if (this.props.location.state) username = this.props.location.state.username
@@ -343,6 +347,7 @@ class HomePage extends Component {
   					    clicked={ this.state.hamburgerX }
   					    handleClick={ this.handleButtonClick }
   					    logout={ this.handleLogOut }
+  					    updateUserData={ this.updateUserData }
   					  />
   					</section>
 	      }
