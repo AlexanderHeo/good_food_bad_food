@@ -16,10 +16,7 @@ app.use(express.json())
 app.get('/api/health-check', (req, res, next) => {
   db.query('select \'successfully connected\' as "message"')
     .then(result => res.json(result.rows[0]))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.post('/api/sign-up', (req, res, next) => {
@@ -41,17 +38,11 @@ app.post('/api/sign-up', (req, res, next) => {
           const user = response.rows[0].username
           req.session.userId = response.rows[0].userId
           if (!user) return next(new ClientError('Please Enter A Unique UserName', 400))
-          res.status(201).json({ success: 's' })
+          res.status(201).json({ success: 'Great success!' })
         })
-        .catch(err => {
-          console.error(err)
-          next(err)
-        })
+        .catch(err => next(err))
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.post('/api/log-in', (req, res, next) => {
@@ -65,23 +56,17 @@ app.post('/api/log-in', (req, res, next) => {
   const params = [username]
   db.query(sql, params)
     .then(response => {
-      if (!response.rows[0]) return next(new ClientError('User Account Does Not Exist!', 400))
+      if (!response.rows[0]) return next(new ClientError('User account does not exist.', 400))
       const dbPassword = response.rows[0].password
       bcrypt.compare(password, dbPassword)
         .then(result => {
-          if (!result) return next(new ClientError('Invalid username / password!', 400))
+          if (!result) return next(new ClientError('Password is incorrect.', 400))
           req.session.userId = response.rows[0].userId
-          res.json({ success: 'Log-In success!' })
+          res.status(200).json({ success: 'Log-In success!' })
         })
-        .catch(err => {
-          console.error(err)
-          next(err)
-        })
+        .catch(err => next(err))
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.get('/api/isloggedin', (req, res, next) => {
@@ -95,11 +80,11 @@ app.get('/api/isloggedin', (req, res, next) => {
 	`
   const param = [userId]
   db.query(sql, param)
-    .then(result => res.status(200).json(result.rows[0]))
-    .catch(err => {
-      console.error(err)
-      next(err)
+    .then(result => {
+      if (!result.rows[0]) res.json({ error: 'An Internal error occured.' })
+      res.status(200).json(result.rows[0])
     })
+    .catch(err => next(err))
 })
 
 app.get('/api/log-out', (req, res, next) => {
@@ -187,9 +172,9 @@ app.post('/api/check', (req, res, next) => {
 
 app.get('/api/list', (req, res, next) => {
   const { userId } = req.session
-
   const condition = new RegExp('^\\d+$')
-  if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404))
+  if (!condition.test(userId)) return next(new ClientError('User Id is invalid', 400))
+  if (isNaN(userId)) return next(new ClientError('User Id must be a positive integer.', 400))
   const sql = `
 		SELECT "m"."name",
 		"m"."eatenAt",
@@ -205,31 +190,25 @@ app.get('/api/list', (req, res, next) => {
   const params = [userId]
   db.query(sql, params)
     .then(result => res.json(result.rows))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.post('/api/enter', (req, res, next) => {
   const userId = req.session.userId
   const { meal, mealtime, isToday, enterDate } = req.body
-
-  if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400))
+  if (!userId) res.json({ error: 'error code 66' })
   else if (!meal) return next(new ClientError('Please enter a meal.', 400))
   const sql = `
 		WITH add_to_meals AS (
 			INSERT INTO "meals" ("name", "userId")
-			VALUE ($1, $2)
+			VALUES ($1, $2)
 			RETURNING "mealId", "name", "eatenAt"
 		), add_to_reports AS (
 			INSERT INTO "mealReports" ("mealId")
 			SELECT "mealId" FROM "add_to_meals"
 		), add_to_mealtime AS (
 			INSERT INTO "mealtime" ("mealId", "mealtime")
-			VALUES (
-				(SELECT "mealId" FROM "add_to_meals"), $3)
-			)
+			VALUES ((SELECT "mealId" FROM "add_to_meals"), $3))
 			SELECT *
 			FROM "add_to_meals";
 	`
@@ -259,16 +238,10 @@ app.post('/api/enter', (req, res, next) => {
             postedMeal.report = null
             res.status(200).json(postedMeal)
           })
-          .catch(err => {
-            console.error(err)
-            next(err)
-          })
+          .catch(err => next(err))
       }
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.patch('/api/enter/:mealId', (req, res, next) => {
@@ -281,10 +254,7 @@ app.patch('/api/enter/:mealId', (req, res, next) => {
   const values = [req.body.name.toLowerCase(), req.body.mealId]
   db.query(sql, values)
     .then(result => res.status(200).json(result.rows[0]))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.delete('/api/enter/:mealId', (req, res, next) => {
@@ -307,32 +277,23 @@ app.delete('/api/enter/:mealId', (req, res, next) => {
   const param = [mealId]
   db.query(sql1, param)
     .then(result => {
-      db.query(sql2, param)
-        .then(result => {
-          db.query(sql3, param)
-            .then(result => {
-              if (!result.rows[0]) {
-                res.status(404).json({
-                  error: `Cannot find meal at ${mealId}`
+      if (result) {
+        db.query(sql2, param)
+          .then(result => {
+            if (result) {
+              db.query(sql3, param)
+                .then(result => {
+                  if (!result.rows[0]) {
+                    res.json({ success: `Great success! Meal at id ${mealId} has been obliterated!` })
+                  }
                 })
-              } else {
-                res.status(204).json(result.rows[0])
-              }
-            })
-            .catch(err => {
-              console.error(err)
-              next(err)
-            })
-        })
-        .catch(err => {
-          console.error(err)
-          next(err)
-        })
+                .catch(err => next(err))
+            }
+          })
+          .catch(err => next(err))
+      }
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.get('/api/ratefood', (req, res, next) => {
@@ -415,9 +376,10 @@ app.use('/api', (req, res, next) => {
 
 app.use((err, req, res, next) => {
   if (err instanceof ClientError) {
+    console.error('err code:405:', err)
     res.status(err.status).json({ error: err.message })
   } else {
-    console.error(err)
+    console.error('err code:408:', err)
     res.status(500).json({
       error: 'an unexpected error occurred'
     })

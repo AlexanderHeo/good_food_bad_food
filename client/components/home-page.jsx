@@ -226,7 +226,7 @@ class HomePage extends Component {
 	    }
 	    const response = await fetch(`/api/enter/${mealId}`, init)
 	    const data = await response.json()
-	    if (data) {
+	    if (data.success) {
 	      const listCopy = [...this.state.list]
 	      const index = listCopy.findIndex(x => x.mealId === mealId)
 	      listCopy.splice(index, 1)
