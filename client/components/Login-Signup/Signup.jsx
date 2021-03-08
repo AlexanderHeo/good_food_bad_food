@@ -28,9 +28,7 @@ class Signup extends React.Component {
     };
     const init = {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(goodStuff)
     };
 
@@ -157,7 +155,6 @@ const Container = styled.div`
 	flex-direction: column;
 	align-items: center;
 	background-color: var(--primary-0);
-
 	.returnButton {
 		width: 50px;
 		height: 50px;
@@ -169,13 +166,11 @@ const Container = styled.div`
 		margin: 12px;
 		padding-left: 6px;
 	}
-
 	.title {
 		width: 100%;
 		text-align: center;
 		margin-top: 20%;
 	}
-
 	.form {
 		width: 87%;
 		display: flex;
@@ -202,7 +197,6 @@ const Container = styled.div`
 	}
 	.input:invalid, .select:invalid {
 		box-shadow: 0 0 3px 3px var(--warning-4);
-
 	}
 	.select {
 		border-width: 2px;
@@ -215,7 +209,6 @@ const Container = styled.div`
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-
 		.button {
 			width: 90%;
 			margin: 10px 0;

@@ -428,9 +428,8 @@ class WeeklyReview extends Component {
 	    }
 	  }
 	  let sunBE, sunBR, sunLE, sunLR, sunDE, sunDR, sunSE, sunSR, monBE, monBR, monLE, monLR, monDE, monDR, monSE, monSR, tueBE, tueBR, tueLE, tueLR, tueDE, tueDR, tueSE, tueSR, wedBE, wedBR, wedLE, wedLR, wedDE, wedDR, wedSE, wedSR, thuBE, thuBR, thuLE, thuLR, thuDE, thuDR, thuSE, thuSR, friBE, friBR, friLE, friLR, friDE, friDR, friSE, friSR, satBE, satBR, satLE, satLR, satDE, satDR, satSE, satSR
-	  // const { mealHighlights } = this.state
+
 	  const { sunHighlight, monHighlight, tueHighlight, wedHighlight, thuHighlight, friHighlight, satHighlight } = this.state.mealHighlights
-	  // console.log(mealHighlights)
 	  if (sunHighlight.b.entered) sunBE = 'entered'
 	  if (sunHighlight.b.rated) sunBR = 'rated'
 	  if (sunHighlight.l.entered) sunLE = 'entered'
@@ -612,7 +611,6 @@ class WeeklyReview extends Component {
 	      }
 	    </Table>
 	  )
-
 	}
 }
 
@@ -624,7 +622,6 @@ const Table = styled.table`
 	text-align: center;
 	background-color: var(--primary-0);
 	border-radius: 12px;
-
 	.tableHead tr:first-of-type th {
 		padding-top: 6px;
 	}
@@ -637,47 +634,41 @@ const Table = styled.table`
 	.tableRow td, .tableRow th {
 		width: calc(100vw - 24px / 7)
 	}
-
 	td.today,
 	 th.today {
 		animation: colorFlip 0.4s forwards;
 	}
-
 	.tableBody .mealHighlight {
-		td, th { padding: 0; }
-			.mealInitial {
-				width: 24%;
-				padding: 0 1px;
-				border: 1px solid var(--primary-1);
-				color: var(--primary-1);
-				background-color: var(--gray-0);
-			}
+		td, th {
+			padding: 0;
+		}
+		.mealInitial {
+			width: 24%;
+			padding: 0 1px;
+			border: 1px solid var(--primary-1);
+			color: var(--primary-1);
+			background-color: var(--gray-0);
 		}
 	}
-
 	.mealInitialSizer {
 		display: flex;
 		width: 100%;
 		justify-content: center;
 	}
-
 	.mealInitialContainer .mealInitial.entered {
 		border: 1px solid var(--primary-4);
 		color: var(--primary-4);
 	}
-
 	.mealInitialContainer .mealInitial.rated {
 		width: 25%;
 		border: 1px solid var(--primary-0);
 		color: var(--primary-0);
 		background-color: var(--primary-6);
 	}
-
 	.rating {
 		font-size: 1.2rem;
 		font-weight: 500;
 	}
-
 	@keyframes colorFlip {
 		from {
 			background-color: var(--primary-0);

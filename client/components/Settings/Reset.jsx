@@ -18,13 +18,9 @@ class ResetPassword extends Component {
 	  pnClicked: false
 	}
 
-	handleChange = e => {
-	  this.setState({ [e.target.name]: e.target.value })
-	}
+	handleChange = e => this.setState({ [e.target.name]: e.target.value })
 
-	handleOnFocus = () => {
-	  this.setState({ errorMessage: '' })
-	}
+	handleOnFocus = () => this.setState({ errorMessage: '' })
 
 	handleClick = e => {
 	  e.preventDefault()
@@ -45,15 +41,9 @@ class ResetPassword extends Component {
 	      this.checkOldPassword()
 	    }
 	  } else if (e.target.name === 'finalSubmit') {
-	    if (!newPassword) {
-	      this.setState({ errorMessage: 'Enter a new password.' })
-	    }
-	    if (newPassword === password) {
-	      this.setState({ errorMessage: 'New password must be different.' })
-	    }
-	    if (newPassword && newPassword !== password) {
-	      this.setNewPassword()
-	    }
+	    if (!newPassword) this.setState({ errorMessage: 'Enter a new password.' })
+	    if (newPassword === password) this.setState({ errorMessage: 'New password must be different.' })
+	    if (newPassword && newPassword !== password) this.setNewPassword()
 	  }
 	}
 
@@ -109,10 +99,9 @@ class ResetPassword extends Component {
 	  fetch(`/api/reset/${userId}`, init)
 	    .then(response => response.json())
 	    .then(data => {
-	      if (data.success) {
-	        this.setState({ success: true })
-	      }
+	      if (data.success) this.setState({ success: true })
 	    })
+	    .catch(err => console.error(err))
 	}
 
 	render() {
@@ -253,7 +242,9 @@ const Container = styled.div`
 		justify-content: center;
 		align-items: center;
 	}
-	h2 { text-align: center; }
+	h2 {
+		text-align: center;
+	}
 	.form {
 		display: flex;
 		flex-direction: column;
@@ -288,7 +279,22 @@ const Container = styled.div`
 		background-color: var(--primary-2);
 		box-shadow: 0 0 0 transparent;
 	}
-	.input:invalid { box-shadow: 0 0 3px 3px var(--warning-4) }
+	.input:invalid {
+		box-shadow: 0 0 3px 3px var(--warning-4)
+	}
+	.buttonContainer {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.button {
+		border: 1px solid var(--primary-6);
+		text-align: center;
+		width: 80%;
+		padding: 12px 24px;
+		margin: 12px 0;
+	}
 	.passwordEye {
 		width: 35px;
 		height: 35px;
@@ -324,19 +330,5 @@ const Container = styled.div`
 	}
 	@keyframes openEyeClose {
 		from { transform: rotateX(-90deg); } to { transform: rotateX(0); }
-	}
-
-	.buttonContainer {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-	.button {
-		border: 1px solid var(--primary-6);
-		text-align: center;
-		width: 80%;
-		padding: 12px 24px;
-		margin: 12px 0;
 	}
 `

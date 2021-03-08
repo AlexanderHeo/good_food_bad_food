@@ -49,7 +49,6 @@ export default RatingDisplay
 
 const Container = styled.div`
 	width: 100%;
-
 	.rating {
 		width: 40px;
 		height: 40px;
@@ -62,7 +61,6 @@ const Container = styled.div`
 		border-style: solid;
 		border-radius: 50%;
 	}
-
 	.one {
 		color: var(--warning-2);
 		background-color: var(--warning-7);
@@ -88,5 +86,4 @@ const Container = styled.div`
 		background-color: var(--primary-6);
 		border-color: var(--primary-2);
 	}
-
 `

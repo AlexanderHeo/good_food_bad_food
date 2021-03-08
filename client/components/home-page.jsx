@@ -55,15 +55,7 @@ class HomePage extends Component {
 	componentWillUnmount = () => { this._isMounted = false }
 
 	setTime = () => {
-	  // ************************* //
-	  // testing only testing only //
-
-	  // const fri = '2021-02-26 00:00:00'
-	  // const newDate = new Date(fri)
 	  const newDate = new Date()
-
-	  // ************************* //
-
 	  // send newDate to be formatted to helper functions
 	  const displayDateState = dateFormatter(newDate)
 	  const displaySundayState = sundayFormatter(newDate)
@@ -127,9 +119,7 @@ class HomePage extends Component {
 	    }
 	  } else if (action === 'previousWeek') {
 	    const sunday = this.state.dateSunday.timestamp
-	    const prev = sunday.setHours(
-	      sunday.getHours() - (24 * 7)
-	    )
+	    const prev = sunday.setHours(sunday.getHours() - (24 * 7))
 	    const previousSunday = new Date(prev)
 	    const previousSundayState = sundayFormatter(previousSunday)
 	    this.setState({
@@ -139,9 +129,7 @@ class HomePage extends Component {
 	    })
 	  } else if (action === 'nextWeek') {
 	    const sunday = this.state.dateSunday.timestamp
-	    const next = sunday.setHours(
-	      sunday.getHours() + (24 * 7)
-	    )
+	    const next = sunday.setHours(sunday.getHours() + (24 * 7))
 	    const nextSundayState = sundayFormatter(new Date(next))
 	    const todaysSunday = sundayFormatter(new Date(this.state.dateToday.timestamp))
 	    if (nextSundayState.fullDate === todaysSunday.fullDate) {
@@ -188,9 +176,7 @@ class HomePage extends Component {
 	    }
 	    const init = {
 	      method: 'POST',
-	      headers: {
-	        'Content-Type': 'application/json'
-	      },
+	      headers: { 'Content-Type': 'application/json' },
 	      body: JSON.stringify(postData)
 	    }
 	    fetch('/api/enter', init)
@@ -205,9 +191,7 @@ class HomePage extends Component {
 	    const reportData = { report: parseInt(report), mealId }
 	    const init = {
 	      method: 'PATCH',
-	      headers: {
-	        'Content-Type': 'application/json'
-	      },
+	      headers: { 'Content-Type': 'application/json' },
 	      body: JSON.stringify(reportData)
 	    }
 	    fetch(`/api/rate/${mealId}`, init)
@@ -227,9 +211,7 @@ class HomePage extends Component {
 	    const patchData = { name, mealId }
 	    const init = {
 	      method: 'PATCH',
-	      headers: {
-	        'Content-Type': 'application/json'
-	      },
+	      headers: { 'Content-Type': 'application/json' },
 	      body: JSON.stringify(patchData)
 	    }
 	    fetch(`/api/enter/${mealId}`, init)
@@ -245,9 +227,7 @@ class HomePage extends Component {
 	    const mealId = parameter
 	    const init = {
 	      method: 'DELETE',
-	      headers: {
-	        'Content-Type': 'application/json'
-	      }
+	      headers: { 'Content-Type': 'application/json' }
 	    }
 	    fetch(`/api/enter/${mealId}`, init)
 	      .then(response => null)
@@ -312,7 +292,7 @@ class HomePage extends Component {
 	                  >{ this.state.dateDisplay.day }</span>
 	              }
 	              <span className='todayDate'>{ this.state.dateDisplay.display }</span>
-          	</div>
+          		</div>
 	            : <span className='todayTitleContainer'>date loading...</span>
 	        }
 	        {
@@ -385,7 +365,6 @@ export default HomePage;
 const Container = styled.div`
 	width: 100vw;
 	height: 100vh;
-
 	.helloSection {
 		width: 100%;
 		height: 15%;
@@ -394,7 +373,6 @@ const Container = styled.div`
 			padding: 15px 25px;
 		}
 	}
-
 	.todaySection {
 		height: 40%;
 		display: flex;
@@ -409,7 +387,6 @@ const Container = styled.div`
 			font-size: 1.1rem;
 		}
 	}
-
 	.reviewSection {
 		padding: 36px 12px;
 		display: flex;
@@ -460,7 +437,6 @@ const Container = styled.div`
 			}
 		}
 	}
-
 	.settingsSection, .listsSection {
 		position: absolute;
 		top: 0;
@@ -485,22 +461,13 @@ const Container = styled.div`
 		max-width: 500px;
 		z-index: 1000;
 	}
-
 	@keyframes slideUp {
-		from {
-			transform: translateY(1000px);
-		}
-		to {
-			transform: translateY(0);
-		}
+		from { transform: translateY(1000px); }
+		to { transform: translateY(0); }
 	}
 	@keyframes slideDown {
-		from {
-			transform: translateY(0);
-		}
-		to {
-			transform: translateY(1000px);
-		}
+		from { transform: translateY(0); }
+		to { transform: translateY(1000px); }
 	}
 	.slideDisplay {
 		height: 100%;
