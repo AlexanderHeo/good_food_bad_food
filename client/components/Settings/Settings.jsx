@@ -110,6 +110,7 @@ const Container = styled.div`
 	background-color: var(--gray-9);
 	.setting {
 		width: 100%;
+		height: 100%;
 		display: flex;
 		display: flex;
 		flex-direction: column;
