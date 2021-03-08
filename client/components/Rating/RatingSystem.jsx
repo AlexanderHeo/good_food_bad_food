@@ -73,7 +73,6 @@ const Container = styled.div`
 	justify-content: center;
 	border: 2px solid var(--primary-4);
 	border-radius: 12px;
-
 	.arrow {
 		width: 100%;
 		height: 50px;

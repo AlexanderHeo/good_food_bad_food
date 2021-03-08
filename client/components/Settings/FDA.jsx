@@ -56,14 +56,11 @@ class FDA extends Component {
 	        <p className='userData'>{ this.props.userData.username } - { this.props.userData.city }, { this.props.userData.state}</p>
 	      </div>
 	      <div className='searchSection'>
-	        <input
-	          className='input'
-	          type='text'
-	          value={ this.state.value}
-	          onChange={ this.handleChange }
-	          onFocus={ this.handleOnFocus }
-	        ></input>
-	        <button onClick={ this.handleClick } className='button'>Search</button>
+	        <input className='input' type='text' value={ this.state.value} onChange={ this.handleChange } onFocus={ this.handleOnFocus } />
+	        <button
+	          onClick={ this.handleClick }
+	          className='button'
+	        >Search</button>
 	      </div>
 	      <div className='mainSection'>
 	        {
@@ -88,7 +85,11 @@ class FDA extends Component {
 	        }
 	      </div>
 	      <div className='buttonContainer'>
-	        <button name='main' className='button' onClick={ this.props.handleClick }>RETURN</button>
+	        <button
+	          name='main'
+	          className='button'
+	          onClick={ this.props.handleClick }
+	        >RETURN</button>
 	      </div>
 	    </section>
 	  )

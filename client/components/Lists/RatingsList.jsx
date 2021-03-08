@@ -22,7 +22,10 @@ class RatingsList extends Component {
 	        	}
 	          <div className='chevron chevronRight'>&gt;</div>
 	        </h3>
-	        <MainTable list={this.props.sortedList} buttonSwitched={this.state.buttonSwitched} />
+	        <MainTable
+	          list={this.props.sortedList}
+	          buttonSwitched={this.state.buttonSwitched}
+	        />
 	      </div>
 	    </Container>
 	  )

@@ -84,9 +84,7 @@ class EnterMeal extends Component {
 	          } else if (this.state.previousValue === this.state.value) {
 	            const foodCopy = Object.assign({}, this.state.food)
 	            foodCopy.report = this.state.rating
-	            const parameters = {
-	              food: foodCopy
-	            }
+	            const parameters = { food: foodCopy }
 	            this.props.addMeal('rating', parameters)
 	            this.props.handleClick('return')
 	          }
@@ -206,11 +204,9 @@ const Container = styled.div`
 	background-color: var(--primary-0);
 	border-radius: 12px;
 	padding: 12px 24px;
-
 	.enterHeader {
 		text-align: center;
 	}
-
 	.form {
 		width: 100%;
 		max-height: 40%;
@@ -241,7 +237,6 @@ const Container = styled.div`
 			border: 2px solid var(--warning-4);
 		}
 	}
-
 	.voteContainer {
 		width: 100%;
 		position: absolute;
@@ -252,7 +247,6 @@ const Container = styled.div`
 		justify-content: center;
 		align-items: center;
 	}
-
 	.buttonContainer {
 		display: flex;
 	}
@@ -281,7 +275,6 @@ const Container = styled.div`
 		margin: 12px;
 		padding: 8px 32px;
 	}
-
 	.errorMessage {
 		text-align: center;
 		color: var(--warning-5);

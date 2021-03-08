@@ -49,12 +49,13 @@ class Lists extends Component {
 
 	render() {
 	  const { breakfast, lunch, dinner, snacks } = this.state
-	  const list = [
-	    { breakfast }, { lunch }, { dinner }, { snacks }
-	  ]
+	  const list = [{ breakfast }, { lunch }, { dinner }, { snacks }]
 	  return (
 	    <Container>
-	      <div className={ this.props.clicked ? `${'lists'} ${'open'}` : `${'lists'} ${'closed'}`}>
+	      <div className={ this.props.clicked
+	        ? `${'lists'} ${'open'}`
+	        : `${'lists'} ${'closed'}`
+	      }>
         	<h2 className='listTitle'>Good vs Bad</h2>
 	        <section className='listSection'>
           	<RatingsList sortedList={list} />

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const loader = () => (
   <Spin>
-    <div className="loader"></div>
+    <div className="loader" />
   </Spin>
 )
 

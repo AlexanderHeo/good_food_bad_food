@@ -52,7 +52,6 @@ const Container = styled.div`
 	background-color: var(--primary-6);
 	border: 18px solid var(--primary-6);
 	border-radius: 32px;
-
 	.main {
 		height: 100%;
 		background-color: var(--primary-0);
@@ -61,7 +60,6 @@ const Container = styled.div`
 		flex-direction: column;
 		justify-content: center;
 	}
-
 	.app-logo {
 		height: 25%;
 		display: flex;
@@ -71,7 +69,6 @@ const Container = styled.div`
 	.app-logo .title {
 		font-size: 3.5rem;
 	}
-
 	.main.start {
 		animation: fadeout 0.5s forwards;
 	}

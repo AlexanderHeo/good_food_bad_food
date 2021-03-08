@@ -31,18 +31,14 @@ class Login extends React.Component {
     };
     const init = {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(goodStuff)
     };
 
     fetch('/api/log-in', init)
       .then(response => response.json())
       .then(result => {
-        if (result.success) {
-          this.setState({ isLoggedIn: true });
-        }
+        if (result.success) this.setState({ isLoggedIn: true });
       })
       .catch(err => console.error(err));
   }
@@ -93,12 +89,9 @@ class Login extends React.Component {
 					  </div>
 					</IntroModal>
 	      }
-
 	      <LoginContainer>
 	        <h1 className="title">Log In</h1>
-	        <form
-	          className="form"
-	        >
+	        <form className="form">
 	          <fieldset className="fieldset">
 	            <label className="label">Username:</label>
 	            <input
@@ -125,7 +118,13 @@ class Login extends React.Component {
 	          </fieldset>
 	          {
 	            this.state.isLoggedIn
-	              ? <Redirect from='/login' to={{ pathname: 'home', state: { username: this.state.username } }}/>
+	              ? <Redirect
+	                from='/login'
+	                to={{
+	                  pathname: 'home',
+	                  state: { username: this.state.username }
+	                }}
+	              />
 	              : null
 	          }
 	          {
@@ -137,7 +136,6 @@ class Login extends React.Component {
 	                  onClick={ this.handleButtonClick }>Log In</button>
 	              </div>
 	          }
-
 	        </form>
 	        <div className='linkContainer'>
 	          <Link
@@ -165,7 +163,6 @@ const IntroModal = styled.div`
 	justify-content: center;
 	align-items: center;
 	z-index: 1000;
-
 	.container {
 		width: 100%;
 		height: 100%;
@@ -215,7 +212,6 @@ const LoginContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
 	.returnButton {
 		width: 50px;
 		height: 50px;
@@ -227,17 +223,14 @@ const LoginContainer = styled.div`
 		margin: 12px;
 		padding-left: 6px;
 	}
-
 	.title {
 		width: 100%;
 		text-align: center;
 		margin-top: 55%;
 	}
-
 	.form {
 		padding: 0 20px;
 		text-align: center;
-
 		.fieldset {
 			padding: 10px 0;
 			margin: 10px 0;
@@ -245,7 +238,6 @@ const LoginContainer = styled.div`
 		.fieldset:last-of-type {
 			margin-bottom: 50px;
 		}
-
 		.label, .input {
 			font-size: 1.3rem;
 			font-weight: 700;
@@ -267,7 +259,6 @@ const LoginContainer = styled.div`
 		.input:invalid {
 			box-shadow: 0 0 3px 3px var(--warning-4);
 		}
-
 		.button-container {
 			margin-top: 36px;
 			width: 100%;
@@ -287,7 +278,6 @@ const LoginContainer = styled.div`
 			font-weight: 700;
 		}
 	}
-
 	.linkContainer {
 		position: absolute;
 		bottom: 0;

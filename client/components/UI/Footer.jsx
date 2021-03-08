@@ -23,7 +23,7 @@ class Footer extends Component {
 					  onClick={ this.props.handleClick }
 					  className='button home'
 					>
-					  <span className="iconify" data-icon="bx:bxs-home-smile" data-inline="false"></span>
+					  <span className="iconify" data-icon="bx:bxs-home-smile" data-inline="false" />
 					</button>
 	      }
 	      <button

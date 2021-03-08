@@ -62,34 +62,15 @@ class Change extends React.Component {
 	  return (
 	    <ChangeContainer>
 	      <h1 className="title">Change Settings</h1>
-	      <form
-	        className="form"
-	      >
+	      <form className="form">
 	        <fieldset className="fieldset">
 	          <label className="label">City:</label>
-	          <input
-	            className="input"
-	            type="text"
-	            name="city"
-	            required={ this.state.cityFocused }
-	            value={ this.state.city }
-	            placeholder=''
-	            onChange={ this.handleChange }
-	            onFocus={ this.handleOnFocus } />
+	          <input className="input" type="text" name="city" required={ this.state.cityFocused } value={ this.state.city } placeholder='' onChange={ this.handleChange } onFocus={ this.handleOnFocus } />
 	        </fieldset>
 	        <fieldset className="fieldset">
 	          <label className="label">State:</label>
-	          <input
-	            className="input"
-	            type="text"
-	            name="state"
-	            required={ this.state.stateFocused }
-	            value={ this.state.state }
-	            placeholder=''
-	            onChange={ this.handleChange }
-	            onFocus={ this.handleOnFocus } />
+	          <input className="input" type="text" name="state" required={ this.state.stateFocused } value={ this.state.state } placeholder='' onChange={ this.handleChange } onFocus={ this.handleOnFocus } />
 	        </fieldset>
-
 	        {
 	          this.state.errorMessage
 	            ? <div className="errorMessage">{ this.state.errorMessage }</div>
@@ -104,7 +85,6 @@ class Change extends React.Component {
 	                onClick={ this.handleButtonClick }>Return</button>
 	            </div>
 	        }
-
 	      </form>
 	    </ChangeContainer>
 	  )
@@ -119,7 +99,6 @@ const ChangeContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
 	.returnButton {
 		width: 50px;
 		height: 50px;
@@ -131,17 +110,14 @@ const ChangeContainer = styled.div`
 		margin: 12px;
 		padding-left: 6px;
 	}
-
 	.title {
 		width: 100%;
 		text-align: center;
 		margin-top: 55%;
 	}
-
 	.form {
 		padding: 0 20px;
 		text-align: center;
-
 		.fieldset {
 			padding: 10px 0;
 			margin: 10px 0;
@@ -149,7 +125,6 @@ const ChangeContainer = styled.div`
 		.fieldset:last-of-type {
 			margin-bottom: 50px;
 		}
-
 		.label, .input {
 			font-size: 1.3rem;
 			font-weight: 700;
@@ -171,7 +146,6 @@ const ChangeContainer = styled.div`
 		.input:invalid {
 			box-shadow: 0 0 3px 3px var(--warning-4);
 		}
-
 		.button-container {
 			margin-top: 36px;
 			width: 100%;
@@ -191,7 +165,6 @@ const ChangeContainer = styled.div`
 			font-weight: 700;
 		}
 	}
-
 	.linkContainer {
 		position: absolute;
 		bottom: 0;

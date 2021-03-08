@@ -9,11 +9,15 @@ class MainTable extends Component {
         <tbody className='mainBody'>
           {
             this.props.list.map(x => {
-              return <tr key={Object.keys(x)[0]}>
+              const key = Object.keys(x)[0]
+              return <tr key={key}>
                 <td colSpan='2'>
-                  <h5 className='foodTableTitle'>{(Object.keys(x)[0]).charAt(0).toUpperCase() + (Object.keys(x)[0]).slice(1)}</h5>
+                  <h5 className='foodTableTitle'>{key.charAt(0).toUpperCase() + key.slice(1)}</h5>
                   <div className='foodTableContainer'>
-                    <FoodTable list={x} buttonSwitched={this.props.buttonSwitched} />
+                    <FoodTable
+                      list={x}
+                      buttonSwitched={this.props.buttonSwitched}
+                    />
                   </div>
                 </td>
               </tr>
@@ -29,12 +33,10 @@ export default MainTable
 
 const MainTableContainer = styled.table`
 	width: 100%;
-
 	.mainBody { font-size: 1rem; }
 	.mainBody>tr:nth-child(2n) .foodTableContainer {
 		background-color: var(--primary-1);
 	}
-
 	.foodTableTitle { text-align: center; }
 	.foodTableContainer {
 		height: 70px;
@@ -45,7 +47,6 @@ const MainTableContainer = styled.table`
 		box-shadow: -1px -1px 10px 1px var(--primary-0),
 		1px 1px 10px 1px var(--primary-9);
 	}
-
 	.foodTable {
 		width: 100%;
 		.foodBody>tr { height: initial; }

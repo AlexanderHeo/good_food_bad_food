@@ -93,9 +93,10 @@ class Setting extends Component {
 
 	  return (
 	    <Container>
-	      <div className={ this.props.clicked ? `${'setting'} ${'open'}` : `${'setting'} ${'closed'}`}>
-	        { SettingDisplay }
-	      </div>
+	      <div className={ this.props.clicked
+	        ? `${'setting'} ${'open'}`
+	        : `${'setting'} ${'closed'}`}
+	      >{ SettingDisplay }</div>
 	    </Container>
 	  )
 	}
@@ -185,7 +186,6 @@ const Container = styled.div`
 		padding: 12px 24px;
 		margin: 12px 0;
 	}
-
 	.disclaimer {
 		color: var(--warning-4);
 		font-weight: 500;
