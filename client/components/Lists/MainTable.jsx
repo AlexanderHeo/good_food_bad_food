@@ -13,7 +13,7 @@ class MainTable extends Component {
                 <td colSpan='2'>
                   <h5 className='foodTableTitle'>{(Object.keys(x)[0]).charAt(0).toUpperCase() + (Object.keys(x)[0]).slice(1)}</h5>
                   <div className='foodTableContainer'>
-                    <FoodTable list={x} />
+                    <FoodTable list={x} buttonSwitched={this.props.buttonSwitched} />
                   </div>
                 </td>
               </tr>

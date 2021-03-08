@@ -10,6 +10,9 @@ class FoodTable extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
+	  if (prevProps.buttonSwitched !== this.props.buttonSwitched) {
+	    this.setState({ buttonSwitched: !this.state.buttonSwitched })
+	  }
 	  if (prevProps.list !== this.props.list) {
 	    this.doTheThing()
 	  }
@@ -22,7 +25,7 @@ class FoodTable extends Component {
 	  })
 	  const bad = this.props.list[mealtime].filter(x => {
 	    if (x.report < 3) return x
-	  })
+	  }).reverse()
 	  this.setState({
 	    goodList: good,
 	    badList: bad,
