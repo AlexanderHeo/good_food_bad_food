@@ -105,15 +105,12 @@ export default Setting
 
 const Container = styled.div`
 	width: 100vw;
-	height: 100vh;
+	max-width: 500px;
+	height: calc(100vh - 80px);
 	background-color: var(--gray-9);
 	.setting {
 		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 100;
+		display: flex;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-evenly;
@@ -134,7 +131,7 @@ const Container = styled.div`
 		flex-direction: column;
 		justify-content: space-evenly;
 		align-items: center;
-		height: 100%;
+		height: 100vh;
 		.titleSection {
 			padding: 12px 0;
 		}
@@ -177,6 +174,7 @@ const Container = styled.div`
 	}
 	.mainButtonContainer {
 		width: 100vw;
+		max-width: 250px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

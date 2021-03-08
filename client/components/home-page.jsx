@@ -52,9 +52,7 @@ class HomePage extends Component {
 	  }
 	}
 
-	componentWillUnmount = () => {
-	  this._isMounted = false
-	}
+	componentWillUnmount = () => { this._isMounted = false }
 
 	setTime = () => {
 	  // ************************* //
@@ -262,16 +260,42 @@ class HomePage extends Component {
 	  }
 	}
 
-	updateUserData = data => {
-	  this.setState({ userData: data })
-	}
+	updateUserData = data => this.setState({ userData: data })
 
 	render() {
-	  let username
+	  let username, display
 	  if (this.props.location.state) username = this.props.location.state.username
 	  else username = 'user'
-	  return (
-	    <Container>
+	  if (this.state.listButtonClicked) {
+	    display = <section
+	      className={ this.state.listButtonClicked
+	        ? 'section listsSection open'
+	        : 'section listsSection closed'
+	      }
+	    >
+	      <Lists
+	        list={ this.state.list }
+	        clicked={ this.state.listButtonX }
+	        handleClick={ this.handleButtonClick }
+	      />
+	    </section>
+	  } else if (this.state.hamburgerClicked) {
+	    display = <section
+	      className={ this.state.hamburgerClicked
+	        ? 'section settingsSection open'
+	        : 'section settingsSection closed'
+	      }
+	    >
+	      <Settings
+	        userData={ this.state.userData }
+	        clicked={ this.state.hamburgerX }
+	        handleClick={ this.handleButtonClick }
+	        logout={ this.handleLogOut }
+	        updateUserData={ this.updateUserData }
+	      />
+	    </section>
+	  } else {
+	    display = <>
 	      <section className='section helloSection'>
 	        <div className='hello'>Hello,  { username } !</div>
 	      </section>
@@ -338,29 +362,11 @@ class HomePage extends Component {
   					/>
 	        }
 	      </section>
-	      {
-	        this.state.hamburgerClicked &&
-  					<section className={ this.state.hamburgerClicked ? 'section settingsSection open' : 'section settingsSection closed' }
-  					>
-  					  <Settings
-  					    userData={ this.state.userData }
-  					    clicked={ this.state.hamburgerX }
-  					    handleClick={ this.handleButtonClick }
-  					    logout={ this.handleLogOut }
-  					    updateUserData={ this.updateUserData }
-  					  />
-  					</section>
-	      }
-	      {
-	        this.state.listButtonClicked &&
-					<section className={ this.state.listButtonClicked ? 'section listsSection open' : 'section listsSection closed' }
-					>
-					  <Lists
-					    list={ this.state.list }
-					    clicked={ this.state.listButtonX }
-					  />
-					</section>
-	      }
+	    </>
+	  }
+	  return (
+	    <Container>
+	      { display }
 	      <div className='footer'>
         	<Footer
 	          isToday={ this.state.isToday }
@@ -463,6 +469,7 @@ const Container = styled.div`
 	.settingsSection.open,
 	.listsSection.open {
 		display: flex;
+		justify-content: center;
 	}
 	.settingsSection.closed,
 	.listsSection.closed {
@@ -471,8 +478,8 @@ const Container = styled.div`
 	.footer {
 		position: absolute;
 		bottom: 0;
-		left: 0;
 		width: 100%;
+		max-width: 500px;
 		z-index: 1000;
 	}
 
