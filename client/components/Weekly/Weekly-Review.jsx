@@ -81,15 +81,9 @@ class WeeklyReview extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-	  if (prevProps.list !== this.props.list) {
-	    this.doTheThing()
-	  }
-	  if (prevProps.dateDisplay !== this.props.dateDisplay) {
-	    this.doTheThing()
-	  }
-	  if (prevProps.dateSunday !== this.props.dateSunday) {
-	    this.doTheThing()
-	  }
+	  if (prevProps.list !== this.props.list) this.doTheThing()
+	  if (prevProps.dateDisplay !== this.props.dateDisplay) this.doTheThing()
+	  if (prevProps.dateSunday !== this.props.dateSunday) this.doTheThing()
 	}
 
 	doTheThing = () => {
@@ -164,6 +158,7 @@ class WeeklyReview extends Component {
 	  })
 
 	  const allWeek = [sun, mon, tue, wed, thu, fri, sat]
+
 	  const mealHighlights = {
 	    sunHighlight: {
 	      b: { entered: false, rated: false },
@@ -527,46 +522,60 @@ class WeeklyReview extends Component {
 					  <tbody className='tableBody'>
 					    <tr className='mealHighlight'>
 					      <td className='mealInitialContainer sun'>
-					        <span className={`mealInitial breakfast ${sunBE} ${sunBR}`}>B</span>
-					        <span className={`mealInitial lunch ${sunLE} ${sunLR}`}>L</span>
-					        <span className={`mealInitial dinner ${sunDE} ${sunDR}`}>D</span>
-					        <span className={`mealInitial snacks ${sunSE} ${sunSR}`}>S</span>
+					        <div className='mealInitialSizer'>
+					          <span className={`mealInitial breakfast ${sunBE} ${sunBR}`}>B</span>
+					          <span className={`mealInitial lunch ${sunLE} ${sunLR}`}>L</span>
+					          <span className={`mealInitial dinner ${sunDE} ${sunDR}`}>D</span>
+					          <span className={`mealInitial snacks ${sunSE} ${sunSR}`}>S</span>
+					        </div>
 					      </td>
 					      <td className='mealInitialContainer mon'>
-					        <span className={`mealInitial breakfast ${monBE} ${monBR}`}>B</span>
-					        <span className={`mealInitial lunch ${monLE} ${monLR}`}>L</span>
-					        <span className={`mealInitial dinner ${monDE} ${monDR}`}>D</span>
-					        <span className={`mealInitial snacks ${monSE} ${monSR}`}>S</span>
+					        <div className='mealInitialSizer'>
+					          <span className={`mealInitial breakfast ${monBE} ${monBR}`}>B</span>
+					          <span className={`mealInitial lunch ${monLE} ${monLR}`}>L</span>
+					          <span className={`mealInitial dinner ${monDE} ${monDR}`}>D</span>
+					          <span className={`mealInitial snacks ${monSE} ${monSR}`}>S</span>
+					        </div>
 					      </td>
 					      <td className='mealInitialContainer tue'>
-					        <span className={`mealInitial breakfast ${tueBE} ${tueBR}`}>B</span>
-					        <span className={`mealInitial lunch ${tueLE} ${tueLR}`}>L</span>
-					        <span className={`mealInitial dinner ${tueDE} ${tueDR}`}>D</span>
-					        <span className={`mealInitial snacks ${tueSE} ${tueSR}`}>S</span>
+					        <div className='mealInitialSizer'>
+					          <span className={`mealInitial breakfast ${tueBE} ${tueBR}`}>B</span>
+					          <span className={`mealInitial lunch ${tueLE} ${tueLR}`}>L</span>
+					          <span className={`mealInitial dinner ${tueDE} ${tueDR}`}>D</span>
+					          <span className={`mealInitial snacks ${tueSE} ${tueSR}`}>S</span>
+					        </div>
 					      </td>
 					      <td className='mealInitialContainer wed'>
-					        <span className={`mealInitial breakfast ${wedBE} ${wedBR}`}>B</span>
-					        <span className={`mealInitial lunch ${wedLE} ${wedLR}`}>L</span>
-					        <span className={`mealInitial dinner ${wedDE} ${wedDR}`}>D</span>
-					        <span className={`mealInitial snacks ${wedSE} ${wedSR}`}>S</span>
+					        <div className='mealInitialSizer'>
+					          <span className={`mealInitial breakfast ${wedBE} ${wedBR}`}>B</span>
+					          <span className={`mealInitial lunch ${wedLE} ${wedLR}`}>L</span>
+					          <span className={`mealInitial dinner ${wedDE} ${wedDR}`}>D</span>
+					          <span className={`mealInitial snacks ${wedSE} ${wedSR}`}>S</span>
+					        </div>
 					      </td>
 					      <td className='mealInitialContainer thu'>
-					        <span className={`mealInitial breakfast ${thuBE} ${thuBR}`}>B</span>
-					        <span className={`mealInitial lunch ${thuLE} ${thuLR}`}>L</span>
-					        <span className={`mealInitial dinner ${thuDE} ${thuDR}`}>D</span>
-					        <span className={`mealInitial snacks ${thuSE} ${thuSR}`}>S</span>
+					        <div className='mealInitialSizer'>
+					          <span className={`mealInitial breakfast ${thuBE} ${thuBR}`}>B</span>
+					          <span className={`mealInitial lunch ${thuLE} ${thuLR}`}>L</span>
+					          <span className={`mealInitial dinner ${thuDE} ${thuDR}`}>D</span>
+					          <span className={`mealInitial snacks ${thuSE} ${thuSR}`}>S</span>
+					        </div>
 					      </td>
 					      <td className='mealInitialContainer fri'>
-					        <span className={`mealInitial breakfast ${friBE} ${friBR}`}>B</span>
-					        <span className={`mealInitial lunch ${friLE} ${friLR}`}>L</span>
-					        <span className={`mealInitial dinner ${friDE} ${friDR}`}>D</span>
-					        <span className={`mealInitial snacks ${friSE} ${friSR}`}>S</span>
+					        <div className='mealInitialSizer'>
+					          <span className={`mealInitial breakfast ${friBE} ${friBR}`}>B</span>
+					          <span className={`mealInitial lunch ${friLE} ${friLR}`}>L</span>
+					          <span className={`mealInitial dinner ${friDE} ${friDR}`}>D</span>
+					          <span className={`mealInitial snacks ${friSE} ${friSR}`}>S</span>
+					        </div>
 					      </td>
 					      <td className='mealInitialContainer sat'>
-					        <span className={`mealInitial breakfast ${satBE} ${satBR}`}>B</span>
-					        <span className={`mealInitial lunch ${satLE} ${satLR}`}>L</span>
-					        <span className={`mealInitial dinner ${satDE} ${satDR}`}>D</span>
-					        <span className={`mealInitial snacks ${satSE} ${satSR}`}>S</span>
+					        <div className='mealInitialSizer'>
+					          <span className={`mealInitial breakfast ${satBE} ${satBR}`}>B</span>
+					          <span className={`mealInitial lunch ${satLE} ${satLR}`}>L</span>
+					          <span className={`mealInitial dinner ${satDE} ${satDR}`}>D</span>
+					          <span className={`mealInitial snacks ${satSE} ${satSR}`}>S</span>
+					        </div>
 					      </td>
 					    </tr>
 					    <tr className='tableRow'>
@@ -629,13 +638,15 @@ const Table = styled.table`
 		width: calc(100vw - 24px / 7)
 	}
 
-	.today {
+	td.today,
+	 th.today {
 		animation: colorFlip 0.4s forwards;
 	}
 
 	.tableBody .mealHighlight {
 		td, th { padding: 0; }
 			.mealInitial {
+				width: 24%;
 				padding: 0 1px;
 				border: 1px solid var(--primary-1);
 				color: var(--primary-1);
@@ -644,12 +655,19 @@ const Table = styled.table`
 		}
 	}
 
+	.mealInitialSizer {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+	}
+
 	.mealInitialContainer .mealInitial.entered {
 		border: 1px solid var(--primary-4);
 		color: var(--primary-4);
 	}
 
 	.mealInitialContainer .mealInitial.rated {
+		width: 25%;
 		border: 1px solid var(--primary-0);
 		color: var(--primary-0);
 		background-color: var(--primary-6);
