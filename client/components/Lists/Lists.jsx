@@ -69,15 +69,11 @@ export default Lists
 
 const Container = styled.div`
 	width: 100vw;
+	max-width: 500px;
 	height: calc(100vh - 80px);
 	background-color: var(--gray-9);
 	.lists {
-		width: 100%;
 		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 100;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
