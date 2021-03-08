@@ -3,16 +3,26 @@ import styled from 'styled-components'
 import MainTable from './MainTable'
 
 class RatingsList extends Component {
-  render() {
-    return (
-      <Container>
-        <div className='tableContainer'>
-          <h3 className='tableContainerTitle'>Ratings List</h3>
-          <MainTable list={this.props.sortedList}/>
-        </div>
-      </Container>
-    )
-  }
+	state = {
+	  buttonSwitched: false
+	}
+
+	handleClick = () => this.setState({ buttonSwitched: !this.state.buttonSwitched })
+
+	render() {
+	  return (
+	    <Container>
+	      <div className='tableContainer'>
+	        <h3 className='tableContainerTitle' onClick={this.handleClick}>{
+	          this.state.buttonSwitched
+	            ? 'The Bad'
+	            : 'The Good'
+	        }</h3>
+	        <MainTable list={this.props.sortedList} buttonSwitched={this.state.buttonSwitched} />
+	      </div>
+	    </Container>
+	  )
+	}
 }
 
 export default RatingsList

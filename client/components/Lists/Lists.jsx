@@ -59,9 +59,6 @@ class Lists extends Component {
 	        <section className='listSection'>
           	<RatingsList sortedList={list} />
 	        </section>
-	        <div className='buttonContainer'>
-	          <button name='list' className='button' onClick={this.props.handleClick}>Return</button>
-	        </div>
 	      </div>
 	    </Container>
 	  )
