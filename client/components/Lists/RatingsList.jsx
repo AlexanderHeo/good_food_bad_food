@@ -13,11 +13,15 @@ class RatingsList extends Component {
 	  return (
 	    <Container>
 	      <div className='tableContainer'>
-	        <h3 className='tableContainerTitle' onClick={this.handleClick}>{
-	          this.state.buttonSwitched
-	            ? 'The Bad'
-	            : 'The Good'
-	        }</h3>
+	        <h3 className='tableContainerTitle' onClick={this.handleClick}>
+	          <div className='chevron chevronLeft'>&lt;</div>
+	          {
+	            this.state.buttonSwitched
+	              ? 'The Bad'
+	              : 'The Good'
+	        	}
+	          <div className='chevron chevronRight'>&gt;</div>
+	        </h3>
 	        <MainTable list={this.props.sortedList} buttonSwitched={this.state.buttonSwitched} />
 	      </div>
 	    </Container>
@@ -35,7 +39,18 @@ const Container = styled.div`
 		border-radius: 12px;
 		box-shadow: inset -1px -1px 10px 1px var(--primary-9), inset 1px 1px 10px 1px var(--primary-0);
 		.tableContainerTitle {
+			position: relative;
 			text-align: center;
+			.chevron {
+				position: absolute;
+				bottom: 0;
+			}
+			.chevronLeft {
+				left: 30px;
+			}
+			.chevronRight {
+				right: 30px;
+			}
 		}
 	}
 `
