@@ -172,7 +172,7 @@ class HomePage extends Component {
     fetch('/api/log-out')
       .then(response => response.json())
       .then(result => {
-        if (result.success) return this.props.history.push('/ls')
+        if (result.success) return this.props.history.push('/login')
       })
       .catch(err => console.error(err));
   }
@@ -415,6 +415,9 @@ const Container = styled.div`
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		.slideDisplay {
+			overflow: hidden;
+		}
 		.reviewTitleContainer {
 			width: 100%;
 			display: flex;
