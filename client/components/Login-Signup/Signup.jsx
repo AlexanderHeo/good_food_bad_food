@@ -47,7 +47,7 @@ class Signup extends React.Component {
     } else this.createAccount()
   }
 
-  createAccount = () => {
+  createAccount = async () => {
     const { username, password, city, state } = this.state
 
     const usernameCheck = { username }
@@ -56,39 +56,35 @@ class Signup extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(usernameCheck)
     }
-    fetch('/api/username-check', checkInit)
-      .then(response => response.json())
-      .then(result => {
-        if (result.error) {
-          this.setState({
-            errorMessage: result.error,
-            invalidSection: 'username'
-          })
-        }
-        if (result.success) {
-          const userData = { username, password, city, state }
-          const init = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-          }
-          fetch('/api/sign-up', init)
-            .then(response => response.json())
-            .then(result => {
-              if (result.success) {
-                this.setState({ success: true })
-                this.props.history.push('/login')
-              } else {
-                this.setState({
-                  errorMessage: result.error,
-                  invalidSection: 'state'
-                })
-              }
-            })
-            .catch(err => console.error(err))
-        }
+    const response = await fetch('/api/username-check', checkInit)
+    const data = await response.json()
+    if (data.error) {
+      this.setState({
+        errorMessage: data.error,
+        invalidSection: 'username',
+        username: ''
       })
-      .catch(err => console.error('err 62:', err))
+    }
+    if (data.success) {
+      const userData = { username, password, city, state }
+      const init = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      }
+      const response = await fetch('/api/sign-up', init)
+      const data = await response.json()
+      if (data.success) {
+        this.setState({ success: true })
+        this.props.history.push('/login')
+      }
+      if (data.error) {
+        this.setState({
+          errorMessage: data.error,
+          invalidSection: 'state'
+        })
+      }
+    }
   }
 
   handleChange = event => {
