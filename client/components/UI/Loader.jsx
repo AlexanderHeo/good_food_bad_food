@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const spinner = () => (
-  <Spin className="loader"></Spin>
+const loader = () => (
+  <Spin>
+    <div className="loader" />
+  </Spin>
 )
 
-export default spinner
+export default loader
 
 const Spin = styled.div`
 	.loader,
@@ -34,7 +36,7 @@ const Spin = styled.div`
 	.loader:before {
 		width: 5.2em;
 		height: 10.2em;
-		background: #0dc5c1;
+		background: var(--primary-4);
 		border-radius: 10.2em 0 0 10.2em;
 		top: -0.1em;
 		left: -0.1em;
@@ -46,7 +48,7 @@ const Spin = styled.div`
 	.loader:after {
 		width: 5.2em;
 		height: 10.2em;
-		background: #0dc5c1;
+		background: var(--primary-4);
 		border-radius: 0 10.2em 10.2em 0;
 		top: -0.1em;
 		left: 4.9em;

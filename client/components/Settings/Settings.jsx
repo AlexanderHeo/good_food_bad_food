@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Backdrop from '../UI/Backdrop'
+import About from './About'
+import Change from './Change'
+import FDA from './FDA'
+import Main from './Main'
+import Reset from './Reset'
 
 class Setting extends Component {
 	state = {
@@ -10,73 +14,89 @@ class Setting extends Component {
 	handleClick = e => {
 	  e.preventDefault()
 	  const name = e.target.name
-	  if (name === 'main') this.setState({ settingDisplay: 'main' })
-	  else if (name === 'setting') this.setState({ settingDisplay: 'setting' })
-	  else if (name === 'about') this.setState({ settingDisplay: 'about' })
-	  else if (name === 'signout') this.setState({ settingDisplay: 'signout' })
-	  else if (name === 'confirm') this.props.logout()
-	  else if (name === 'return') this.props.handleClick()
+	  switch (name) {
+	    case 'main':
+	      this.setState({ settingDisplay: 'main' })
+	      break
+	    case 'fda':
+	      this.setState({ settingDisplay: 'fda' })
+	      break
+	    case 'setting':
+	      this.setState({ settingDisplay: 'setting' })
+	      break
+	    case 'about':
+	      this.setState({ settingDisplay: 'about' })
+	      break
+	    case 'reset':
+	      this.setState({ settingDisplay: 'reset' })
+	      break
+	    case 'signout':
+	      this.setState({ settingDisplay: 'signout' })
+	      break
+	    case 'confirm':
+	      this.props.logout()
+	      break
+	    case 'return':
+	      this.props.handleClick()
+	      break
+	    default:
+	      break
+	  }
 	}
+
+	return = () => { this.setState({ settingDisplay: 'main' }) }
 
 	render() {
 	  let SettingDisplay
 	  const display = this.state.settingDisplay
 	  if (display === 'main') {
-	    SettingDisplay = <section className='main'>
-	      <h1 className='title'>Settings</h1>
-	      <div className='buttonContainer'>
-	        <button name='setting' className='button' onClick={ this.handleClick }
-	        >
-						Change Settings
-	        </button>
-	        <button name='about' className='button' onClick={ this.handleClick }
-	        >
-						About
-	        </button>
-	        <button name='signout' className='button' onClick={ this.handleClick }
-	        >
-						Sign Out
-	        </button>
-	      </div>
-	    </section>
+	    SettingDisplay = <Main
+	      handleClick={ this.handleClick }
+	      userData={ this.props.userData }
+	    />
+	  } else if (display === 'fda') {
+	    SettingDisplay = <FDA
+	      handleClick={ this.handleClick }
+	      userData={ this.props.userData }
+	    />
 	  } else if (display === 'setting') {
-	    SettingDisplay = (
-	      <>
-	        <h1>CHANGE YO SETTINGS HERE</h1>
-	        <p>There is nothing to adjust here, please come back in future versions to see what you will be able to control!</p>
-	        <button className='button' name='main' onClick={ this.handleClick }>return</button>
-	      </>
-	    )
+	    SettingDisplay = <Change
+	      handleClick={ this.handleClick }
+	      userData={ this.props.userData }
+	      submitPatchData={ this.props.updateUserData }
+	      return={ this.return }
+	    />
 	  } else if (display === 'about') {
-	    SettingDisplay = (
-	      <>
-	        <h1>THIS APP IS ABOUT:</h1>
-	        <p>There is nothing to see here, please come back in future versions to see the complete About Me page.</p>
-	        <button className='button' name='main' onClick={ this.handleClick }>return</button>
-	      </>
-	    )
+	    SettingDisplay = <About handleClick={ this.handleClick } />
+	  } else if (display === 'reset') {
+	    SettingDisplay = <Reset
+	      handleClick={ this.handleClick }
+	      userData={ this.props.userData }
+	    />
 	  } else if (display === 'signout') {
 	    SettingDisplay = (
 	      <>
 	        <h1>CONFIRM YOU SIGNING OUT?</h1>
-	        <button className='button' name='confirm' onClick={ this.handleClick }
-	        >
-						Yes
-	        </button>
-	        <button className='button' name='return' onClick={ this.handleClick }
-	        >
-						No
-	        </button>
+	        <button
+	          className='button'
+	          name='confirm'
+	          onClick={ this.handleClick }
+	        >Yes</button>
+	        <button
+	          className='button'
+	          name='return'
+	          onClick={ this.handleClick }
+	        >No</button>
 	      </>
 	    )
 	  }
 
 	  return (
 	    <Container>
-	      <Backdrop handleClick={ this.props.handleClick } />
-	      <div className={ this.props.clicked ? `${'setting'} ${'open'}` : `${'setting'} ${'closed'}`}>
-	        { SettingDisplay }
-	      </div>
+	      <div className={ this.props.clicked
+	        ? `${'setting'} ${'open'}`
+	        : `${'setting'} ${'closed'}`}
+	      >{ SettingDisplay }</div>
 	    </Container>
 	  )
 	}
@@ -85,14 +105,14 @@ class Setting extends Component {
 export default Setting
 
 const Container = styled.div`
-
+	width: 100vw;
+	max-width: 500px;
+	height: calc(100vh - 80px);
+	background-color: var(--gray-9);
 	.setting {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		z-index: 100;
-		height: 60%;
 		width: 100%;
+		height: 100%;
+		display: flex;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-evenly;
@@ -100,15 +120,7 @@ const Container = styled.div`
 		text-align: center;
 		background-color: var(--primary-1);
 		transform: translateY(1000px);
-	}
-	.main {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-evenly;
-		height: 100%;
-	}
-	.title {
-		height: 20%;
+		overflow-y: scroll;
 	}
 	.setting.open {
 		animation: slideUp 0.3s forwards;
@@ -116,31 +128,70 @@ const Container = styled.div`
 	.setting.closed {
 		animation: slideDown 0.3s forwards;
 	}
-	@keyframes slideUp {
-		from {
-			transform: translateY(1000px);
-		}
-		to {
-			transform: translateY(0);
-		}
-	}
-	@keyframes slideDown {
-		from {
-			transform: translateY(0);
-		}
-		to {
-			transform: translateY(1000px);
-		}
-	}
-
-	.buttonContainer {
+	.section {
 		display: flex;
 		flex-direction: column;
-
-		.button {
-			padding: 12px 24px;
+		justify-content: space-evenly;
+		align-items: center;
+		height: 100vh;
+		.titleSection {
+			padding: 12px 0;
+		}
+		.searchSection {
+			.input {
+				padding: 12px;
+				border: none;
+				outline: none;
+				border-radius: 12px;
+			}
+		}
+		.searchSection {
+			padding-bottom: 36px;
+			width: 100%;
+			.input {
+				width: 80%;
+			}
+		}
+		.mainSection {
+			width: 80%;
+			display: flex;
+			flex-direction: column;
+			overflow-y: scroll;
+			padding: 12px;
+			border: 1px solid var(--primary-4);
+			border-radius: 12px;
+		}
+		.buttonContainer {
 			margin: 12px 0;
 		}
+		.paragraph {
+
+		}
+		.userData {
+			font-size: 1.2rem;
+		}
+	}
+	.buttonContainer {
+		width: 100vw;
+	}
+	.mainButtonContainer {
+		width: 100vw;
+		max-width: 250px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.button {
+		width: 80%;
+		padding: 12px 24px;
+		margin: 12px 0;
+	}
+	.disclaimer {
+		color: var(--warning-4);
+		font-weight: 500;
+		background-color: var(--gray-0);
+		border-radius: 2px;
+		padding: 26px;
 	}
 
 `

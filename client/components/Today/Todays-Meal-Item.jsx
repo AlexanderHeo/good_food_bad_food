@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
+import RatingDisplay from '../Rating/RatingDisplay'
 
 const TodaysMealItem = props => {
   const first = props.mealtime.charAt(0).toUpperCase()
   return (
     <Container
-      onClick={ () => props.handleClick('edit', props.mealtime)}
+      onClick={ () => props.handleClick('enter', props.mealtime)}
       className="meal">
       <div className='mealName'>
         <span>
@@ -20,7 +21,7 @@ const TodaysMealItem = props => {
         <span className='food'>{ props.food.name }</span>
       </div>
       <div className='mealRating'>
-        <span>{ props.food.report }</span>
+        <RatingDisplay rating={ props.food.report } />
       </div>
       <div className='buttonContainer'>
 	      <span className='iconify' data-icon="octicon-trashcan" data-inline='false' />

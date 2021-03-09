@@ -97,8 +97,7 @@ CREATE TABLE public."mealIngredients" (
 
 CREATE TABLE public."mealReports" (
     "mealId" integer NOT NULL,
-    report integer,
-    image text
+    report integer
 );
 
 
@@ -109,7 +108,7 @@ CREATE TABLE public."mealReports" (
 CREATE TABLE public.meals (
     "mealId" integer NOT NULL,
     name character varying(90) NOT NULL,
-    "eatenAt" timestamp(6) with time zone DEFAULT now() NOT NULL,
+    "eatenAt" timestamp with time zone DEFAULT now() NOT NULL,
     "userId" integer NOT NULL
 );
 
@@ -140,7 +139,7 @@ ALTER SEQUENCE public."meals_mealId_seq" OWNED BY public.meals."mealId";
 
 CREATE TABLE public.mealtime (
     "mealId" integer,
-    mealtime character(1)
+    mealtime character varying
 );
 
 
@@ -163,7 +162,8 @@ CREATE TABLE public.users (
     "userId" integer NOT NULL,
     username character varying(90) NOT NULL,
     password text NOT NULL,
-    location text
+    city character varying,
+    state character varying
 );
 
 
@@ -214,6 +214,12 @@ lettuce
 3
 4
 5
+Plain chocolate
+Butter
+Milk
+Eggs
+Granulated Sugar
+Flour
 \.
 
 
@@ -222,9 +228,6 @@ lettuce
 --
 
 COPY public."mealIngredients" ("mealId", "ingredientName") FROM stdin;
-1	bacon
-1	tomato
-1	lettuce
 \.
 
 
@@ -232,16 +235,50 @@ COPY public."mealIngredients" ("mealId", "ingredientName") FROM stdin;
 -- Data for Name: mealReports; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public."mealReports" ("mealId", report, image) FROM stdin;
-1	1	/images/badFace.jpg
-2	2	/images/neutralFace.jpg
-3	2	/images/neutralFace.jpg
-5	3	/images/happyFace.jpg
-12	3	/images/happyFace.jpg
-11	3	/images/happyFace.jpg
-13	3	images/happyFace.jpg
-14	2	images/neutralFace.jpg
-15	1	images/badFace.jpg
+COPY public."mealReports" ("mealId", report) FROM stdin;
+154	5
+66	1
+85	3
+65	2
+52	2
+53	2
+54	2
+55	2
+56	2
+57	2
+58	2
+59	2
+38	3
+40	1
+41	3
+39	1
+33	1
+34	1
+35	1
+36	1
+37	1
+157	5
+165	5
+211	5
+212	5
+213	5
+214	5
+51	3
+44	3
+43	3
+42	3
+60	3
+61	3
+62	3
+63	3
+64	3
+150	3
+152	5
+151	1
+153	\N
+155	\N
+156	\N
+187	5
 \.
 
 
@@ -250,21 +287,49 @@ COPY public."mealReports" ("mealId", report, image) FROM stdin;
 --
 
 COPY public.meals ("mealId", name, "eatenAt", "userId") FROM stdin;
-1	BLT	2020-01-22 10:54:40.912531-08	1
-3	Mutton	2020-01-23 10:51:46.844296-08	1
-2	water2.0	2020-01-23 10:31:46.63852-08	1
-4	ksgagaglas	2020-01-24 16:58:50.839627-08	1
-5	food1	2020-01-27 12:31:18.709119-08	1
-6	sgsg	2020-01-27 17:27:22.054725-08	1
-7	sgsg	2020-01-27 17:28:31.69958-08	1
-8	sgsg	2020-01-27 17:29:22.814181-08	1
-9	sgsg	2020-01-28 10:29:15.84586-08	1
-10	sgsg	2020-01-28 10:31:54.144487-08	1
-11	eggs	2021-01-06 11:07:55.392543-08	5
-12	hash browns	2021-01-06 11:08:03.06037-08	5
-13	chicken quesedilla	2021-02-17 19:40:15.472662-08	5
-14	potato, eggs	2021-02-17 19:40:15.472662-08	5
-15	shrimp ramen	2021-02-17 19:40:15.472662-08	5
+33	jello	2017-03-27 00:00:00-07	5
+40	tomato soup	2021-02-20 00:00:00-08	5
+211	potato, eggs	2021-03-03 23:25:57.09845-08	5
+212	soup	2021-03-03 23:26:07.168685-08	5
+213	steak	2021-03-03 23:26:11.708384-08	5
+214	egg sandwich	2021-03-04 13:41:13.751607-08	5
+34	potato, eggs	2021-02-19 00:00:00-08	5
+35	curry rice	2021-02-19 00:00:00-08	5
+36	cereal	2021-02-19 00:00:00-08	5
+37	ice cream	2021-02-19 00:00:00-08	5
+38	potato, eggs	2021-02-20 00:00:00-08	5
+39	chicken quesadilla	2021-02-20 00:00:00-08	5
+41	chocolate	2021-02-20 00:00:00-08	5
+42	potato, eggs	2021-02-21 00:00:00-08	5
+43	grilled cheese	2021-02-21 00:00:00-08	5
+44	shrimp ramen	2021-02-21 00:00:00-08	5
+51	ice cream	2021-02-21 00:00:00-08	5
+52	potato, eggs	2021-02-22 00:00:00-08	5
+53	chicken sandwich	2021-02-22 00:00:00-08	5
+54	bulgogi	2021-02-22 00:00:00-08	5
+55	ice cream	2021-02-22 00:00:00-08	5
+57	ham sandwich	2021-02-23 00:00:00-08	5
+58	pork katsu	2021-02-23 00:00:00-08	5
+59	chocolate	2021-02-23 00:00:00-08	5
+60	potato, eggs	2021-02-24 00:00:00-08	5
+61	hot dogs	2021-02-24 00:00:00-08	5
+62	cereal	2021-02-24 00:00:00-08	5
+63	chocolate	2021-02-24 00:00:00-08	5
+65	cheese burgerss	2021-02-25 00:00:00-08	5
+66	spicy pork wraps	2021-02-25 00:00:00-08	5
+151	asdffdsa	2021-02-26 15:41:32.288158-08	5
+152	ssss	2021-02-26 16:31:19.90879-08	5
+150	asdfasdf	2021-02-26 15:40:41.770506-08	5
+85	mango	2021-02-25 00:00:00-08	5
+64	potato, eggs	2021-02-25 00:00:00-08	5
+153	almonds	2021-02-27 11:41:00.137118-08	5
+56	potato, eggs	2021-02-23 00:00:00-08	5
+155	almonds	2021-02-27 12:10:21.562987-08	5
+154	asdfasdf	2021-02-27 12:08:53.428506-08	5
+156	ffff	2021-02-27 12:12:45.289403-08	5
+187	croissant, eggs, potatoes	2021-03-02 12:53:40.106049-08	5
+157	pancakes	2021-03-01 13:10:27.765383-08	5
+165	cereal	2021-03-01 21:57:59.581513-08	5
 \.
 
 
@@ -273,11 +338,49 @@ COPY public.meals ("mealId", name, "eatenAt", "userId") FROM stdin;
 --
 
 COPY public.mealtime ("mealId", mealtime) FROM stdin;
-11	b
-12	b
-13	l
-14	b
-15	d
+85	snacks
+150	breakfast
+151	lunch
+152	dinner
+153	snacks
+154	breakfast
+155	snacks
+156	lunch
+157	breakfast
+165	dinner
+33	snacks
+34	breakfast
+35	lunch
+36	dinner
+37	snacks
+38	breakfast
+39	lunch
+40	dinner
+41	snacks
+42	breakfast
+43	lunch
+44	dinner
+187	breakfast
+51	snacks
+52	breakfast
+53	lunch
+54	dinner
+55	snacks
+56	breakfast
+57	lunch
+58	dinner
+59	snacks
+60	breakfast
+61	lunch
+62	dinner
+63	snacks
+64	breakfast
+65	lunch
+66	dinner
+211	breakfast
+212	lunch
+213	dinner
+214	breakfast
 \.
 
 
@@ -293,11 +396,16 @@ COPY public."userIngredients" ("userId", ingredient, unfavorable) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.users ("userId", username, password, location) FROM stdin;
-1	Evan	learningfuze	Irvine
-2	Alex	$2b$10$vMdVPyc.VY.KFAYn8hfBMexet.gtfJfaEhVCI5esI7O.nAKo5rNKu	\N
-4	fender	$2b$10$3rfRs3ClG11HpJqM91JSvOxdomMr2EglOKsq3OOxoya81xkpSzYlO	\N
-5	alex	$2b$10$YMhm/IaR7OCematju.psUuRr/DBbksHRR1TQlhZhNEBVTLr5uViZ2	\N
+COPY public.users ("userId", username, password, city, state) FROM stdin;
+1	Evan	learningfuze	\N	\N
+2	Alex	$2b$10$vMdVPyc.VY.KFAYn8hfBMexet.gtfJfaEhVCI5esI7O.nAKo5rNKu	\N	\N
+4	fender	$2b$10$3rfRs3ClG11HpJqM91JSvOxdomMr2EglOKsq3OOxoya81xkpSzYlO	\N	\N
+5	alex	$2b$10$wWwQqvpBDHWMpDmOSX4p4eXcJ0L5eAofGfumyBfhks7YMC4WA9txe	Cloud City	Bespin
+25	asdf	$2b$10$hx4VoeiuJTZS9LZpmaIfg.ZUs2M/mkMhV1G762Q.nRmcz.WOk2t9O	Death Star City	CA
+26	Ahsoka	$2b$10$ebKl2RiEHyl.2IjGO5aj/uNRF6ngXkzwKWMtJVda0G.dEJf9SDRry	Long Beach	CO
+27	ffff	$2b$10$Sblkn3XDbJmbnTgKAAl7reUArOYDOvMuxch9vR/75NZgbw41LUuoO	Long Beach	CA
+28	gggg	$2b$10$Wt2eBTyhvlDau/j7ejCHweNvRe8XX1PycM3UW.oEXtN97L3xhKqAu	f	FL
+29	gg	$2b$10$rqDIhrsp69WM.Bdxn2o6E.SanCHWylNzIE3xxFK.J5aJZILWyZI52	los angeles	CA
 \.
 
 
@@ -305,14 +413,14 @@ COPY public.users ("userId", username, password, location) FROM stdin;
 -- Name: meals_mealId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."meals_mealId_seq"', 15, true);
+SELECT pg_catalog.setval('public."meals_mealId_seq"', 235, true);
 
 
 --
 -- Name: users_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."users_userId_seq"', 5, true);
+SELECT pg_catalog.setval('public."users_userId_seq"', 29, true);
 
 
 --
