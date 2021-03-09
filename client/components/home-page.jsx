@@ -144,29 +144,25 @@ class HomePage extends Component {
 	}
 
 	delayState = () => {
-	  this.setState({
-	    hamburgerX: !this.state.hamburgerX,
-	    listButtonX: !this.state.listButtonX
-	  })
 	  setTimeout(() => {
 	    this.setState({
 	      hamburgerClicked: false,
 	      listButtonClicked: false
 	    })
 	  }, 300)
+	  this.setState({
+	    hamburgerX: !this.state.hamburgerX,
+	    listButtonX: !this.state.listButtonX
+	  })
 	}
 
-  handleLogOut = () => {
-    fetch('/api/log-out')
-      .then(response => response.json())
-      .then(result => {
-        if (result.success) return this.props.history.push('/login')
-      })
-      .catch(err => console.error(err));
+  handleLogOut = async () => {
+    const response = await fetch('/api/log-out')
+    const data = await response.json()
+    if (data.success) return this.props.history.push('/login')
   }
 
-	addMeal = (category, parameter) => {
-
+	addMeal = async (category, parameter) => {
 	  if (category === 'food') {
 	    const postData = {
 	      meal: parameter.meal,
@@ -179,13 +175,13 @@ class HomePage extends Component {
 	      headers: { 'Content-Type': 'application/json' },
 	      body: JSON.stringify(postData)
 	    }
-	    fetch('/api/enter', init)
-	      .then(response => response.json())
-	      .then(data => {
-	        const listCopy = [...this.state.list]
-	        listCopy.push(data)
-	        this.setState({ list: listCopy })
-	      })
+	    const response = await fetch('/api/enter', init)
+	    const data = await response.json()
+	    if (data) {
+	      const listCopy = [...this.state.list]
+	      listCopy.push(data)
+	      this.setState({ list: listCopy })
+	    }
 	  } else if (category === 'rating') {
 	    const { mealId, report } = parameter.food
 	    const reportData = { report: parseInt(report), mealId }
@@ -194,18 +190,17 @@ class HomePage extends Component {
 	      headers: { 'Content-Type': 'application/json' },
 	      body: JSON.stringify(reportData)
 	    }
-	    fetch(`/api/rate/${mealId}`, init)
-	      .then(response => response.json())
-	      .then(data => {
-	        const listCopy = [...this.state.list]
-	        for (let i = 0; i < listCopy.length; i++) {
-	          if (listCopy[i].mealId === mealId) {
-	            listCopy[i].report = parseInt(report)
-	            this.setState({ list: listCopy })
-	          }
+	    const response = await fetch(`/api/rate/${mealId}`, init)
+	    const data = await response.json()
+	    if (data) {
+	      const listCopy = [...this.state.list]
+	      for (let i = 0; i < listCopy.length; i++) {
+	        if (listCopy[i].mealId === mealId) {
+	          listCopy[i].report = parseInt(report)
+	          this.setState({ list: listCopy })
 	        }
-	      })
-	      .catch(error => console.error(error))
+	      }
+	    }
 	  } else if (category === 'foodPatch') {
 	    const { mealId, name } = parameter.food
 	    const patchData = { name, mealId }
@@ -214,29 +209,29 @@ class HomePage extends Component {
 	      headers: { 'Content-Type': 'application/json' },
 	      body: JSON.stringify(patchData)
 	    }
-	    fetch(`/api/enter/${mealId}`, init)
-	      .then(response => response.json())
-	      .then(data => {
-	        const listCopy = [...this.state.list]
-	        const arrOfIds = listCopy.map(x => x.mealId)
-	        const index = arrOfIds.indexOf(mealId)
-	        listCopy[index].name = name
-	        this.setState({ list: listCopy })
-	      })
+	    const response = await fetch(`/api/enter/${mealId}`, init)
+	    const data = await response.json()
+	    if (data) {
+	      const listCopy = [...this.state.list]
+	      const arrOfIds = listCopy.map(x => x.mealId)
+	      const index = arrOfIds.indexOf(mealId)
+	      listCopy[index].name = name
+	      this.setState({ list: listCopy })
+	    }
 	  } else if (category === 'delete') {
 	    const mealId = parameter
 	    const init = {
 	      method: 'DELETE',
 	      headers: { 'Content-Type': 'application/json' }
 	    }
-	    fetch(`/api/enter/${mealId}`, init)
-	      .then(response => null)
-	      .then(data => {
-	        const listCopy = [...this.state.list]
-	        const index = listCopy.findIndex(x => x.mealId === mealId)
-	        listCopy.splice(index, 1)
-	        this.setState({ list: listCopy })
-	      })
+	    const response = await fetch(`/api/enter/${mealId}`, init)
+	    const data = await response.json()
+	    if (data.success) {
+	      const listCopy = [...this.state.list]
+	      const index = listCopy.findIndex(x => x.mealId === mealId)
+	      listCopy.splice(index, 1)
+	      this.setState({ list: listCopy })
+	    }
 	  }
 	}
 
