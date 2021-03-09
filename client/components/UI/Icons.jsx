@@ -1,15 +1,36 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 
-export const Hamburger = props => (
-  <HamburgerContainer >
-    <div className={ props.clicked ? `${'hamburger'} ${'open'}` : `${'hamburger'} ${'closed'}` }>
-      <div className='bar bar1' />
-      <div className='bar bar2' />
-      <div className='bar bar3' />
-    </div>
-  </HamburgerContainer>
-)
+class Hamburger extends Component {
+	state = { clicked: false }
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevProps.clicked !== this.props.clicked) {
+	    this.setState({ clicked: true })
+	  }
+	}
+
+	render() {
+	  return (
+	    <HamburgerContainer >
+	      <div
+	        className={
+	          !this.props.clicked
+	            ? this.state.clicked
+	              ? 'hamburger closed'
+	              : 'hamburger'
+	            : this.state.clicked
+	              ? 'hamburger open'
+	              : 'hamburger'
+	        }>
+	        <div className='bar bar1' />
+	        <div className='bar bar2' />
+	        <div className='bar bar3' />
+	      </div>
+	    </HamburgerContainer>
+	  )
+	}
+}
 
 const HamburgerContainer = styled.div`
 
@@ -22,20 +43,20 @@ const HamburgerContainer = styled.div`
 		.bar {
 			width: 30px;
 			height: 3px;
-			background-color: var(--primary-6);
+			background-color: var(--primary-4);
 			margin: 4px 0;
 			border-radius: 10px;
 		}
 	}
 
 	.hamburger .bar1 {
-		transform: rotate(45deg) translate(5px, 4px);
+		transform: rotate(0) translate(0, 0);
 	}
 	.hamburger .bar2 {
 		transform: opacity(1);
 	}
 	.hamburger .bar3 {
-		transform: rotate(-45deg) translate(5px, -4px);
+		transform: rotate(0) translate(0, 0);
 	}
 
 	.hamburger.open .bar1 {
@@ -121,6 +142,195 @@ const HamburgerContainer = styled.div`
 		}
 	}
 
+`
+
+class List extends Component {
+  state = { clicked: false }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.clicked !== this.props.clicked) {
+      this.setState({ clicked: true })
+    }
+  }
+
+  render() {
+	  return (
+	    <ListContainer>
+	      <div
+          className={
+            !this.props.clicked
+              ? this.state.clicked // not open
+                ? 'listComponent closed' // clicked
+                : 'listComponent' // not clicked
+              : this.state.clicked // open
+                ? 'listComponent open' // clicked
+                : 'listComponent' // not clicked ?
+          }>
+	        <div className='x x1' />
+	        <div className='bars'>
+	          <div className='bar bar1'>
+	            <div className='dot dot1' />
+	            <div className='line line1' />
+	          </div>
+	          <div className='bar bar2'>
+	            <div className='dot dot2' />
+	            <div className='line line2' />
+	          </div>
+	          <div className='bar bar3'>
+	            <div className='dot dot3' />
+	            <div className='line line3' />
+	          </div>
+	        </div>
+	        <div className='x x2' />
+	      </div>
+	    </ListContainer>
+	  )
+  }
+}
+
+const ListContainer = styled.div`
+
+	.listComponent {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+	}
+
+	.bar {
+		display: flex;
+		margin: 3px 0;
+		display: flex;
+		align-items: center;
+		.dot, .line {
+			border-radius: 10px;
+		}
+		.dot {
+			width: 4px;
+			height: 4px;
+			background-color: var(--primary-4);
+			margin-right: 3px;
+		}
+		.line {
+			width: 25px;
+			height: 3px;
+			background-color: var(--primary-4);
+		}
+	}
+	.x {
+		width: 3px;
+		height: 30px;
+		background-color: var(--primary-4);
+	}
+	.x1 { transform: rotate(-38deg) translate(15px, -24px); }
+	.x2 { transform: rotate(38deg) translate(-13px, -30px); }
+
+
+	.listComponent.open .bar { animation: hideBarsopen .3s forwards ease-out; }
+	.listComponent.open .x1 { animation: x1open .3s forwards ease-out; }
+	.listComponent.open .x2 { animation: x2open .3s forwards ease-out; }
+	.listComponent.closed .bar { animation: hideBarsclosed .3s forwards ease-out; }
+	.listComponent.closed .x1 { animation: x1closed .3s forwards ease-out; }
+	.listComponent.closed .x2 { animation: x2closed .3s forwards ease-out; }
+
+	@keyframes hideBarsopen {
+		from { transform: translateY(0); }
+		to { transform: translateY(38px); }
+	}
+	@keyframes x1open {
+		from { transform: rotate(-38deg) translate(15px, -24px); }
+		to { transform: rotate(-38deg) translate(15px, 11px); }
+	}
+	@keyframes x2open {
+		from { transform: rotate(38deg) translate(-13px, -30px); }
+		to { transform: rotate(38deg) translate(-13px, 10px); }
+	}
+	@keyframes hideBarsclosed {
+		from { transform: translateY(38px); }
+		to { transform: translateY(0); }
+	}
+	@keyframes x1closed {
+		from { transform: rotate(-38deg) translate(15px, 11px); }
+		to { transform: rotate(-38deg) translate(15px, -24px); }
+	}
+	@keyframes x2closed {
+		from { transform: rotate(38deg) translate(-13px, 10px); }
+		to { transform: rotate(38deg) translate(-13px, -30px); }
+	}
+
+`
+
+class Eye extends Component {
+	state = { clicked: false }
+
+	componentDidUpdate(prevProps, prevState) {
+	  if (prevProps.clicked !== this.props.clicked) {
+	    this.setState({ clicked: true })
+	  }
+	}
+
+	render() {
+	  return (
+	    <EyeContainer>
+	      <div className='eyeLashContainer'>
+	        <div className='eyelash eyelash1' />
+	        <div className='eyelash eyelash2' />
+	        <div className='eyelash eyelash3' />
+	        <div className='eyelash eyelash4' />
+	      </div>
+	      <div className='outer'>
+	        <div className='iris' />
+	      </div>
+	    </EyeContainer>
+	  )
+	}
+}
+
+const EyeContainer = styled.div`
+	display: inline-flex;
+	position: relative;
+	.passwordEye .eyelashContainer {
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		position: absolute;
+		top: -5px;
+		left: 0;
+		.eyelash {
+			width: 3px;
+			height: 8px;
+			background-color: var(--primary-6);
+		}
+		.eyelash1 {
+			transform: translate(-3px 7px) rotate(-50deg)
+		}
+		.eyelash2 {
+			transform: translate(-2px -1px) rotate(-20deg)
+		}
+		.eyelash3 {
+			transform: translate(2px -1px) rotate(20deg)
+		}
+		.eyelash4 {
+			transform: translate(3px 7px) rotate(50deg)
+		}
+	}
+	.outer {
+		width: 40px;
+		height: 40px;
+		background-color: white;
+		border: 2px solid var(--primary-6);
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+	}
+	.iris {
+		width: 18px;
+		height: 18px;
+		background-color: var(--primary-6);
+		border-radius:  50%;
+	}
 `
 
 export const AddPlus = props => (
@@ -243,3 +453,5 @@ const DownVoteContainer = styled.div`
 	}
 
 `
+
+export { Hamburger, List, Eye }
