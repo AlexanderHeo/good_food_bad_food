@@ -16,9 +16,15 @@ class Login extends React.Component {
   handleButtonClick = e => {
     e.preventDefault()
     if (!this.state.username) {
-      this.setState({ errorMessage: 'Please enter username' })
+      this.setState({
+        errorMessage: 'Please enter username',
+        invalidSection: 'username'
+      })
     } else if (!this.state.password) {
-      this.setState({ errorMessage: 'Please enter password' })
+      this.setState({
+        errorMessage: 'Please enter password',
+        invalidSection: 'password'
+      })
     } else {
       this.loginAccount()
     }
@@ -39,6 +45,12 @@ class Login extends React.Component {
       .then(response => response.json())
       .then(result => {
         if (result.success) this.setState({ isLoggedIn: true });
+        if (result.error) {
+          this.setState({
+            errorMessage: result.error,
+            invalidSection: 'password'
+          })
+        }
       })
       .catch(err => console.error(err));
   }
@@ -49,12 +61,14 @@ class Login extends React.Component {
     if (type === 'username') {
       this.setState({
         username: value,
-        errorMessage: ''
+        errorMessage: '',
+        invalidSection: ''
       })
     } else if (type === 'password') {
       this.setState({
         password: value,
-        errorMessage: ''
+        errorMessage: '',
+        invalidSection: ''
       });
     }
   }
@@ -62,12 +76,19 @@ class Login extends React.Component {
 	handleOnFocus = e => {
 	  const focused = `${e.target.name}Focused`
 	  this.setState({
+	    [focused]: true,
 	    errorMessage: '',
-	    [focused]: true
+	    invalidSection: ''
 	  })
 	}
 
 	render() {
+	  const { invalidSection } = this.state
+	  let errorUsername, errorPassword
+	  let disabled = false
+	  if (invalidSection === 'username') errorUsername = 'invalid'
+	  if (invalidSection === 'password') errorPassword = 'invalid'
+	  if (invalidSection) disabled = true
 	  return (
 	    <>
 	      {
@@ -103,6 +124,7 @@ class Login extends React.Component {
 	              placeholder=''
 	              onChange={ this.handleChange }
 	              onFocus={ this.handleOnFocus } />
+	            <div className={`errorMessage ${errorUsername}`}><span>{ this.state.errorMessage}</span></div>
 	          </fieldset>
 	          <fieldset className="fieldset">
 	            <label className="label">Password:</label>
@@ -115,6 +137,7 @@ class Login extends React.Component {
 	              placeholder=''
 	              onChange={ this.handleChange }
 	              onFocus={ this.handleOnFocus } />
+	            <div className={`errorMessage ${errorPassword}`}><span>{ this.state.errorMessage}</span></div>
 	          </fieldset>
 	          {
 	            this.state.isLoggedIn
@@ -127,15 +150,13 @@ class Login extends React.Component {
 	              />
 	              : null
 	          }
-	          {
-	            this.state.errorMessage
-	              ? <div className="errorMessage">{ this.state.errorMessage }</div>
-	              : <div className="button-container">
-	                <button
-	                  className="button"
-	                  onClick={ this.handleButtonClick }>Log In</button>
-	              </div>
-	          }
+	          <div className="button-container">
+	            <button
+	              className="button"
+	              onClick={ this.handleButtonClick }
+	              disabled={ disabled }
+	            >Log In</button>
+	          </div>
 	        </form>
 	        <div className='linkContainer'>
 	          <Link
@@ -234,6 +255,7 @@ const LoginContainer = styled.div`
 		.fieldset {
 			padding: 10px 0;
 			margin: 10px 0;
+			position: relative;
 		}
 		.fieldset:last-of-type {
 			margin-bottom: 50px;
@@ -259,24 +281,34 @@ const LoginContainer = styled.div`
 		.input:invalid {
 			box-shadow: 0 0 3px 3px var(--warning-4);
 		}
-		.button-container {
-			margin-top: 36px;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			.button {
-				width: 90%;
-				margin: 10px 0;
-			}
+	}
+	.button-container {
+		margin-top: 36px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		.button {
+			width: 90%;
+			margin: 10px 0;
+			border: 2px solid var(--primary-6);
 		}
-		.errorMessage {
-			width: calc(100% - 40px);
-			position: absolute;
-			font-size: 1.5rem;
-			color: var(--warning-4);
-			font-weight: 700;
+		.button:disabled {
+			background: var(--gray-0);
+			color: var(--gray-6);
 		}
+	}
+	.errorMessage {
+		position: absolute;
+		bottom: -13px;
+		left: 120px;
+		font-size: 1rem;
+		color: var(--warning-4);
+		font-weight: 700;
+		display: none;
+	}
+	.errorMessage.invalid {
+		display: initial;
 	}
 	.linkContainer {
 		position: absolute;
