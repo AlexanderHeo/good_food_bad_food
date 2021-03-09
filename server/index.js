@@ -19,10 +19,27 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err))
 })
 
+app.post('/api/username-check', (req, res, next) => {
+  const { username } = req.body
+  if (!username) return next(new ClientError('Enter a username.', 400))
+  const sql = `
+		SELECT "username"
+		FROM "users"
+		WHERE "username" = $1;
+	`
+  const param = [username]
+  db.query(sql, param)
+    .then(response => {
+      if (!response.rows[0]) res.json({ success: 'Great success!' })
+      else return next(new ClientError('Username already exists.', 400))
+    })
+    .catch(err => next(err))
+})
+
 app.post('/api/sign-up', (req, res, next) => {
   const { username, password, city, state } = req.body
-  if (!username) return next(new ClientError('Enter a username name.', 400))
-  if (!password) return next(new ClientError('Enter a password name.', 400))
+  if (!username) return next(new ClientError('Enter a username.', 400))
+  if (!password) return next(new ClientError('Enter a password.', 400))
   if (!city) return next(new ClientError('Enter a city name.', 400))
   if (!state) return next(new ClientError('Enter a state name.', 400))
   bcrypt.hash(password, 10)
@@ -37,7 +54,7 @@ app.post('/api/sign-up', (req, res, next) => {
       db.query(sql, params)
         .then(response => {
           const user = response.rows[0].username
-          if (!user) return next(new ClientError('Please Enter A Unique UserName', 400))
+          if (!user) return next(new ClientError('Username already exsists.', 400))
           req.session.userId = user.userId
           res.status(201).json({ success: 'Great success!' })
         })
@@ -83,7 +100,7 @@ app.get('/api/isloggedin', (req, res, next) => {
   const param = [userId]
   db.query(sql, param)
     .then(result => {
-      if (!result.rows[0]) res.json({ error: 'An Internal error occured.' })
+      if (!result.rows[0]) return next(new ClientError('An internal error occured. Please try again.'), 500)
       res.status(200).json(result.rows[0])
     })
     .catch(err => next(err))
@@ -97,7 +114,7 @@ app.get('/api/log-out', (req, res, next) => {
 
 app.patch('/api/reset/:userId', (req, res, next) => {
   const { userId, newPassword } = req.body
-  if (!userId) res.json({ error: 'error code 66' })
+  if (!userId) return next(new ClientError('Error order 66', 400))
   if (!newPassword) return next(new ClientError('Please enter a new password.', 400))
   bcrypt.hash(newPassword, 10)
     .then(hash => {
@@ -117,7 +134,7 @@ app.patch('/api/reset/:userId', (req, res, next) => {
 
 app.patch('/api/location/:userId', (req, res, next) => {
   const { city, state, userId } = req.body
-  if (!userId) res.json({ error: 'error code 66' })
+  if (!userId) return next(new ClientError('Error order 66', 400))
   if (!city) return next(new ClientError('Enter a new city name.', 400))
   if (!state) return next(new ClientError('Enter a new state name.', 400))
   const sql = `
@@ -134,7 +151,7 @@ app.patch('/api/location/:userId', (req, res, next) => {
 
 app.post('/api/check', (req, res, next) => {
   const { userId, password } = req.body
-  if (!userId) res.json({ error: 'error code 66' })
+  if (!userId) return next(new ClientError('Error order 66', 400))
   if (!password) return next(new ClientError('Please enter a password.'), 400)
   const sql = `
 		SELECT *
@@ -155,7 +172,7 @@ app.post('/api/check', (req, res, next) => {
 
 app.get('/api/list', (req, res, next) => {
   const { userId } = req.session
-  if (!userId) res.json({ error: 'error code 66' })
+  if (!userId) return next(new ClientError('Error order 66', 400))
   const sql = `
 		SELECT "m"."name",
 		"m"."eatenAt",
@@ -177,10 +194,10 @@ app.get('/api/list', (req, res, next) => {
 app.post('/api/enter', (req, res, next) => {
   const userId = req.session.userId
   const { meal, mealtime, isToday, enterDate } = req.body
-  if (!userId) res.json({ error: 'error code 66' })
-  if (!mealtime) res.json({ error: 'error code 32' })
-  if (!isToday) res.json({ error: 'error code 40' })
-  if (!enterDate) res.json({ error: 'error code 42' })
+  if (!userId) return next(new ClientError('Error order 66', 400))
+  if (!mealtime) return next(new ClientError('Error order 32', 400))
+  if (!isToday) return next(new ClientError('Error order 30', 400))
+  if (!enterDate) return next(new ClientError('Error order 42', 400))
   if (!meal) return next(new ClientError('Please enter a meal.', 400))
   const sql = `
 		WITH add_to_meals AS (
@@ -230,8 +247,8 @@ app.post('/api/enter', (req, res, next) => {
 
 app.patch('/api/enter/:mealId', (req, res, next) => {
   const { name, mealId } = req.body
-  if (!mealId) res.json({ error: 'error code 33' })
-  if (!name) return next(new ClientError('Enter a new meal name.', 400))
+  if (!mealId) return next(new ClientError('Error order 32', 400))
+  if (!name) return next(new ClientError('Error order 49', 400))
   const sql = `
 		UPDATE meals
 		SET name=$1
@@ -246,7 +263,7 @@ app.patch('/api/enter/:mealId', (req, res, next) => {
 
 app.delete('/api/enter/:mealId', (req, res, next) => {
   const { mealId } = req.params
-  if (!mealId) res.json({ error: 'error code 33' })
+  if (!mealId) return next(new ClientError('Error order 32', 400))
   const sql1 = `
   	DELETE FROM "mealReports"
 		WHERE "mealId" = $1;
@@ -277,7 +294,7 @@ app.delete('/api/enter/:mealId', (req, res, next) => {
 
 app.get('/api/ratefood', (req, res, next) => {
   const userId = req.session.userId
-  if (!userId) res.json({ error: 'error code 66' })
+  if (!userId) return next(new ClientError('Error order 66', 400))
   const sql = `
 		SELECT m."mealId", m."name", m."eatenAt", mp."report"
 		FROM "meals" AS m
@@ -293,8 +310,8 @@ app.get('/api/ratefood', (req, res, next) => {
 
 app.patch('/api/rate/:mealId', (req, res, next) => {
   const { mealId, report } = req.body
-  if (!mealId) res.json({ error: 'error code 33' })
-  if (!report) res.json({ error: 'error code 70' })
+  if (!mealId) return next(new ClientError('Error order 32', 400))
+  if (!report) return next(new ClientError('Error order 70', 400))
   const sql = `
 		UPDATE "mealReports"
 		SET "report" = $2
@@ -309,7 +326,7 @@ app.patch('/api/rate/:mealId', (req, res, next) => {
 
 app.get('/api/rate/:mealId', (req, res, next) => {
   const mealId = parseInt(req.params.mealId)
-  if (!mealId) res.json({ error: 'error code 33' })
+  if (!mealId) return next(new ClientError('Error order 32', 400))
   const sql = `
 		SELECT m."name"
 		FROM "meals" AS m
@@ -324,7 +341,7 @@ app.get('/api/rate/:mealId', (req, res, next) => {
 
 app.get('/api/ingredients/:mealId', (req, res, next) => {
   const mealId = parseInt(req.params.mealId)
-  if (!mealId) res.json({ error: 'error code 33' })
+  if (!mealId) return next(new ClientError('Error order 32', 400))
   const sql = `
 		SELECT "ingredientName"
 		FROM "mealIngredients"
@@ -342,13 +359,9 @@ app.use('/api', (req, res, next) => {
 
 app.use((err, req, res, next) => {
   if (err instanceof ClientError) {
-    console.error('err code:405:', err)
     res.status(err.status).json({ error: err.message })
   } else {
-    console.error('err code:408:', err)
-    res.status(500).json({
-      error: 'an unexpected error occurred'
-    })
+    res.status(500).json({ error: 'an unexpected error occurred' })
   }
 })
 
