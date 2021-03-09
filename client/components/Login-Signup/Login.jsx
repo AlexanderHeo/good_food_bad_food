@@ -30,7 +30,7 @@ class Login extends React.Component {
     }
   }
 
-  loginAccount = () => {
+  loginAccount = async () => {
     const goodStuff = {
       username: this.state.username,
       password: this.state.password
@@ -40,19 +40,15 @@ class Login extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(goodStuff)
     };
-
-    fetch('/api/log-in', init)
-      .then(response => response.json())
-      .then(result => {
-        if (result.success) this.setState({ isLoggedIn: true });
-        if (result.error) {
-          this.setState({
-            errorMessage: result.error,
-            invalidSection: 'password'
-          })
-        }
+    const response = await fetch('/api/log-in', init)
+    const data = await response.json()
+    if (data.success) this.setState({ isLoggedIn: true });
+    if (data.error) {
+      this.setState({
+        errorMessage: data.error,
+        invalidSection: 'db'
       })
-      .catch(err => console.error(err));
+    }
   }
 
   handleChange = event => {
@@ -84,10 +80,11 @@ class Login extends React.Component {
 
 	render() {
 	  const { invalidSection } = this.state
-	  let errorUsername, errorPassword
+	  let errorUsername, errorPassword, errorDb
 	  let disabled = false
 	  if (invalidSection === 'username') errorUsername = 'invalid'
 	  if (invalidSection === 'password') errorPassword = 'invalid'
+	  if (invalidSection === 'db') errorDb = 'invalid'
 	  if (invalidSection) disabled = true
 	  return (
 	    <>
@@ -151,6 +148,7 @@ class Login extends React.Component {
 	              : null
 	          }
 	          <div className="button-container">
+	            <div className={`dbErrorMessage ${errorDb}`}><span>{ this.state.errorMessage}</span></div>
 	            <button
 	              className="button"
 	              onClick={ this.handleButtonClick }
@@ -288,6 +286,7 @@ const LoginContainer = styled.div`
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		position: relative;
 		.button {
 			width: 90%;
 			margin: 10px 0;
@@ -298,16 +297,25 @@ const LoginContainer = styled.div`
 			color: var(--gray-6);
 		}
 	}
-	.errorMessage {
+	.errorMessage,
+	.dbErrorMessage {
 		position: absolute;
-		bottom: -13px;
-		left: 120px;
 		font-size: 1rem;
 		color: var(--warning-4);
 		font-weight: 700;
 		display: none;
 	}
-	.errorMessage.invalid {
+	.errorMessage {
+		bottom: -13px;
+		left: 120px;
+	}
+	.dbErrorMessage {
+		top: -22px;
+		left: 0;
+		width: 100%;
+	}
+	.errorMessage.invalid,
+	.dbErrorMessage.invalid {
 		display: initial;
 	}
 	.linkContainer {
