@@ -16,17 +16,32 @@ app.use(express.json())
 app.get('/api/health-check', (req, res, next) => {
   db.query('select \'successfully connected\' as "message"')
     .then(result => res.json(result.rows[0]))
-    .catch(err => {
-      console.error(err)
-      next(err)
+    .catch(err => next(err))
+})
+
+app.post('/api/username-check', (req, res, next) => {
+  const { username } = req.body
+  if (!username) return next(new ClientError('Enter a username.', 400))
+  const sql = `
+		SELECT "username"
+		FROM "users"
+		WHERE "username" = $1;
+	`
+  const param = [username]
+  db.query(sql, param)
+    .then(response => {
+      if (!response.rows[0]) res.json({ success: 'Great success!' })
+      else return next(new ClientError('Username already exists.', 400))
     })
+    .catch(err => next(err))
 })
 
 app.post('/api/sign-up', (req, res, next) => {
   const { username, password, city, state } = req.body
-  if (!username || !password) {
-    return next(new ClientError('Invalid username / password!', 400))
-  }
+  if (!username) return next(new ClientError('Enter a username.', 400))
+  if (!password) return next(new ClientError('Enter a password.', 400))
+  if (!city) return next(new ClientError('Enter a city name.', 400))
+  if (!state) return next(new ClientError('Enter a state name.', 400))
   bcrypt.hash(password, 10)
     .then(hash => {
       const hashedPassword = hash
@@ -39,54 +54,43 @@ app.post('/api/sign-up', (req, res, next) => {
       db.query(sql, params)
         .then(response => {
           const user = response.rows[0].username
-          req.session.userId = response.rows[0].userId
-          if (!user) return next(new ClientError('Please Enter A Unique UserName', 400))
-          res.status(201).json({ success: 's' })
+          if (!user) return next(new ClientError('Username already exsists.', 400))
+          req.session.userId = user.userId
+          res.status(201).json({ success: 'Great success!' })
         })
-        .catch(err => {
-          console.error(err)
-          next(err)
-        })
+        .catch(err => next(err))
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.post('/api/log-in', (req, res, next) => {
   const { username, password } = req.body
-  if (!username || !password) return next(new ClientError('Invalid username / password!', 400))
+  if (!username) return next(new ClientError('Enter a username name.', 400))
+  if (!password) return next(new ClientError('Enter a password name.', 400))
   const sql = `
 		SELECT *
-			FROM "users"
-			WHERE "username" = $1;
+		FROM "users"
+		WHERE "username" = $1;
   `
   const params = [username]
   db.query(sql, params)
     .then(response => {
-      if (!response.rows[0]) return next(new ClientError('User Account Does Not Exist!', 400))
+      if (!response.rows[0]) return next(new ClientError('User account does not exist.', 400))
       const dbPassword = response.rows[0].password
       bcrypt.compare(password, dbPassword)
         .then(result => {
-          if (!result) return next(new ClientError('Invalid username / password!', 400))
+          if (!result) return next(new ClientError('Password is incorrect.', 400))
           req.session.userId = response.rows[0].userId
-          res.json({ success: 'Log-In success!' })
+          res.status(200).json({ success: 'Great success!' })
         })
-        .catch(err => {
-          console.error(err)
-          next(err)
-        })
+        .catch(err => next(err))
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.get('/api/isloggedin', (req, res, next) => {
   const { userId } = req.session
-  if (!userId) return next(new ClientError('Please log in first!', 400))
+  if (!userId) return next(new ClientError('There is no account logged in.', 400))
   if (isNaN(userId)) return next(new ClientError('User Id must be a positive integer.', 400))
 
   const sql = `
@@ -95,22 +99,23 @@ app.get('/api/isloggedin', (req, res, next) => {
 	`
   const param = [userId]
   db.query(sql, param)
-    .then(result => res.status(200).json(result.rows[0]))
-    .catch(err => {
-      console.error(err)
-      next(err)
+    .then(result => {
+      if (!result.rows[0]) return next(new ClientError('An internal error occured. Please try again.'), 500)
+      res.status(200).json(result.rows[0])
     })
+    .catch(err => next(err))
 })
 
 app.get('/api/log-out', (req, res, next) => {
-  if (!req.session.userId) return next(new ClientError('Please log-in before log-out!', 400))
+  if (!req.session.userId) return next(new ClientError('There is no account logged in.', 400))
   delete req.session.userId
   res.json({ success: 'Successful log-out' })
 })
 
 app.patch('/api/reset/:userId', (req, res, next) => {
   const { userId, newPassword } = req.body
-  // validation for userId and newPassword
+  if (!userId) return next(new ClientError('Error order 66', 400))
+  if (!newPassword) return next(new ClientError('Please enter a new password.', 400))
   bcrypt.hash(newPassword, 10)
     .then(hash => {
       const sql = `
@@ -121,23 +126,17 @@ app.patch('/api/reset/:userId', (req, res, next) => {
 			`
       const params = [userId, hash]
       db.query(sql, params)
-        .then(response => {
-          if (response.rows[0]) res.json({ success: true })
-        })
-        .catch(err => {
-          console.error(err)
-          next(err)
-        })
+        .then(response => { if (response.rows[0]) res.json({ success: 'Great success!' }) })
+        .catch(err => next(err))
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.patch('/api/location/:userId', (req, res, next) => {
   const { city, state, userId } = req.body
-  // validation
+  if (!userId) return next(new ClientError('Error order 66', 400))
+  if (!city) return next(new ClientError('Enter a new city name.', 400))
+  if (!state) return next(new ClientError('Enter a new state name.', 400))
   const sql = `
 		UPDATE "users"
 		SET "city"=$1, "state"=$2
@@ -147,15 +146,13 @@ app.patch('/api/location/:userId', (req, res, next) => {
   const params = [city, state, userId]
   db.query(sql, params)
     .then(result => res.status(200).json(result.rows[0]))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.post('/api/check', (req, res, next) => {
   const { userId, password } = req.body
-  // validate userId and password
+  if (!userId) return next(new ClientError('Error order 66', 400))
+  if (!password) return next(new ClientError('Please enter a password.'), 400)
   const sql = `
 		SELECT *
 		FROM "users"
@@ -166,30 +163,16 @@ app.post('/api/check', (req, res, next) => {
     .then(response => {
       const resp = response.rows[0]
       const dbPW = resp.password
-      // if (!resp) return next(new ClientError('User Account Does Not Exist!', 400))
-      // if (resp.userId !== req.session.userId) return next(new ClientError('Error: code 234kd'))
-      // if (resp.username !== username) return next(new ClientError('Username does not exist', 400))
       bcrypt.compare(password, dbPW)
-        .then(result => {
-          if (!result) return next(new ClientError('Invalid username/password!', 400))
-          res.json({ success: result })
-        })
-        .catch(err => {
-          console.error(err)
-          next(err)
-        })
+        .then(result => res.json({ success: result }))
+        .catch(err => next(err))
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.get('/api/list', (req, res, next) => {
   const { userId } = req.session
-
-  const condition = new RegExp('^\\d+$')
-  if (!condition.test(userId)) return next(new ClientError(`user Id must be valid! Bad Id: ${userId}`, 404))
+  if (!userId) return next(new ClientError('Error order 66', 400))
   const sql = `
 		SELECT "m"."name",
 		"m"."eatenAt",
@@ -205,31 +188,28 @@ app.get('/api/list', (req, res, next) => {
   const params = [userId]
   db.query(sql, params)
     .then(result => res.json(result.rows))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.post('/api/enter', (req, res, next) => {
   const userId = req.session.userId
   const { meal, mealtime, isToday, enterDate } = req.body
-
-  if (!userId) return next(new ClientError(`Cannot find user with id: ${userId}.`, 400))
-  else if (!meal) return next(new ClientError('Please enter a meal.', 400))
+  if (!userId) return next(new ClientError('Error order 66', 400))
+  if (!mealtime) return next(new ClientError('Error order 32', 400))
+  if (!isToday) return next(new ClientError('Error order 30', 400))
+  if (!enterDate) return next(new ClientError('Error order 42', 400))
+  if (!meal) return next(new ClientError('Please enter a meal.', 400))
   const sql = `
 		WITH add_to_meals AS (
 			INSERT INTO "meals" ("name", "userId")
-			VALUE ($1, $2)
+			VALUES ($1, $2)
 			RETURNING "mealId", "name", "eatenAt"
 		), add_to_reports AS (
 			INSERT INTO "mealReports" ("mealId")
 			SELECT "mealId" FROM "add_to_meals"
 		), add_to_mealtime AS (
 			INSERT INTO "mealtime" ("mealId", "mealtime")
-			VALUES (
-				(SELECT "mealId" FROM "add_to_meals"), $3)
-			)
+			VALUES ((SELECT "mealId" FROM "add_to_meals"), $3))
 			SELECT *
 			FROM "add_to_meals";
 	`
@@ -259,39 +239,31 @@ app.post('/api/enter', (req, res, next) => {
             postedMeal.report = null
             res.status(200).json(postedMeal)
           })
-          .catch(err => {
-            console.error(err)
-            next(err)
-          })
+          .catch(err => next(err))
       }
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.patch('/api/enter/:mealId', (req, res, next) => {
+  const { name, mealId } = req.body
+  if (!mealId) return next(new ClientError('Error order 32', 400))
+  if (!name) return next(new ClientError('Error order 49', 400))
   const sql = `
 		UPDATE meals
 		SET name=$1
 		WHERE "mealId"=$2
 		RETURNING *;
 	`
-  const values = [req.body.name.toLowerCase(), req.body.mealId]
+  const values = [name.toLowerCase(), mealId]
   db.query(sql, values)
     .then(result => res.status(200).json(result.rows[0]))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.delete('/api/enter/:mealId', (req, res, next) => {
   const { mealId } = req.params
-  if (!parseInt(mealId)) {
-    return res.status(400).json({ error: 'The meal id must be a positive integer.' })
-  }
+  if (!mealId) return next(new ClientError('Error order 32', 400))
   const sql1 = `
   	DELETE FROM "mealReports"
 		WHERE "mealId" = $1;
@@ -311,102 +283,74 @@ app.delete('/api/enter/:mealId', (req, res, next) => {
         .then(result => {
           db.query(sql3, param)
             .then(result => {
-              if (!result.rows[0]) {
-                res.status(404).json({
-                  error: `Cannot find meal at ${mealId}`
-                })
-              } else {
-                res.status(204).json(result.rows[0])
-              }
+              if (!result.rows[0]) res.json({ success: `Great success! Meal at id ${mealId} has been obliterated!` })
             })
-            .catch(err => {
-              console.error(err)
-              next(err)
-            })
+            .catch(err => next(err))
         })
-        .catch(err => {
-          console.error(err)
-          next(err)
-        })
+        .catch(err => next(err))
     })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.get('/api/ratefood', (req, res, next) => {
   const userId = req.session.userId
+  if (!userId) return next(new ClientError('Error order 66', 400))
   const sql = `
 		SELECT m."mealId", m."name", m."eatenAt", mp."report"
 		FROM "meals" AS m
 		LEFT JOIN "mealReports" AS mp ON m."mealId" = mp."mealId"
-		WHERE m."userId" = ${userId}
+		WHERE m."userId" = $1
 		ORDER BY "eatenAt" DESC;
 	`
-  db.query(sql)
+  const param = [userId]
+  db.query(sql, param)
     .then(result => res.status(200).json(result.rows))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.patch('/api/rate/:mealId', (req, res, next) => {
+  const { mealId, report } = req.body
+  if (!mealId) return next(new ClientError('Error order 32', 400))
+  if (!report) return next(new ClientError('Error order 70', 400))
   const sql = `
 		UPDATE "mealReports"
 		SET "report" = $2
 		WHERE "mealId" = $1
 		RETURNING *;
 	`
-  const params = [req.body.mealId, req.body.report]
-
+  const params = [mealId, report]
   db.query(sql, params)
     .then(result => res.status(200).json(result.rows))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.get('/api/rate/:mealId', (req, res, next) => {
   const mealId = parseInt(req.params.mealId)
+  if (!mealId) return next(new ClientError('Error order 32', 400))
   const sql = `
 		SELECT m."name"
 		FROM "meals" AS m
 		LEFT JOIN "mealReports" AS mp ON m."mealId" = mp."mealId"
 		WHERE m."mealId" = $1;
 	`
-
   const param = [mealId]
   db.query(sql, param)
-    .then(result => {
-      const [singleMeal] = result.rows
-      res.status(200).json(singleMeal)
-    })
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .then(result => res.status(200).json(result.rows))
+    .catch(err => next(err))
 })
 
 app.get('/api/ingredients/:mealId', (req, res, next) => {
   const mealId = parseInt(req.params.mealId)
-  if (!mealId) return next(new ClientError('Cannot find meal ID', 400))
-
+  if (!mealId) return next(new ClientError('Error order 32', 400))
   const sql = `
 		SELECT "ingredientName"
 		FROM "mealIngredients"
 		WHERE "mealId" = $1;
   `
   const param = [mealId]
-
   db.query(sql, param)
     .then(result => res.json(result.rows))
-    .catch(err => {
-      console.error(err)
-      next(err)
-    })
+    .catch(err => next(err))
 })
 
 app.use('/api', (req, res, next) => {
@@ -417,10 +361,7 @@ app.use((err, req, res, next) => {
   if (err instanceof ClientError) {
     res.status(err.status).json({ error: err.message })
   } else {
-    console.error(err)
-    res.status(500).json({
-      error: 'an unexpected error occurred'
-    })
+    res.status(500).json({ error: 'an unexpected error occurred' })
   }
 })
 

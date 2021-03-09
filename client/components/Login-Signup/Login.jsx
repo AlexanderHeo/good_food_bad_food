@@ -16,15 +16,21 @@ class Login extends React.Component {
   handleButtonClick = e => {
     e.preventDefault()
     if (!this.state.username) {
-      this.setState({ errorMessage: 'Please enter username' })
+      this.setState({
+        errorMessage: 'Please enter username',
+        invalidSection: 'username'
+      })
     } else if (!this.state.password) {
-      this.setState({ errorMessage: 'Please enter password' })
+      this.setState({
+        errorMessage: 'Please enter password',
+        invalidSection: 'password'
+      })
     } else {
       this.loginAccount()
     }
   }
 
-  loginAccount = () => {
+  loginAccount = async () => {
     const goodStuff = {
       username: this.state.username,
       password: this.state.password
@@ -34,13 +40,15 @@ class Login extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(goodStuff)
     };
-
-    fetch('/api/log-in', init)
-      .then(response => response.json())
-      .then(result => {
-        if (result.success) this.setState({ isLoggedIn: true });
+    const response = await fetch('/api/log-in', init)
+    const data = await response.json()
+    if (data.success) this.setState({ isLoggedIn: true });
+    if (data.error) {
+      this.setState({
+        errorMessage: data.error,
+        invalidSection: 'db'
       })
-      .catch(err => console.error(err));
+    }
   }
 
   handleChange = event => {
@@ -49,12 +57,14 @@ class Login extends React.Component {
     if (type === 'username') {
       this.setState({
         username: value,
-        errorMessage: ''
+        errorMessage: '',
+        invalidSection: ''
       })
     } else if (type === 'password') {
       this.setState({
         password: value,
-        errorMessage: ''
+        errorMessage: '',
+        invalidSection: ''
       });
     }
   }
@@ -62,12 +72,20 @@ class Login extends React.Component {
 	handleOnFocus = e => {
 	  const focused = `${e.target.name}Focused`
 	  this.setState({
+	    [focused]: true,
 	    errorMessage: '',
-	    [focused]: true
+	    invalidSection: ''
 	  })
 	}
 
 	render() {
+	  const { invalidSection } = this.state
+	  let errorUsername, errorPassword, errorDb
+	  let disabled = false
+	  if (invalidSection === 'username') errorUsername = 'invalid'
+	  if (invalidSection === 'password') errorPassword = 'invalid'
+	  if (invalidSection === 'db') errorDb = 'invalid'
+	  if (invalidSection) disabled = true
 	  return (
 	    <>
 	      {
@@ -103,6 +121,7 @@ class Login extends React.Component {
 	              placeholder=''
 	              onChange={ this.handleChange }
 	              onFocus={ this.handleOnFocus } />
+	            <div className={`errorMessage ${errorUsername}`}><span>{ this.state.errorMessage}</span></div>
 	          </fieldset>
 	          <fieldset className="fieldset">
 	            <label className="label">Password:</label>
@@ -115,6 +134,7 @@ class Login extends React.Component {
 	              placeholder=''
 	              onChange={ this.handleChange }
 	              onFocus={ this.handleOnFocus } />
+	            <div className={`errorMessage ${errorPassword}`}><span>{ this.state.errorMessage}</span></div>
 	          </fieldset>
 	          {
 	            this.state.isLoggedIn
@@ -127,15 +147,14 @@ class Login extends React.Component {
 	              />
 	              : null
 	          }
-	          {
-	            this.state.errorMessage
-	              ? <div className="errorMessage">{ this.state.errorMessage }</div>
-	              : <div className="button-container">
-	                <button
-	                  className="button"
-	                  onClick={ this.handleButtonClick }>Log In</button>
-	              </div>
-	          }
+	          <div className="button-container">
+	            <div className={`dbErrorMessage ${errorDb}`}><span>{ this.state.errorMessage}</span></div>
+	            <button
+	              className="button"
+	              onClick={ this.handleButtonClick }
+	              disabled={ disabled }
+	            >Log In</button>
+	          </div>
 	        </form>
 	        <div className='linkContainer'>
 	          <Link
@@ -234,6 +253,7 @@ const LoginContainer = styled.div`
 		.fieldset {
 			padding: 10px 0;
 			margin: 10px 0;
+			position: relative;
 		}
 		.fieldset:last-of-type {
 			margin-bottom: 50px;
@@ -259,24 +279,44 @@ const LoginContainer = styled.div`
 		.input:invalid {
 			box-shadow: 0 0 3px 3px var(--warning-4);
 		}
-		.button-container {
-			margin-top: 36px;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			.button {
-				width: 90%;
-				margin: 10px 0;
-			}
+	}
+	.button-container {
+		margin-top: 36px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		position: relative;
+		.button {
+			width: 90%;
+			margin: 10px 0;
+			border: 2px solid var(--primary-6);
 		}
-		.errorMessage {
-			width: calc(100% - 40px);
-			position: absolute;
-			font-size: 1.5rem;
-			color: var(--warning-4);
-			font-weight: 700;
+		.button:disabled {
+			background: var(--gray-0);
+			color: var(--gray-6);
 		}
+	}
+	.errorMessage,
+	.dbErrorMessage {
+		position: absolute;
+		font-size: 1rem;
+		color: var(--warning-4);
+		font-weight: 700;
+		display: none;
+	}
+	.errorMessage {
+		bottom: -13px;
+		left: 120px;
+	}
+	.dbErrorMessage {
+		top: -22px;
+		left: 0;
+		width: 100%;
+	}
+	.errorMessage.invalid,
+	.dbErrorMessage.invalid {
+		display: initial;
 	}
 	.linkContainer {
 		position: absolute;
