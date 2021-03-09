@@ -10,8 +10,14 @@ class Signup extends React.Component {
     email: '',
     city: '',
     state: '',
+    usernameFocused: '',
+    passwordFocused: '',
+    emailFocused: '',
+    cityFocused: '',
+    stateFocused: '',
     message: '',
     errorMessage: '',
+    passCheckMessage: 'Password must be 7-15 characters, and include at least one (1) special character and one (1) number.',
     invalidSection: '',
     success: false
   }
@@ -93,18 +99,45 @@ class Signup extends React.Component {
     this.setState({ [name]: value })
   }
 
-	handleOnFocus = e => {
-	  const focused = `${e.target.name}Focused`
-	  this.setState({
-	    [focused]: true,
-	    errorMessage: '',
-	    invalidSection: ''
-	  })
+  handleFocus = e => {
+    const name = e.target.name
+    const focused = `${name}Focused`
+    const { invalidSection } = this.state
+    if (name !== 'password' && invalidSection !== 'passCheck') {
+      this.setState({
+        [focused]: true,
+        errorMessage: '',
+        invalidSection: ''
+      })
+    } else if (name === 'password') {
+      this.setState({ invalidSection: 'passCheck' })
+    }
+  }
+
+	handleBlur = e => {
+	  const name = e.target.name
+	  if (name === 'password') {
+	    const { password } = this.state
+	    if (password) {
+	      const passwordRegEx = new RegExp(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/)
+	      if (!password.match(passwordRegEx)) {
+	        this.passwordInput.focus()
+	        this.setState({
+	          password: '',
+	          invalidSection: 'passCheck'
+	        })
+	      } else {
+	        this.setState({ invalidSection: '' })
+	      }
+	    } else if (!password) {
+	      this.passwordInput.focus()
+	    }
+	  }
 	}
 
 	render() {
 	  const { emailFocused, email, usernameFocused, username, passwordFocused, password, cityFocused, city, stateFocused, success, invalidSection } = this.state
-	  let errorEmail, errorUsername, errorPassword, errorCity, errorState
+	  let errorEmail, errorUsername, errorPassword, errorCity, errorState, passCheckPassword
 	  switch (invalidSection) {
 	    case 'email':
 	      errorEmail = 'invalid'
@@ -120,6 +153,9 @@ class Signup extends React.Component {
 	      break
 	    case 'state':
 	      errorState = 'invalid'
+	      break
+	    case 'passCheck':
+	      passCheckPassword = 'invalid'
 	      break
 	    default:
 	      break
@@ -140,7 +176,7 @@ class Signup extends React.Component {
 	            value={ email }
 	            required={ emailFocused }
 	            onChange={ this.handleChange }
-	            onFocus={ this.handleOnFocus } />
+	            onFocus={ this.handleFocus } />
 	          <div className={`errorMessage ${errorEmail}`}><span>{ this.state.errorMessage}</span></div>
 	        </fieldset>
 	        <fieldset className='fieldset'>
@@ -154,7 +190,7 @@ class Signup extends React.Component {
 	            value={ username }
 	            required={ usernameFocused }
 	            onChange={ this.handleChange }
-	            onFocus={ this.handleOnFocus } />
+	            onFocus={ this.handleFocus } />
 	          <div className={`errorMessage ${errorUsername}`}><span>{ this.state.errorMessage}</span></div>
 	        </fieldset>
 	        <fieldset className='fieldset'>
@@ -168,8 +204,11 @@ class Signup extends React.Component {
 	            value={ password }
 	            required={ passwordFocused }
 	            onChange={ this.handleChange }
-	            onFocus={ this.handleOnFocus } />
-	          <div className={`errorMessage ${errorPassword}`}><span>{ this.state.errorMessage}</span></div>
+	            onFocus={ this.handleFocus }
+	            onBlur={ this.handleBlur }
+	            ref={input => { this.passwordInput = input } } />
+	          <div className={ `errorMessage ${errorPassword}` }><span>{ this.state.errorMessage }</span></div>
+	          <div className={ `errorMessage passCheckMessage ${passCheckPassword}` }><span>{ this.state.passCheckMessage }</span></div>
 	        </fieldset>
 	        <fieldset className='fieldset'>
 	          <label className='label'>
@@ -182,8 +221,8 @@ class Signup extends React.Component {
 	            value={ city }
 	            required={ cityFocused }
 	            onChange={ this.handleChange }
-	            onFocus={ this.handleOnFocus } />
-	          <div className={`errorMessage ${errorCity}`}><span>{ this.state.errorMessage}</span></div>
+	            onFocus={ this.handleFocus }/>
+	          <div className={ `errorMessage ${errorCity}` }><span>{ this.state.errorMessage }</span></div>
 	        </fieldset>
 	        <fieldset className='fieldset'>
 	          <label className='label'>
@@ -193,7 +232,7 @@ class Signup extends React.Component {
 	            className='select'
 	            required={ stateFocused }
 	            onChange={ this.handleChange }
-	            onFocus={ this.handleOnFocus }
+	            onFocus={ this.handleFocus }
 	          />
 	          <div className={`errorMessage ${errorState}`}><span>{ this.state.errorMessage}</span></div>
 	        </fieldset>
@@ -288,6 +327,16 @@ const Container = styled.div`
 		position: absolute;
 		bottom: -8px;
 		left: 120px;
+	}
+	.passCheckMessage {
+		display: none;
+		left: 0;
+		bottom: 68px;
+		padding: 24px;
+		background-color: var(--primary-0);
+		border: 2px solid var(--primary-6);
+		border-radius: 12px;
+		z-index: 100;
 	}
 	.invalid {
 		display: initial;
