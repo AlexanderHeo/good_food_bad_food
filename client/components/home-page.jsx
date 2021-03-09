@@ -83,7 +83,6 @@ class HomePage extends Component {
 	handleWeeklyClick = (date, day) => {
 	  const displayDateState = dateFormatter(date)
 	  const displaySundayState = sundayFormatter(date)
-
 	  this.setState({
 	    dateDisplay: displayDateState,
 	    dateSunday: displaySundayState
@@ -93,32 +92,32 @@ class HomePage extends Component {
 	handleButtonClick = e => {
 	  e.preventDefault()
 	  const action = e.currentTarget.name
-	  if (action === 'today') {
-	    this.setTime()
-	  } else if (action === 'list') {
-	    if (!this.state.listButtonClicked) {
+	  const { listButtonClicked, hamburgerClicked, dateSunday, dateToday } = this.state
+	  if (action === 'today') this.setTime()
+	  else if (action === 'list') {
+	    if (!listButtonClicked) {
 	      this.setState({
 	        listButtonClicked: true,
 	        listButtonX: true,
 	        hamburgerClicked: false,
 	        hamburgerX: false
 	      })
-	    } else if (this.state.listButtonClicked) {
+	    } else if (listButtonClicked) {
 	      this.delayState()
 	    }
 	  } else if (action === 'hamburger') {
-	    if (!this.state.hamburgerClicked) {
+	    if (!hamburgerClicked) {
 	      this.setState({
 	        hamburgerClicked: true,
 	        hamburgerX: true,
 	        listButtonClicked: false,
 	        listButtonX: false
 	      })
-	    } else if (this.state.hamburgerClicked) {
+	    } else if (hamburgerClicked) {
 	      this.delayState()
 	    }
 	  } else if (action === 'previousWeek') {
-	    const sunday = this.state.dateSunday.timestamp
+	    const sunday = dateSunday.timestamp
 	    const prev = sunday.setHours(sunday.getHours() - (24 * 7))
 	    const previousSunday = new Date(prev)
 	    const previousSundayState = sundayFormatter(previousSunday)
@@ -128,10 +127,10 @@ class HomePage extends Component {
 	      dateSunday: previousSundayState
 	    })
 	  } else if (action === 'nextWeek') {
-	    const sunday = this.state.dateSunday.timestamp
+	    const sunday = dateSunday.timestamp
 	    const next = sunday.setHours(sunday.getHours() + (24 * 7))
 	    const nextSundayState = sundayFormatter(new Date(next))
-	    const todaysSunday = sundayFormatter(new Date(this.state.dateToday.timestamp))
+	    const todaysSunday = sundayFormatter(new Date(dateToday.timestamp))
 	    if (nextSundayState.fullDate === todaysSunday.fullDate) {
 	      this.setTime()
 	    } else {
