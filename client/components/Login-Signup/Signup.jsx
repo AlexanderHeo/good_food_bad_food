@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import styled from 'styled-components';
-import State from '../Functions/StateChooser';
+import React from 'react'
+import { Link, Redirect } from 'react-router-dom'
+import styled from 'styled-components'
+import State from '../Functions/StateChooser'
 
 class Signup extends React.Component {
   state = {
@@ -11,38 +11,84 @@ class Signup extends React.Component {
     city: '',
     state: '',
     message: '',
+    errorMessage: '',
+    invalidSection: '',
     success: false
   }
 
   handleSubmit = e => {
-    e.preventDefault();
-    this.createAccount();
+    e.preventDefault()
+    const { email, username, password, city, state } = this.state
+    if (!email) {
+      this.setState({
+        errorMessage: 'Enter a email address.',
+        invalidSection: 'email'
+      })
+    } else if (!username) {
+      this.setState({
+        errorMessage: 'Enter a username.',
+        invalidSection: 'username'
+      })
+    } else if (!password) {
+      this.setState({
+        errorMessage: 'Enter a password.',
+        invalidSection: 'password'
+      })
+    } else if (!city) {
+      this.setState({
+        errorMessage: 'Enter a city name.',
+        invalidSection: 'city'
+      })
+    } else if (!state) {
+      this.setState({
+        errorMessage: 'Enter a state name.',
+        invalidSection: 'state'
+      })
+    } else this.createAccount()
   }
 
   createAccount = () => {
-    const goodStuff = {
-      username: this.state.username,
-      password: this.state.password,
-      city: this.state.city,
-      state: this.state.state
-    };
-    const init = {
+    const { username, password, city, state } = this.state
+
+    const usernameCheck = { username }
+    const checkInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(goodStuff)
-    };
-
-    fetch('/api/sign-up', init)
+      body: JSON.stringify(usernameCheck)
+    }
+    fetch('/api/username-check', checkInit)
       .then(response => response.json())
       .then(result => {
+        if (result.error) {
+          this.setState({
+            errorMessage: result.error,
+            invalidSection: 'username'
+          })
+        }
         if (result.success) {
-          this.setState({ success: true })
-          this.props.history.push('/home');
-        } else {
-          this.setState({ message: result.error });
+          const userData = { username, password, city, state }
+          const init = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+          }
+          fetch('/api/sign-up', init)
+            .then(response => response.json())
+            .then(result => {
+              if (result.success) {
+                this.setState({ success: true })
+                this.props.history.push('/login')
+              } else {
+                this.setState({
+                  errorMessage: result.error,
+                  invalidSection: 'state'
+                })
+              }
+            })
+            .catch(err => console.error(err))
         }
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error('err 62:', err))
   }
 
   handleChange = event => {
@@ -53,10 +99,36 @@ class Signup extends React.Component {
 
 	handleOnFocus = e => {
 	  const focused = `${e.target.name}Focused`
-	  this.setState({ [focused]: true })
+	  this.setState({
+	    [focused]: true,
+	    errorMessage: '',
+	    invalidSection: ''
+	  })
 	}
 
 	render() {
+	  const { emailFocused, email, usernameFocused, username, passwordFocused, password, cityFocused, city, stateFocused, success, invalidSection } = this.state
+	  let errorEmail, errorUsername, errorPassword, errorCity, errorState
+	  switch (invalidSection) {
+	    case 'email':
+	      errorEmail = 'invalid'
+	      break
+	    case 'username':
+	      errorUsername = 'invalid'
+	      break
+	    case 'password':
+	      errorPassword = 'invalid'
+	      break
+	    case 'city':
+	      errorCity = 'invalid'
+	      break
+	    case 'state':
+	      errorState = 'invalid'
+	      break
+	    default:
+	      break
+	  }
+
 	  return (
 	    <Container>
 	      <h1 className='title'>Sign Up</h1>
@@ -68,11 +140,12 @@ class Signup extends React.Component {
 	          <input
 	            className='input'
 	            type='email'
-	            required={ this.state.emailFocused }
 	            name='email'
-	            value={ this.state.email }
+	            value={ email }
+	            required={ emailFocused }
 	            onChange={ this.handleChange }
 	            onFocus={ this.handleOnFocus } />
+	          <div className={`errorMessage ${errorEmail}`}><span>{ this.state.errorMessage}</span></div>
 	        </fieldset>
 	        <fieldset className='fieldset'>
 	          <label className='label'>
@@ -81,11 +154,12 @@ class Signup extends React.Component {
 	          <input
 	            className='input'
 	            type='text'
-	            required={ this.state.usernameFocused }
 	            name='username'
-	            value={ this.state.username }
+	            value={ username }
+	            required={ usernameFocused }
 	            onChange={ this.handleChange }
 	            onFocus={ this.handleOnFocus } />
+	          <div className={`errorMessage ${errorUsername}`}><span>{ this.state.errorMessage}</span></div>
 	        </fieldset>
 	        <fieldset className='fieldset'>
 	          <label className='label'>
@@ -94,11 +168,12 @@ class Signup extends React.Component {
 	          <input
 	            className='input'
 	            type='password'
-	            required={ this.state.passwordFocused }
 	            name='password'
-	            value={ this.state.password }
+	            value={ password }
+	            required={ passwordFocused }
 	            onChange={ this.handleChange }
 	            onFocus={ this.handleOnFocus } />
+	          <div className={`errorMessage ${errorPassword}`}><span>{ this.state.errorMessage}</span></div>
 	        </fieldset>
 	        <fieldset className='fieldset'>
 	          <label className='label'>
@@ -107,11 +182,12 @@ class Signup extends React.Component {
 	          <input
 	            className='input'
 	            type='text'
-	            required={ this.state.cityFocused }
 	            name='city'
-	            value={ this.state.city }
+	            value={ city }
+	            required={ cityFocused }
 	            onChange={ this.handleChange }
 	            onFocus={ this.handleOnFocus } />
+	          <div className={`errorMessage ${errorCity}`}><span>{ this.state.errorMessage}</span></div>
 	        </fieldset>
 	        <fieldset className='fieldset'>
 	          <label className='label'>
@@ -119,34 +195,35 @@ class Signup extends React.Component {
 	          </label>
 	          <State
 	            className='select'
-	            required={ this.state.stateFocused }
+	            required={ stateFocused }
 	            onChange={ this.handleChange }
 	            onFocus={ this.handleOnFocus }
 	          />
+	          <div className={`errorMessage ${errorState}`}><span>{ this.state.errorMessage}</span></div>
 	        </fieldset>
 	        <div className='buttonContainer'>
-	          <button className='button'>Sign Up</button>
+	          <button className='button signup' disabled={this.state.invalidSection}>Sign Up</button>
 	        </div>
 	      </form>
 	      <div className='linkContainer'>
 	      	<Link to='/login' className='link'>login</Link>
 	      </div>
 	      {
-	        this.state.success &&
+	        success &&
 					<Redirect
 					  from='/signup'
 					  to={{
-					    pathname: 'home',
-					    state: { username: this.state.username }
+					    pathname: 'login',
+					    state: { username: username }
 					  }}
 					/>
 	      }
 	    </Container>
-	  );
+	  )
 	}
 }
 
-export default Signup;
+export default Signup
 
 const Container = styled.div`
 	width: 100vw;
@@ -179,19 +256,23 @@ const Container = styled.div`
 		justify-content: center;
 	}
 	.fieldset {
-		padding: 12px 0;
+		padding: 14px 0;
 		width: 100%;
+		position: relative;
 	}
 	.label {
 		text-align: right;
 		width: 30%;
 		font-size: 1.2rem;
+		font-weight: 500;
+		margin: 0;
 	}
 	.input, .select {
 		width: 60%;
+		font-size: 1.3rem;
 		outline: none;
-		border-radius: 10px;
-		padding: 6px 12px;
+		border-radius: 6px;
+		padding: 2px 12px;
 		margin: 0 12px;
 		box-shadow: 0 0 0 transparent;
 	}
@@ -203,6 +284,18 @@ const Container = styled.div`
 		border-style: inset;
 		border-color: -internal-light-dark(rgb(118,118,118),rgb(133,133,133));
 	}
+	.errorMessage {
+		display: none;
+		font-size: 1rem;
+		font-weight: 700;
+		color: var(--warning-4);
+		position: absolute;
+		bottom: -8px;
+		left: 120px;
+	}
+	.invalid {
+		display: initial;
+	}
 	.buttonContainer {
 		margin-top: 36px;
 		width: 100%;
@@ -212,8 +305,11 @@ const Container = styled.div`
 		.button {
 			width: 90%;
 			margin: 10px 0;
+			border: 2px solid var(--primary-6);
+			background-color: white;
 		}
 	}
+
 	.linkContainer {
 		position: absolute;
 		bottom: 0;
