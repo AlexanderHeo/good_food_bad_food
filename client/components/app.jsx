@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import styled from 'styled-components';
-import HomePage from './Home-Page';
+import HomePage from './home-page';
 import Login from './Login-Signup/Login';
 import Logo from './Login-Signup/Logo';
 import Signup from './Login-Signup/Signup';
