@@ -260,8 +260,6 @@ COPY public."mealReports" ("mealId", report) FROM stdin;
 157	5
 165	5
 211	5
-212	5
-213	5
 214	5
 51	3
 44	3
@@ -278,7 +276,18 @@ COPY public."mealReports" ("mealId", report) FROM stdin;
 153	\N
 155	\N
 156	\N
-187	5
+213	4
+212	3
+236	5
+242	\N
+243	\N
+244	\N
+245	\N
+246	\N
+247	\N
+249	3
+250	\N
+251	\N
 \.
 
 
@@ -327,9 +336,18 @@ COPY public.meals ("mealId", name, "eatenAt", "userId") FROM stdin;
 155	almonds	2021-02-27 12:10:21.562987-08	5
 154	asdfasdf	2021-02-27 12:08:53.428506-08	5
 156	ffff	2021-02-27 12:12:45.289403-08	5
-187	croissant, eggs, potatoes	2021-03-02 12:53:40.106049-08	5
 157	pancakes	2021-03-01 13:10:27.765383-08	5
 165	cereal	2021-03-01 21:57:59.581513-08	5
+236	potato, eggs	2021-04-03 15:13:14.119199-07	5
+242	ffff	2021-04-03 17:26:48.58791-07	5
+243	ss	2021-04-03 17:29:32.493581-07	5
+244	ff	2021-04-03 17:37:49.659024-07	5
+245	dd	2021-04-03 17:41:16.479526-07	5
+246	cc	2021-04-03 17:43:23.657103-07	5
+247	ff	2021-04-03 17:46:11.195875-07	5
+249	ddd	2021-03-04 18:11:53.329-08	5
+250	ssss	2021-03-05 18:11:53.329-08	5
+251	dd	2021-03-30 18:21:53.91-07	5
 \.
 
 
@@ -348,6 +366,12 @@ COPY public.mealtime ("mealId", mealtime) FROM stdin;
 156	lunch
 157	breakfast
 165	dinner
+236	breakfast
+242	lunch
+243	dinner
+244	snacks
+245	snacks
+246	snacks
 33	snacks
 34	breakfast
 35	lunch
@@ -360,7 +384,10 @@ COPY public.mealtime ("mealId", mealtime) FROM stdin;
 42	breakfast
 43	lunch
 44	dinner
-187	breakfast
+247	snacks
+249	lunch
+250	breakfast
+251	lunch
 51	snacks
 52	breakfast
 53	lunch
@@ -413,7 +440,7 @@ COPY public.users ("userId", username, password, city, state) FROM stdin;
 -- Name: meals_mealId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."meals_mealId_seq"', 235, true);
+SELECT pg_catalog.setval('public."meals_mealId_seq"', 251, true);
 
 
 --
