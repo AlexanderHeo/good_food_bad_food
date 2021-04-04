@@ -60,7 +60,7 @@ const GlobalStyles = createGlobalStyle`
 
 		font-family: 'Roboto', sans-serif;
 	}
-`
+`;
 
 const App = ({ children }) => {
   return (
@@ -71,4 +71,4 @@ const App = ({ children }) => {
   );
 };
 
-export default App
+export default App;

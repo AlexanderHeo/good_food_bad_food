@@ -14,9 +14,9 @@ app.use(sessionMiddleware);
 app.use(express.json());
 
 app.get('/api/health-check', (req, res, next) => {
-  db.query("select 'successfully connected' as \"message\"")
-    .then(result => res.json(result.rows[0]))
-    .catch(err => next(err));
+  db.query('select \'successfully connected\' as "message"')
+    .then((result) => res.json(result.rows[0]))
+    .catch((err) => next(err));
 });
 
 app.post('/api/username-check', (req, res, next) => {
@@ -29,11 +29,11 @@ app.post('/api/username-check', (req, res, next) => {
 	`;
   const param = [username];
   db.query(sql, param)
-    .then(response => {
+    .then((response) => {
       if (!response.rows[0]) res.json({ success: 'Great success!' });
       else return next(new ClientError('Username already exists.', 400));
     })
-    .catch(err => next(err));
+    .catch((err) => next(err));
 });
 
 app.post('/api/sign-up', (req, res, next) => {
@@ -44,7 +44,7 @@ app.post('/api/sign-up', (req, res, next) => {
   if (!state) return next(new ClientError('Enter a state name.', 400));
   bcrypt
     .hash(password, 10)
-    .then(hash => {
+    .then((hash) => {
       const hashedPassword = hash;
       const sql = `
 				INSERT INTO "users"("username", "password", "city", "state")
@@ -53,7 +53,7 @@ app.post('/api/sign-up', (req, res, next) => {
       `;
       const params = [username, hashedPassword, city, state];
       db.query(sql, params)
-        .then(response => {
+        .then((response) => {
           const user = response.rows[0].username;
           if (!user) {
             return next(new ClientError('Username already exsists.', 400));
@@ -61,9 +61,9 @@ app.post('/api/sign-up', (req, res, next) => {
           req.session.userId = user.userId;
           res.status(201).json({ success: 'Great success!' });
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     })
-    .catch(err => next(err));
+    .catch((err) => next(err));
 });
 
 app.post('/api/log-in', (req, res, next) => {
@@ -77,23 +77,23 @@ app.post('/api/log-in', (req, res, next) => {
   `;
   const params = [username];
   db.query(sql, params)
-    .then(response => {
+    .then((response) => {
       if (!response.rows[0]) {
         return next(new ClientError('User account does not exist.', 400));
       }
       const dbPassword = response.rows[0].password;
       bcrypt
         .compare(password, dbPassword)
-        .then(result => {
+        .then((result) => {
           if (!result) {
             return next(new ClientError('Password is incorrect.', 400));
           }
           req.session.userId = response.rows[0].userId;
           res.status(200).json({ success: 'Great success!' });
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     })
-    .catch(err => next(err));
+    .catch((err) => next(err));
 });
 
 app.get('/api/isloggedin', (req, res, next) => {
@@ -111,16 +111,13 @@ app.get('/api/isloggedin', (req, res, next) => {
 	`;
   const param = [userId];
   db.query(sql, param)
-    .then(result => {
+    .then((result) => {
       if (!result.rows[0]) {
-        return next(
-          new ClientError('An internal error occured. Please try again.'),
-          500
-        );
+        return next(new ClientError('An internal error occured. Please try again.'), 500);
       }
       res.status(200).json(result.rows[0]);
     })
-    .catch(err => next(err));
+    .catch((err) => next(err));
 });
 
 app.get('/api/log-out', (req, res, next) => {
@@ -139,7 +136,7 @@ app.patch('/api/reset/:userId', (req, res, next) => {
   }
   bcrypt
     .hash(newPassword, 10)
-    .then(hash => {
+    .then((hash) => {
       const sql = `
 				update "users"
 				set "password" = $2
@@ -148,12 +145,12 @@ app.patch('/api/reset/:userId', (req, res, next) => {
 			`;
       const params = [userId, hash];
       db.query(sql, params)
-        .then(response => {
+        .then((response) => {
           if (response.rows[0]) res.json({ success: 'Great success!' });
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     })
-    .catch(err => next(err));
+    .catch((err) => next(err));
 });
 
 app.patch('/api/location/:userId', (req, res, next) => {
@@ -169,8 +166,8 @@ app.patch('/api/location/:userId', (req, res, next) => {
 	`;
   const params = [city, state, userId];
   db.query(sql, params)
-    .then(result => res.status(200).json(result.rows[0]))
-    .catch(err => next(err));
+    .then((result) => res.status(200).json(result.rows[0]))
+    .catch((err) => next(err));
 });
 
 app.post('/api/check', (req, res, next) => {
@@ -184,15 +181,15 @@ app.post('/api/check', (req, res, next) => {
 	`;
   const param = [userId];
   db.query(sql, param)
-    .then(response => {
+    .then((response) => {
       const resp = response.rows[0];
       const dbPW = resp.password;
       bcrypt
         .compare(password, dbPW)
-        .then(result => res.json({ success: result }))
-        .catch(err => next(err));
+        .then((result) => res.json({ success: result }))
+        .catch((err) => next(err));
     })
-    .catch(err => next(err));
+    .catch((err) => next(err));
 });
 
 app.get('/api/list', (req, res, next) => {
@@ -212,8 +209,8 @@ app.get('/api/list', (req, res, next) => {
   `;
   const params = [userId];
   db.query(sql, params)
-    .then(result => res.json(result.rows))
-    .catch(err => next(err));
+    .then((result) => res.json(result.rows))
+    .catch((err) => next(err));
 });
 
 app.post('/api/enter', (req, res, next) => {
@@ -239,7 +236,7 @@ app.post('/api/enter', (req, res, next) => {
 	`;
   const params = [meal.toLowerCase(), userId, mealtime];
   db.query(sql, params)
-    .then(result => {
+    .then((result) => {
       const postedMeal = result.rows[0];
       if (isToday) {
         postedMeal.mealtime = mealtime;
@@ -257,16 +254,16 @@ app.post('/api/enter', (req, res, next) => {
       		`;
         const params = [eatenAt, mealId];
         db.query(sql, params)
-          .then(result => {
+          .then((result) => {
             const postedMeal = result.rows[0];
             postedMeal.mealtime = mealtime;
             postedMeal.report = null;
             res.status(200).json(postedMeal);
           })
-          .catch(err => next(err));
+          .catch((err) => next(err));
       }
     })
-    .catch(err => next(err));
+    .catch((err) => next(err));
 });
 
 app.patch('/api/enter/:mealId', (req, res, next) => {
@@ -281,8 +278,8 @@ app.patch('/api/enter/:mealId', (req, res, next) => {
 	`;
   const values = [name.toLowerCase(), mealId];
   db.query(sql, values)
-    .then(result => res.status(200).json(result.rows[0]))
-    .catch(err => next(err));
+    .then((result) => res.status(200).json(result.rows[0]))
+    .catch((err) => next(err));
 });
 
 app.delete('/api/enter/:mealId', (req, res, next) => {
@@ -302,22 +299,22 @@ app.delete('/api/enter/:mealId', (req, res, next) => {
 	`;
   const param = [mealId];
   db.query(sql1, param)
-    .then(result => {
+    .then((result) => {
       db.query(sql2, param)
-        .then(result => {
+        .then((result) => {
           db.query(sql3, param)
-            .then(result => {
+            .then((result) => {
               if (!result.rows[0]) {
                 res.json({
                   success: `Great success! Meal at id ${mealId} has been obliterated!`
                 });
               }
             })
-            .catch(err => next(err));
+            .catch((err) => next(err));
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     })
-    .catch(err => next(err));
+    .catch((err) => next(err));
 });
 
 app.get('/api/ratefood', (req, res, next) => {
@@ -332,8 +329,8 @@ app.get('/api/ratefood', (req, res, next) => {
 	`;
   const param = [userId];
   db.query(sql, param)
-    .then(result => res.status(200).json(result.rows))
-    .catch(err => next(err));
+    .then((result) => res.status(200).json(result.rows))
+    .catch((err) => next(err));
 });
 
 app.patch('/api/rate/:mealId', (req, res, next) => {
@@ -348,8 +345,8 @@ app.patch('/api/rate/:mealId', (req, res, next) => {
 	`;
   const params = [mealId, report];
   db.query(sql, params)
-    .then(result => res.status(200).json(result.rows))
-    .catch(err => next(err));
+    .then((result) => res.status(200).json(result.rows))
+    .catch((err) => next(err));
 });
 
 app.get('/api/rate/:mealId', (req, res, next) => {
@@ -363,8 +360,8 @@ app.get('/api/rate/:mealId', (req, res, next) => {
 	`;
   const param = [mealId];
   db.query(sql, param)
-    .then(result => res.status(200).json(result.rows))
-    .catch(err => next(err));
+    .then((result) => res.status(200).json(result.rows))
+    .catch((err) => next(err));
 });
 
 app.get('/api/ingredients/:mealId', (req, res, next) => {
@@ -377,8 +374,8 @@ app.get('/api/ingredients/:mealId', (req, res, next) => {
   `;
   const param = [mealId];
   db.query(sql, param)
-    .then(result => res.json(result.rows))
-    .catch(err => next(err));
+    .then((result) => res.json(result.rows))
+    .catch((err) => next(err));
 });
 
 app.use('/api', (req, res, next) => {

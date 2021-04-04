@@ -13,24 +13,24 @@ const App = () => {
         <Route path="/logo" component={Logo} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/home" render={ props => <HomePage {...props} /> } />
-        <Redirect from='/' to='login' />
+        <Route path="/home" render={(props) => <HomePage {...props} />} />
+        <Redirect from="/" to="login" />
       </Router>
     </Container>
-  )
-}
+  );
+};
 
 export default App;
 
 const Container = styled.div`
-	width: 100%;
-	max-width: 500px;
-	height: 100%;
-	display: flex;
-	color: var(--primary-6);
-	font-size: 12px;
-	a {
-		color: var(--primary-6);
-		font-size: 1.4em;
-	}
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  display: flex;
+  color: var(--primary-6);
+  font-size: 12px;
+  a {
+    color: var(--primary-6);
+    font-size: 1.4em;
+  }
 `;
