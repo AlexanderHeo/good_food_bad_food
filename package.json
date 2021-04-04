@@ -52,7 +52,9 @@
       }
     },
     "rules": {
-      "semi": 0,
+      "semi": [
+        "always"
+      ],
       "no-tabs": 0,
       "allow-indentation-tabs": 0,
       "no-mixed-spaces-and-tabs": 0,
@@ -120,13 +122,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kumquatpeels/good-food-bad-food.git"
+    "url": "git+https://github.com/AlexanderHeo/good-food-bad-food.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kumquatpeels/good-food-bad-food/issues"
+    "url": "https://github.com/AlexanderHeo/good-food-bad-food/issues"
   },
-  "homepage": "https://github.com/kumquatpeels/good-food-bad-food#readme"
+  "homepage": "https://github.com/AlexanderHeo/good-food-bad-food#readme"
 }
