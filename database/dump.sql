@@ -16,30 +16,30 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-ALTER TABLE ONLY public."userIngredients" DROP CONSTRAINT "userIngredients_userId_fkey";
-ALTER TABLE ONLY public."userIngredients" DROP CONSTRAINT "userIngredients_ingredient_fkey";
-ALTER TABLE ONLY public.meals DROP CONSTRAINT "meals_userId_fkey";
-ALTER TABLE ONLY public."mealReports" DROP CONSTRAINT "mealReports_mealId_fkey";
-ALTER TABLE ONLY public."mealIngredients" DROP CONSTRAINT "mealIngredients_mealId_fkey";
-ALTER TABLE ONLY public."mealIngredients" DROP CONSTRAINT fk;
-ALTER TABLE ONLY public.users DROP CONSTRAINT users_username_key;
-ALTER TABLE ONLY public.users DROP CONSTRAINT users_pkey;
-ALTER TABLE ONLY public.meals DROP CONSTRAINT meals_pkey;
-ALTER TABLE ONLY public."mealReports" DROP CONSTRAINT mealreports_mealid_u;
-ALTER TABLE ONLY public.ingredients DROP CONSTRAINT ingredients_pkey;
-ALTER TABLE public.users ALTER COLUMN "userId" DROP DEFAULT;
-ALTER TABLE public.meals ALTER COLUMN "mealId" DROP DEFAULT;
-DROP SEQUENCE public."users_userId_seq";
-DROP TABLE public.users;
-DROP TABLE public."userIngredients";
-DROP TABLE public.mealtime;
-DROP SEQUENCE public."meals_mealId_seq";
-DROP TABLE public.meals;
-DROP TABLE public."mealReports";
-DROP TABLE public."mealIngredients";
-DROP TABLE public.ingredients;
-DROP EXTENSION plpgsql;
-DROP SCHEMA public;
+ALTER TABLE IF EXISTS ONLY public."userIngredients" DROP CONSTRAINT IF EXISTS "userIngredients_userId_fkey";
+ALTER TABLE IF EXISTS ONLY public."userIngredients" DROP CONSTRAINT IF EXISTS "userIngredients_ingredient_fkey";
+ALTER TABLE IF EXISTS ONLY public.meals DROP CONSTRAINT IF EXISTS "meals_userId_fkey";
+ALTER TABLE IF EXISTS ONLY public."mealReports" DROP CONSTRAINT IF EXISTS "mealReports_mealId_fkey";
+ALTER TABLE IF EXISTS ONLY public."mealIngredients" DROP CONSTRAINT IF EXISTS "mealIngredients_mealId_fkey";
+ALTER TABLE IF EXISTS ONLY public."mealIngredients" DROP CONSTRAINT IF EXISTS fk;
+ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS users_username_key;
+ALTER TABLE IF EXISTS ONLY public.users DROP CONSTRAINT IF EXISTS users_pkey;
+ALTER TABLE IF EXISTS ONLY public.meals DROP CONSTRAINT IF EXISTS meals_pkey;
+ALTER TABLE IF EXISTS ONLY public."mealReports" DROP CONSTRAINT IF EXISTS mealreports_mealid_u;
+ALTER TABLE IF EXISTS ONLY public.ingredients DROP CONSTRAINT IF EXISTS ingredients_pkey;
+ALTER TABLE IF EXISTS public.users ALTER COLUMN "userId" DROP DEFAULT;
+ALTER TABLE IF EXISTS public.meals ALTER COLUMN "mealId" DROP DEFAULT;
+DROP SEQUENCE IF EXISTS public."users_userId_seq";
+DROP TABLE IF EXISTS public.users;
+DROP TABLE IF EXISTS public."userIngredients";
+DROP TABLE IF EXISTS public.mealtime;
+DROP SEQUENCE IF EXISTS public."meals_mealId_seq";
+DROP TABLE IF EXISTS public.meals;
+DROP TABLE IF EXISTS public."mealReports";
+DROP TABLE IF EXISTS public."mealIngredients";
+DROP TABLE IF EXISTS public.ingredients;
+DROP EXTENSION IF EXISTS plpgsql;
+DROP SCHEMA IF EXISTS public;
 --
 -- Name: public; Type: SCHEMA; Schema: -; Owner: -
 --
@@ -288,6 +288,17 @@ COPY public."mealReports" ("mealId", report) FROM stdin;
 249	3
 250	\N
 251	\N
+252	\N
+253	\N
+257	\N
+254	5
+255	5
+256	4
+258	3
+259	5
+260	5
+261	5
+262	5
 \.
 
 
@@ -348,6 +359,17 @@ COPY public.meals ("mealId", name, "eatenAt", "userId") FROM stdin;
 249	ddd	2021-03-04 18:11:53.329-08	5
 250	ssss	2021-03-05 18:11:53.329-08	5
 251	dd	2021-03-30 18:21:53.91-07	5
+252	gfdsgfd	2021-04-01 18:21:53.91-07	5
+253	potato, eggs	2021-04-04 12:47:28.426-07	5
+254	potato, eggs, veggie patty	2021-04-07 11:08:23.081-07	5
+255	chicken salad sandwich	2021-04-07 11:08:23.081-07	5
+256	pork kimchi hotpot	2021-04-07 11:08:23.081-07	5
+257	 potato, eggs, veggie patty	2021-04-08 11:10:11.293985-07	5
+258	ice cream	2021-04-07 11:08:23.081-07	5
+259	potato, eggs, bacon	2021-04-06 11:08:23.081-07	5
+260	ham sandwich	2021-04-06 11:08:23.081-07	5
+261	curry	2021-04-06 11:08:23.081-07	5
+262	mango	2021-04-06 11:08:23.081-07	5
 \.
 
 
@@ -404,6 +426,17 @@ COPY public.mealtime ("mealId", mealtime) FROM stdin;
 64	breakfast
 65	lunch
 66	dinner
+252	dinner
+253	breakfast
+254	breakfast
+255	lunch
+256	dinner
+257	breakfast
+258	snacks
+259	breakfast
+260	lunch
+261	dinner
+262	snacks
 211	breakfast
 212	lunch
 213	dinner
@@ -440,7 +473,7 @@ COPY public.users ("userId", username, password, city, state) FROM stdin;
 -- Name: meals_mealId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."meals_mealId_seq"', 251, true);
+SELECT pg_catalog.setval('public."meals_mealId_seq"', 262, true);
 
 
 --
